@@ -52,21 +52,31 @@ The content is built from 3 sections, spanning ingestion of data, manipulation o
 
 | Section 1 | Section 2 | Section 3|
 |-------|-------|------|
-| Ingestion of data using Eventstream. Complex structures and advanced data manipulation using Eventstream and the different built-in transformations. Including the use of reference data, multiple and different sources and how to effectively implement advanced data manipulation | Storage in Eventhouse and how to query the data at speed. Advanced KQL query statements, incl., but not limited to, data load patterns using functions, views and updatepolicies, geo-spacial calculations, graph data structures and time series manipulation. Effective KQL query sets with performance tuning and understanding of the underlying metrics to write better queries. | Analyze and visualize data in both queries and using Real-Time Dashboard + Power BI. Using the built-in visualizations for in-query analysis. Building custom visuals using Plotly library and working with Power BI to help model and query data when needed. |
+| Ingestion of data using Eventstream. Complex structures and advanced data manipulation using Eventstream and the different built-in transformations. Including the use of schemas, reference data, multiple and different sources and how to effectively implement advanced data manipulation. This also includes the use of Rules, Activator and event-driven actions. | Storage in Eventhouse and how to query the data at speed. Advanced KQL query statements, incl., but not limited to, data load patterns using functions, views and updatepolicies, geo-spacial calculations, graph data structures and time series manipulation. Effective KQL query sets with performance tuning and understanding of the underlying metrics to write better queries. Security and governance of the KQL database. | Analyze and visualize data in both queries and using Real-Time Dashboard + Power BI. Using the built-in visualizations for in-query analysis. Building custom visuals using Plotly library and working with Power BI to help model and query data when needed. |
 
-## Section 1
+## Section 1 - ingestion and actions
 
 After this section you will know how work with the Eventstream processor and how to use the built-in data manipulations.
 
-You will also know to use multiple sources in the Eventstream and how to leverage the use of reference data for optimal data loading from source to Eventhouse.
+You will also know to use multiple sources in the Eventstream and how to leverage the use of schemas, reference data for optimal data loading from source to Eventhouse.
 
-Lastly you will understand the whereabouts of the built-in sources from Microsoft Fabric and know your way around cost of the service.
+Lastly you will understand the whereabouts of the built-in sources from Microsoft Fabric, how to use and implement the Rules, Activator and event-driven actions and know your way around cost of the service.
 
-### heading
+### Fabric Events and Business Events
 
-content
+### Activator and Event driven actions
 
-## Section 2
+### Custom connectors
+
+### Troubleshooting
+
+### Orchestration and optimization
+
+### Schemas and throughput
+
+### Monitoring
+
+## Section 2 - KQL engine and queries
 
 In this section you will learn the advanced techniques of working with the KQL language in the Eventhouse and KQL database.
 
@@ -74,16 +84,36 @@ You will learn the whereabouts of storage, how it is maintained by the engine, h
 
 This section also covers the advanced techniques of Geo-spacial analytics, analytics on graph data and how to use the built-in data movement processes from functions, views and update policies.
 
-### heading
+Lastly you will learn the approach of securing and governing your KQL database.
 
-content
+### Storage and the KQL engine
 
-## Section 3
+### Streaming tables
+
+### Advanced data manipulation
+
+### Geo-spacial techniques
+
+### Graph data
+
+### Joins, hints and lookups
+
+### Views, functions and policies
+
+### Security and governance
+
+## Section 3 - visualization and apps
 
 In this section you will learn the built-in features of visualizing data at query time and how to implement custom visuals using the Plotly library.
 
 You will learn the usage and implementation of the Real-Time Dashboard, including, but not limited to, the advanved techniques of dashboards (filters, parameters, data source etc.) and a subsection on how to implement Power BI in the solution of using KQL data for analytics.
 
-### Heading
+### Built-in visualization
 
-content
+### Custom visualization using Plotly
+
+### Real-Time Dashboards
+
+### Power BI
+
+### Org Apps
