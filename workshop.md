@@ -117,3 +117,30 @@ You will learn the usage and implementation of the Real-Time Dashboard, includin
 ### Power BI
 
 ### Org Apps
+
+---
+
+# Standard elements (delete before final deployment)
+
+## Note section
+
+<div class="info" data-title="Note">
+
+> **The title can be resized on the dashboard canvas directly, rather than writing code.**
+
+</div>
+
+## Images
+
+![Image alt text](<path to image>)
+
+## code sections
+
+```
+This is a code section
+// this is a KQL comment within a code section
+```
+
+##
+
+`this is a highlight`
