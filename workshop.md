@@ -1,5 +1,5 @@
 ---
-published: true # Optional. Set to true to publish the workshop (default: false)
+published: false # Optional. Set to true to publish the workshop (default: false)
 type: workshop # Required.
 title: Project Peritus - Real-Time Intelligence expoert training # Required. Full title of the workshop
 short_title: Real-Time Intelligence expoert training # Optional. Short title displayed in the header
