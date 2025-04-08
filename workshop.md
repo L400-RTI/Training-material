@@ -23,7 +23,7 @@ tags: fabric, kql, realtime, intelligence, event, stream, sql, data, analytics, 
 ## Modalities
 
 - Total workshop duration is 2-3 days.
-- Each section is accompanied with technical explanation of the Fabric Real-Time Intelligence component being used in the tutorial.
+- Each module is accompanied with technical explanation of the Fabric Real-Time Intelligence component being used in the tutorial.
 - Without the accompanied explanation, the tutorial can be completed in 1-2 days.
 
 ## Authors
@@ -48,25 +48,51 @@ This training will not help you understand the basics of the suite, and it will 
 
 ## Overview of the content
 
-The content is built from 3 sections, spanning ingestion of data, manipulation of data when needed using the KQL language and visualize & analyze data using KQL, Real-Time Dashboards and Power BI.
+The content is built from 12 modules, spanning ingestion of data, manipulation of data when needed using the KQL language and visualize & analyze data using KQL, Real-Time Dashboards and Power BI, CI/CD and architectural approaches, Security and Networking.
 
-| Section 1 | Section 2 | Section 3|
-|-------|-------|------|
-| Ingestion of data using Eventstream. Complex structures and advanced data manipulation using Eventstream and the different built-in transformations. Including the use of schemas, reference data, multiple and different sources and how to effectively implement advanced data manipulation. This also includes the use of Rules, Activator and event-driven actions. | Storage in Eventhouse and how to query the data at speed. Advanced KQL query statements, incl., but not limited to, data load patterns using functions, views and updatepolicies, geo-spacial calculations, graph data structures and time series manipulation. Effective KQL query sets with performance tuning and understanding of the underlying metrics to write better queries. Security and governance of the KQL database. | Analyze and visualize data in both queries and using Real-Time Dashboard + Power BI. Using the built-in visualizations for in-query analysis. Building custom visuals using Plotly library and working with Power BI to help model and query data when needed. |
+1. Connectors
+2. Real-Time Hub
+3. Ingestion
+4. Analytics
+5. Dashboards
+6. Rules (Activator)
+7. Actions
+8. AI + Copilot
+9. Data modelling
+10. Security
+11. Networking
+12. CI/CD and ALM
 
-## Section 1 - ingestion and actions
+![Real-Time Intelligence in Microsoft Fabric](/assets/images/Real-Time%20Intelligence%20in%20Microsoft%20Fabric.png)
 
-After this section you will know how work with the Eventstream processor and how to use the built-in data manipulations.
+Each module has the same overall structure:
 
-You will also know to use multiple sources in the Eventstream and how to leverage the use of schemas, reference data for optimal data loading from source to Eventhouse.
+| Structure | Content |
+|------------|---------|
+| 1. Introduction to the module | Gives the fly-in to the module, the content and the business value of the module and area of RTI. |
+| 2. Architectural deep dive | Introduces the module and the connection to the rest of the RTI suite in Microsoft Fabric. Also contains elements on how the architecture could work in conjunction with other parts of the RTI service. |
+| 3. Technical deep dive | Dive into the whereabouts of the service. Seen from the backend, with a deep technical walktthrough of how things are working behind the scenes and what makes the specific part of the service connect with the rest. |
+| 4. Implementations | How should the specific part of the service be implemented and what to look out for when working with it. Also a deep walktrough of the details in functionality and outcome of the service. |
+| 5. Troubleshooting | How to read error messages and error codes. How to debug issues. How to best help Microsoft support in case of need. |
+| 6. Orchestration and optimization | How does the service best fit with an entire architecture around orchestration, how to execute the processes. How to optimize the loads, speeds and querytimes. |
+| 7. Schemas and throughout | How to handle schemas in the service and what to know when working with structured, semi-structured and unstructured data. A walkthrough of the limitations, configuration options and whereabouts of throughput |
+| 8. Monitoring and pricing | How to monitor the service and find the bottlenecks and other needed information of the performance. A deep learning element on how to calculate and estimate cost of a service and an entire implementation. How to monitor cost and optimize for cost reduction. |
+| 9. Hands-on lab | A hands on lab with guides, to try out the specific service and to learn some of the L400 features. |
 
-Lastly you will understand the whereabouts of the built-in sources from Microsoft Fabric, how to use and implement the Rules, Activator and event-driven actions and know your way around cost of the service.
+<div class="info" data-title="Note">
 
-### Fabric Events and Business Events
+> **In some modules, you will find a section with only a "N/A". This is by intent, and shows that this specific section does not apply to this module, or the module does not contain any information about the section.**
+</div>
 
-### Activator and Event driven actions
+## Module 1 - Connectors
 
-### Custom connectors
+### Introduction
+
+### Architectural deep dive
+
+### Technical deep dive
+
+### Implementations
 
 ### Troubleshooting
 
@@ -74,49 +100,229 @@ Lastly you will understand the whereabouts of the built-in sources from Microsof
 
 ### Schemas and throughput
 
-### Monitoring
+### Monitoring and pricing
 
-## Section 2 - KQL engine and queries
+### Hands-on lab
 
-In this section you will learn the advanced techniques of working with the KQL language in the Eventhouse and KQL database.
+## Module 2 - Real-Time Hub
 
-You will learn the whereabouts of storage, how it is maintained by the engine, how the streaming of data to tables works and how to leverage the power of the KQL language to perform data manipulation at query time.
+### Introduction
 
-This section also covers the advanced techniques of Geo-spacial analytics, analytics on graph data and how to use the built-in data movement processes from functions, views and update policies.
+### Architectural deep dive
 
-Lastly you will learn the approach of securing and governing your KQL database.
+### Technical deep dive
 
-### Storage and the KQL engine
+### Implementations
 
-### Streaming tables
+### Troubleshooting
 
-### Advanced data manipulation
+### Orchestration and optimization
 
-### Geo-spacial techniques
+### Schemas and throughput
 
-### Graph data
+### Monitoring and pricing
 
-### Joins, hints and lookups
+### Hands-on lab
 
-### Views, functions and policies
+## Module 3 - Ingestion
 
-### Security and governance
+### Introduction
 
-## Section 3 - visualization and apps
+### Architectural deep dive
 
-In this section you will learn the built-in features of visualizing data at query time and how to implement custom visuals using the Plotly library.
+### Technical deep dive
 
-You will learn the usage and implementation of the Real-Time Dashboard, including, but not limited to, the advanved techniques of dashboards (filters, parameters, data source etc.) and a subsection on how to implement Power BI in the solution of using KQL data for analytics.
+### Implementations
 
-### Built-in visualization
+### Troubleshooting
 
-### Custom visualization using Plotly
+### Orchestration and optimization
 
-### Real-Time Dashboards
+### Schemas and throughput
 
-### Power BI
+### Monitoring and pricing
 
-### Org Apps
+### Hands-on lab
+
+## Module 4 - Analytics
+
+### Introduction
+
+### Architectural deep dive
+
+### Technical deep dive
+
+### Implementations
+
+### Troubleshooting
+
+### Orchestration and optimization
+
+### Schemas and throughput
+
+### Monitoring and pricing
+
+### Hands-on lab
+
+## Module 5 - Dashboards
+
+### Introduction
+
+### Architectural deep dive
+
+### Technical deep dive
+
+### Implementations
+
+### Troubleshooting
+
+### Orchestration and optimization
+
+### Schemas and throughput
+
+### Monitoring and pricing
+
+### Hands-on lab
+
+## Module 6 - Rules (Activator)
+
+### Introduction
+
+### Architectural deep dive
+
+### Technical deep dive
+
+### Implementations
+
+### Troubleshooting
+
+### Orchestration and optimization
+
+### Schemas and throughput
+
+### Monitoring and pricing
+
+### Hands-on lab
+
+## Module 7 - Actions
+
+### Introduction
+
+### Architectural deep dive
+
+### Technical deep dive
+
+### Implementations
+
+### Troubleshooting
+
+### Orchestration and optimization
+
+### Schemas and throughput
+
+### Monitoring and pricing
+
+### Hands-on lab
+
+## Module 8 - AI + Copilot
+
+### Introduction
+
+### Architectural deep dive
+
+### Technical deep dive
+
+### Implementations
+
+### Troubleshooting
+
+### Orchestration and optimization
+
+### Schemas and throughput
+
+### Monitoring and pricing
+
+### Hands-on lab
+
+## Module 9 - Data modelling
+
+### Introduction
+
+### Architectural deep dive
+
+### Technical deep dive
+
+### Implementations
+
+### Troubleshooting
+
+### Orchestration and optimization
+
+### Schemas and throughput
+
+### Monitoring and pricing
+
+### Hands-on lab
+
+## Module 10 - Security
+
+### Introduction
+
+### Architectural deep dive
+
+### Technical deep dive
+
+### Implementations
+
+### Troubleshooting
+
+### Orchestration and optimization
+
+### Schemas and throughput
+
+### Monitoring and pricing
+
+### Hands-on lab
+
+## Module 11 - Networking
+
+### Introduction
+
+### Architectural deep dive
+
+### Technical deep dive
+
+### Implementations
+
+### Troubleshooting
+
+### Orchestration and optimization
+
+### Schemas and throughput
+
+### Monitoring and pricing
+
+### Hands-on lab
+
+## Module 12 - CI/CD and ALM
+
+### Introduction
+
+### Architectural deep dive
+
+### Technical deep dive
+
+### Implementations
+
+### Troubleshooting
+
+### Orchestration and optimization
+
+### Schemas and throughput
+
+### Monitoring and pricing
+
+### Hands-on lab
 
 ---
 
