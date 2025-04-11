@@ -48,20 +48,22 @@ This training will not help you understand the basics of the suite, and it will 
 
 ## Overview of the content
 
-The content is built from 12 modules, spanning ingestion of data, manipulation of data when needed using the KQL language and visualize & analyze data using KQL, Real-Time Dashboards and Power BI, CI/CD and architectural approaches, Security and Networking.
+The content is built from 13 modules + 1 appendix, spanning ingestion of data, manipulation of data when needed using the KQL language and visualize & analyze data using KQL, Real-Time Dashboards and Power BI, CI/CD and architectural approaches, Security and Networking.
 
-1. Connectors
+1. Introduction to RTI
 2. Real-Time Hub
-3. Ingestion
-4. Analytics
-5. Dashboards
-6. Rules (Activator)
-7. Actions
-8. AI + Copilot
-9. Data modelling
-10. Security
-11. Networking
-12. CI/CD and ALM
+3. Connectors
+4. Ingestion
+5. Data modelling
+6. Analytics
+7. AI + Copilot
+8. Dashboards
+9. Rules (Activator)
+10. Actions
+11. Security
+12. Networking
+13. CI/CD and ALM
+14. Appendix
 
 ![Real-Time Intelligence in Microsoft Fabric](/assets/images/Real-Time%20Intelligence%20in%20Microsoft%20Fabric.png)
 
@@ -84,7 +86,7 @@ Each module has the same overall structure:
 > **In some modules, you will find a section with only a "N/A". This is by intent, and shows that this specific section does not apply to this module, or the module does not contain any information about the section.**
 </div>
 
-## Module 1 - Connectors
+## Module 1 - Introduction to RTI
 
 ### Introduction
 
@@ -124,7 +126,7 @@ Each module has the same overall structure:
 
 ### Hands-on lab
 
-## Module 3 - Ingestion
+## Module 3 - Connectors
 
 ### Introduction
 
@@ -144,7 +146,7 @@ Each module has the same overall structure:
 
 ### Hands-on lab
 
-## Module 4 - Analytics
+## Module 4 - Ingestion
 
 ### Introduction
 
@@ -164,7 +166,7 @@ Each module has the same overall structure:
 
 ### Hands-on lab
 
-## Module 5 - Dashboards
+## Module 5 - Data modelling
 
 ### Introduction
 
@@ -184,7 +186,7 @@ Each module has the same overall structure:
 
 ### Hands-on lab
 
-## Module 6 - Rules (Activator)
+## Module 6 - Analytics
 
 ### Introduction
 
@@ -204,7 +206,7 @@ Each module has the same overall structure:
 
 ### Hands-on lab
 
-## Module 7 - Actions
+## Module 7 - AI + Copilot
 
 ### Introduction
 
@@ -224,7 +226,7 @@ Each module has the same overall structure:
 
 ### Hands-on lab
 
-## Module 8 - AI + Copilot
+## Module 8 - Dashboards
 
 ### Introduction
 
@@ -244,7 +246,7 @@ Each module has the same overall structure:
 
 ### Hands-on lab
 
-## Module 9 - Data modelling
+## Module 9 - Rules (Activator)
 
 ### Introduction
 
@@ -264,7 +266,7 @@ Each module has the same overall structure:
 
 ### Hands-on lab
 
-## Module 10 - Security
+## Module 10 - Actions
 
 ### Introduction
 
@@ -284,7 +286,7 @@ Each module has the same overall structure:
 
 ### Hands-on lab
 
-## Module 11 - Networking
+## Module 11 - Security
 
 ### Introduction
 
@@ -304,7 +306,47 @@ Each module has the same overall structure:
 
 ### Hands-on lab
 
-## Module 12 - CI/CD and ALM
+## Module 12 - Networking
+
+### Introduction
+
+### Architectural deep dive
+
+### Technical deep dive
+
+### Implementations
+
+### Troubleshooting
+
+### Orchestration and optimization
+
+### Schemas and throughput
+
+### Monitoring and pricing
+
+### Hands-on lab
+
+## Module 13 - CI/CD and ALM
+
+### Introduction
+
+### Architectural deep dive
+
+### Technical deep dive
+
+### Implementations
+
+### Troubleshooting
+
+### Orchestration and optimization
+
+### Schemas and throughput
+
+### Monitoring and pricing
+
+### Hands-on lab
+
+## Appendix
 
 ### Introduction
 
