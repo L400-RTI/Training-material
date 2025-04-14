@@ -346,6 +346,10 @@ MS for now is calling this a "private link bypass" using contracts in the reques
 
 For destionation inside a vNET in Fabric, the Eventstream is also using the "private link bypass" for Lakehouse, Eventhouse in (push to EH). But here is a problem for EH pulling data from the Eventstream.
 
+![Private vNET injection](./assets/images/Private%20vNET%20injection.png)
+
+This image was a part of the networking discussion. Around the work on getting data from on-prem data sets.
+
 ### Implementations
 
 ### Troubleshooting
