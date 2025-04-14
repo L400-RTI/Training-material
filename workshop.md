@@ -154,6 +154,26 @@ Each module has the same overall structure:
 
 ### Technical deep dive
 
+Eventstream - meeting with Xu Jiang April 14
+
+![Eventstream 1](./assets/images/Eventstream1.png)
+
+- Low = 4 partitions
+- Medium = 16 partitions
+- High = 32 partitions
+
+Throughput has 3 parts: the inlet (the event hub) the processing, the ASA job and lastly the destination speed.
+Custom endpoint has the hightest throughpout as a destination. See the documentation for details (Eventstream -> Configure settings)
+Notice the throughput when using pull and push to Eventhouse
+
+When choosing "Eventstream before ingestion" the Eventhouse does a streaming mode and the max throughput is only theoretical.
+
+For Event Hub and IoT Hub source:
+
+- An ASA job is created to pull the data and send it to the Eventstream
+- This also enables vNET, as the Streaming connector is not vNET enabled
+- MS is working os using the Messaging Connectors to read data from EH and IoT Hub
+
 ### Implementations
 
 ### Troubleshooting
@@ -313,6 +333,18 @@ Each module has the same overall structure:
 ### Architectural deep dive
 
 ### Technical deep dive
+
+Eventstream - meeting Xu Jiang April 14
+
+![Eventstream 2](./assets/images/Eventstream2.png)
+
+PL = Private Link.
+
+When a workspace is closed to public accesss the Eventstream will use the ASA job to pull data from the Azure Event Hub from the vNET using the network protector library.
+
+MS for now is calling this a "private link bypass" using contracts in the request to enable the trusted handshake between the "outside" ASA and the internal Eventhub in the Eventstream in the workspace not open to the public (in a vNET).
+
+For destionation inside a vNET in Fabric, the Eventstream is also using the "private link bypass" for Lakehouse, Eventhouse in (push to EH). But here is a problem for EH pulling data from the Eventstream.
 
 ### Implementations
 
