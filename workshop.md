@@ -18,7 +18,7 @@ tags: fabric, kql, realtime, intelligence, event, stream, sql, data, analytics, 
 
 # Introduction
 
-*intro goes here*
+_intro goes here_
 
 ## Modalities
 
@@ -50,40 +50,41 @@ This training will not help you understand the basics of the suite, and it will 
 
 The content is built from 13 modules + 1 appendix, spanning ingestion of data, manipulation of data when needed using the KQL language and visualize & analyze data using KQL, Real-Time Dashboards and Power BI, CI/CD and architectural approaches, Security and Networking.
 
-1. Introduction to RTI
-2. Real-Time Hub
-3. Connectors
-4. Ingestion
-5. Data modelling
-6. Analytics
-7. AI + Copilot
-8. Dashboards
-9. Rules (Activator)
-10. Actions
-11. Security
-12. Networking
-13. CI/CD and ALM
-14. Appendix
+[1. Introduction to RTI](#module-1---introduction-to-rti)
+[2. Real-Time Hub](#module-2---real-time-hub)
+[3. Connectors](#module-3---connectors)
+[4. Ingestion](#module-4---ingestion)
+[5. Data modelling](#module-5---data-modelling)
+[6. Analytics](#module-6---analytics)
+[7. AI + Copilot](#module-7---ai--copilot)
+[8. Dashboards](#module-8---dashboards)
+[9. Rules (Activator)](#module-9---rules-activator)
+[10. Actions](#module-10---actions)
+[11. Security](#module-11---security)
+[12. Networking](#module-12---networking)
+[13. CI/CD and ALM](#module-13---cicd-and-alm)
+[14. Appendix](#appendix)
 
 ![Real-Time Intelligence in Microsoft Fabric](/assets/images/Real-Time%20Intelligence%20in%20Microsoft%20Fabric.png)
 
 Each module has the same overall structure:
 
-| Structure | Content |
-|------------|---------|
-| 1. Introduction to the module | Gives the fly-in to the module, the content and the business value of the module and area of RTI. |
-| 2. Architectural deep dive | Introduces the module and the connection to the rest of the RTI suite in Microsoft Fabric. Also contains elements on how the architecture could work in conjunction with other parts of the RTI service. |
-| 3. Technical deep dive | Dive into the whereabouts of the service. Seen from the backend, with a deep technical walktthrough of how things are working behind the scenes and what makes the specific part of the service connect with the rest. |
-| 4. Implementations | How should the specific part of the service be implemented and what to look out for when working with it. Also a deep walktrough of the details in functionality and outcome of the service. |
-| 5. Troubleshooting | How to read error messages and error codes. How to debug issues. How to best help Microsoft support in case of need. |
-| 6. Orchestration and optimization | How does the service best fit with an entire architecture around orchestration, how to execute the processes. How to optimize the loads, speeds and querytimes. |
-| 7. Schemas and throughout | How to handle schemas in the service and what to know when working with structured, semi-structured and unstructured data. A walkthrough of the limitations, configuration options and whereabouts of throughput |
-| 8. Monitoring and pricing | How to monitor the service and find the bottlenecks and other needed information of the performance. A deep learning element on how to calculate and estimate cost of a service and an entire implementation. How to monitor cost and optimize for cost reduction. |
-| 9. Hands-on lab | A hands on lab with guides, to try out the specific service and to learn some of the L400 features. |
+| Structure                         | Content                                                                                                                                                                                                                                                            |
+| --------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| 1. Introduction to the module     | Gives the fly-in to the module, the content and the business value of the module and area of RTI.                                                                                                                                                                  |
+| 2. Architectural deep dive        | Introduces the module and the connection to the rest of the RTI suite in Microsoft Fabric. Also contains elements on how the architecture could work in conjunction with other parts of the RTI service.                                                           |
+| 3. Technical deep dive            | Dive into the whereabouts of the service. Seen from the backend, with a deep technical walktthrough of how things are working behind the scenes and what makes the specific part of the service connect with the rest.                                             |
+| 4. Implementations                | How should the specific part of the service be implemented and what to look out for when working with it. Also a deep walktrough of the details in functionality and outcome of the service.                                                                       |
+| 5. Troubleshooting                | How to read error messages and error codes. How to debug issues. How to best help Microsoft support in case of need.                                                                                                                                               |
+| 6. Orchestration and optimization | How does the service best fit with an entire architecture around orchestration, how to execute the processes. How to optimize the loads, speeds and querytimes.                                                                                                    |
+| 7. Schemas and throughout         | How to handle schemas in the service and what to know when working with structured, semi-structured and unstructured data. A walkthrough of the limitations, configuration options and whereabouts of throughput                                                   |
+| 8. Monitoring and pricing         | How to monitor the service and find the bottlenecks and other needed information of the performance. A deep learning element on how to calculate and estimate cost of a service and an entire implementation. How to monitor cost and optimize for cost reduction. |
+| 9. Hands-on lab                   | A hands on lab with guides, to try out the specific service and to learn some of the L400 features.                                                                                                                                                                |
 
 <div class="info" data-title="Note">
 
 > **In some modules, you will find a section with only a "N/A". This is by intent, and shows that this specific section does not apply to this module, or the module does not contain any information about the section.**
+
 </div>
 
 ## Module 1 - Introduction to RTI
