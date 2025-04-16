@@ -50,18 +50,18 @@ This training will not help you understand the basics of the suite, and it will 
 
 The content is built from 13 modules + 1 appendix, spanning ingestion of data, manipulation of data when needed using the KQL language and visualize & analyze data using KQL, Real-Time Dashboards and Power BI, CI/CD and architectural approaches, Security and Networking.
 
-1. Introduction to RTI
+1. Introduction to RTI (Frank)
 2. Real-Time Hub
-3. Connectors
-4. Ingestion
-5. Data modelling
-6. Analytics
+3. Connectors (Brian)
+4. Ingestion (Brian)
+5. Data modelling (Brian)
+6. Analytics (Brian)
 7. AI + Copilot
 8. Dashboards
 9. Rules (Activator)
-10. Actions
-11. Security
-12. Networking
+10. Actions (Frank)
+11. Security (Frank)
+12. Networking (Brian)
 13. CI/CD and ALM
 14. Appendix
 
