@@ -54,13 +54,13 @@ The content is built from 13 modules + 1 appendix, spanning ingestion of data, m
 2. Real-Time Hub
 3. Connectors (Brian)
 4. Ingestion (Brian)
-5. Data modelling (Brian)
+5. Data modelling (Frank)
 6. Analytics (Brian)
 7. AI + Copilot
 8. Dashboards
-9. Rules (Activator)
+9. Rules (Activator) (Frank)
 10. Actions (Frank)
-11. Security (Frank)
+11. Security
 12. Networking (Brian)
 13. CI/CD and ALM
 14. Appendix
