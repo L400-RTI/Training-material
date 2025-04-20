@@ -18,51 +18,67 @@ tags: fabric, kql, realtime, intelligence, event, stream, sql, data, analytics, 
 
 # Introduction
 
-The Microsoft Fabric Real-Time Intelligence (RTI) platform represents a pivotal shift in how enterprises handle streaming data, automation, and action-oriented analytics. As adoption grows, so too does the need for real-world expertise that goes beyond the surface-level feature set.
+The Microsoft Fabric Real-Time Intelligence (RTI) platform represents a pivotal shift in how enterprises handle
+streaming data, automation, and action-oriented analytics. As adoption grows, so too does the need for real-world
+expertise that goes beyond the surface-level feature set.
 
 ## Why This Course Was Created
 
-Across the Microsoft data ecosystem, we are seeing a recurring pattern: Partners and customers are building real-time solutions using Fabric—but too often with architectural blind spots, implementation mistakes, or fundamental misunderstandings of how services like Activator, Eventstream, and Reflex are meant to interoperate at scale.
+Across the Microsoft data ecosystem, we are seeing a recurring pattern: Partners and customers are building
+real-time solutions using Fabric—but too often with architectural blind spots, implementation mistakes, or
+fundamental misunderstandings of how services like Activator, Eventstream, and Reflex are meant to interoperate at scale.
 
 For example:
 
 - Partners report difficulty staffing RTI engagements due to a lack of L400–500-skilled professionals.
 - Suboptimal implementations are leading to production disruptions,
-- Customers are building real-time automation flows without fully understanding how detection rules interact with stream federation, delays, and failure states.
-- Fundamental concepts such as pattern detection, state change management, and throughput handling are either misapplied or ignored.
+- Customers are building real-time automation flows without fully understanding how detection
+  rules interact with stream federation, delays, and failure states.
+- Fundamental concepts such as pattern detection, state change management, and
+  throughput handling are either misapplied or ignored.
 
-These are not theoretical issues—they are impacting live deployments and increasing the burden on support and engineering teams. We must address this gap in expertise now to avoid scale-limiting friction across the RTI customer base.
+These are not theoretical issues—they are impacting live deployments and increasing the burden on
+support and engineering teams. We must address this gap in expertise now to avoid scale-limiting friction
+across the RTI customer base.
 
 ## What This Course Provides
 
 This course was built to:
 
-- Equip senior engineers, architects, and partners with advanced technical insight into Fabric RTI’s architecture, performance characteristics, and behavioral nuances.
-- Demystify complex real-time patterns, including dynamic schema handling, alert suppression strategies, federated stream orchestration, and event-driven pipeline execution.
-- Enable best-practice implementations by showcasing what should happen in production—and what often goes wrong when you miss key details.
-- Accelerate onboarding of RTI experts to ensure Microsoft’s ecosystem can meet the growing customer demand for high-fidelity real-time solutions.
+- Equip senior engineers, architects, and partners with advanced technical insight into Fabric RTI’s architecture,
+  performance characteristics, and behavioral nuances.
+- Demystify complex real-time patterns, including dynamic schema handling,
+  alert suppression strategies, federated stream orchestration, and event-driven pipeline execution.
+- Enable best-practice implementations by showcasing what should happen in production—and what often
+  goes wrong when you miss key details.
+- Accelerate onboarding of RTI experts to ensure Microsoft’s ecosystem can meet the growing customer
+  demand for high-fidelity real-time solutions.
 
-The content is driven directly by interviews with Microsoft’s product engineering leaders, distilled into actionable knowledge and guided labs.
+The content is driven directly by interviews with Microsoft’s product engineering leaders, distilled into
+actionable knowledge and guided labs.
 
 ## Modalities
 
 - Total workshop duration is 2-3 days.
-- Each module is accompanied with technical explanation of the Fabric Real-Time Intelligence component being used in the tutorial.
+- Each module is accompanied with technical explanation of the Fabric Real-Time
+  Intelligence component being used in the tutorial.
 - Without the accompanied explanation, the tutorial can be completed in 1-2 days.
 
 ## Authors
 
-- [Brian Bønk ](https://www.linkedin.com/in/brianbonk/), Data Platform MVP
+- [Brian Bønk](https://www.linkedin.com/in/brianbonk/), Data Platform MVP
 - [Frank Geisler](https://www.linkedin.com/in/frank-geisler/), Data Platform MVP
 - [Matt Gordon](https://www.linkedin.com/in/sqlatspeed/), Data Platform MVP
 
 ## Contributing
 
-- If you'd like to contribute to this lab, report a bug or issue, please feel free to submit a Pull-Request to the [GitHub repo](<link to repo>) for us to review or [submit Issues](<link to repo>) you encounter.
+- If you'd like to contribute to this lab, report a bug or issue, please feel free to submit a Pull-Request
+  to the ==[GitHub repo](<link to repo>)== for us to review or ==[submit Issues](<link to repo>)== you encounter.
 
 ## Prerequisites
 
-To get starated with this training and to understand the baseline of the Real-Time Intelligence suite of services from Microsoft Fabric, it is expected of the audience to have the following certifications:
+To get starated with this training and to understand the baseline of the Real-Time Intelligence suite of
+services from Microsoft Fabric, it is expected of the audience to have the following certifications:
 
 - [DP-600 Microsoft Certified: Fabric Analytics Engineer Associate](https://learn.microsoft.com/en-us/credentials/certifications/fabric-analytics-engineer-associate/?practice-assessment-type=certification)
 - [DP-700 Microsoft Certified: Fabric Data Engineer Associate](https://learn.microsoft.com/en-us/credentials/certifications/fabric-data-engineer-associate/?practice-assessment-type=certification)
@@ -72,7 +88,9 @@ This training will not help you understand the basics of the suite, and it will 
 
 ## Overview of the content
 
-The content is built from 13 modules + 1 appendix, spanning ingestion of data, manipulation of data when needed using the KQL language and visualize & analyze data using KQL, Real-Time Dashboards and Power BI, CI/CD and architectural approaches, Security and Networking.
+The content is built from 13 modules + 1 appendix, spanning ingestion of data, manipulation of data when
+needed using the KQL language, visualize and analyze data using KQL, Real-Time Dashboards and Power BI, CI/CD and
+architectural approaches, Security and Networking.
 
 1. [Introduction to RTI](#module-1---introduction-to-rti) (Frank)
 2. [Real-Time Hub](#module-2---real-time-hub) (Matt)
@@ -115,7 +133,96 @@ Each module has the same overall structure:
 
 ### Introduction
 
+Real-Time Intelligence (RTI) in Microsoft Fabric is a fully managed, end-to-end platform for ingesting,
+processing, analyzing, and acting on streaming data — all in near real time.
+
+It enables organizations to:
+
+- **Capture live data** from sources like IoT devices, logs, files, APIs, and more using Eventstream.
+- **Enrich and transform** that data in motion with KQL, Eventstreams, or low-code tools.
+- **Detect patterns, anomalies, and threshold conditions** using intelligent Reflex rules and Activator.
+- **Trigger automated actions** across systems (e.g., Power Automate, pipelines, APIs) the moment a business-critical event occurs.
+
+RTI is deeply integrated with the broader Fabric platform — allowing seamless connectivity with OneLake, Notebooks, Pipelines,
+Power BI, and security infrastructure. This gives enterprises a unified foundation for real-time operational
+analytics, anomaly detection, alerting, and automated decisioning.
+
+In short: RTI empowers you to go from data-in-motion to action-in-motion.
+
 ### Architectural deep dive
+
+Real-Time Intelligence (RTI) is not a siloed service—it is a tightly integrated layer within the broader
+Microsoft Fabric unified data platform, designed to support continuous intelligence pipelines across
+structured and unstructured data streams.
+
+![alt](./assets/images/rtiLabArchitecture.png)
+
+At the architectural level, RTI is composed of several interlocking components:
+
+#### 1. Data Sources (Streaming & Batch)
+
+The architecture supports a wide range of streaming and batch data sources:
+
+- Streaming: Kafka, MQTT, Azure Event Hubs, IoT Hub, Azure Data Explorer, PostgreSQL, Cosmos DB, and others.
+- Batch: Ingested and orchestrated via Data Factory, which feeds both Lakehouse and Eventhouse layers.
+
+#### 2. Eventstream – The Streaming Ingestion Gateway
+
+Eventstream acts as the unified real-time ingestion layer:
+
+- Connects to live data sources with low latency
+- Filters, parses, and enriches data in motion
+- Routes data simultaneously to destinations such as Eventhouse, Real-time Dashboards, and Activator
+
+#### 3. Eventhouse – Layered Storage & Processing
+
+With Eventhouse you can build:
+
+- Bronze, Silver, and Gold layers for progressive data refinement
+- Update policies to process data as they are ingested into the KQL-Databases
+- Materialized views (MV) for near-real-time queryability
+- Integration with OneLake and Query Accelerated Shortcuts for high-performance access
+
+#### 4. Machine Learning Integration
+
+The platform supports training and real-time scoring of ML models:
+
+- Models consume streaming or batch data
+- Real-time inference is embedded directly into the processing pipeline via Eventhouse
+
+#### 5. Real-Time Visualization and Analytics
+
+- Power BI and Real-Time Dashboards provide instant visibility into data flowing through
+  Eventstream and Eventhouse
+- Data is queried directly via DirectQuery, eliminating the need for duplication
+
+#### 6. Activator – Action Engine and Automation Layer
+
+Activator is the execution engine for real-time actions:
+
+- Listens for triggers from Reflex detection rules or Eventstream patterns
+- Executes downstream actions: Power Automate flows, REST API calls, email, Teams alerts, and more
+- Supports composable rules, stateful evaluation, and alert suppression strategies
+
+#### 7. Foundational Platform Integration
+
+All RTI components are built on core Fabric foundations:
+
+- OneLake for unified data storage across batch and streaming workloads
+- Real-Time Hub as a logical fabric-wide orchestration layer
+- AI and Copilot Agents for intelligent assistance and automation enrichment
+
+#### Architectural Highlights
+
+- **Integrated Lakehouse and Streaming:** Combines traditional Lakehouse architecture with real-time stream
+  processing
+- **Natively Fabric:** All services are fully managed and deeply connected across the Fabric ecosystem
+- **Streaming-to-Action:** Built for low-latency, high-value automated responses
+- **End-to-End Observability:** Real-time dashboards and ML scoring close the loop from raw data to business decision
+
+RTI workloads are capacity-based, ensuring predictable performance and cost control across tenant- or
+workspace-scoped environments. It supports multi-tenant, cross-workspace, and multi-sink streaming
+architectures, making it a good fit for enterprise-wide observability, monitoring, and automation solutions.
 
 ### Technical deep dive
 
@@ -912,6 +1019,8 @@ This image was a part of the networking discussion. Around the work on getting d
 ### Hands-on lab
 
 ## Appendix
+
+### Important Links
 
 ### Introduction
 
