@@ -18,7 +18,31 @@ tags: fabric, kql, realtime, intelligence, event, stream, sql, data, analytics, 
 
 # Introduction
 
-_intro goes here_
+The Microsoft Fabric Real-Time Intelligence (RTI) platform represents a pivotal shift in how enterprises handle streaming data, automation, and action-oriented analytics. As adoption grows, so too does the need for real-world expertise that goes beyond the surface-level feature set.
+
+## Why This Course Was Created
+
+Across the Microsoft data ecosystem, we are seeing a recurring pattern: Partners and customers are building real-time solutions using Fabric—but too often with architectural blind spots, implementation mistakes, or fundamental misunderstandings of how services like Activator, Eventstream, and Reflex are meant to interoperate at scale.
+
+For example:
+
+- Partners report difficulty staffing RTI engagements due to a lack of L400–500-skilled professionals.
+- Suboptimal implementations are leading to production disruptions,
+- Customers are building real-time automation flows without fully understanding how detection rules interact with stream federation, delays, and failure states.
+- Fundamental concepts such as pattern detection, state change management, and throughput handling are either misapplied or ignored.
+
+These are not theoretical issues—they are impacting live deployments and increasing the burden on support and engineering teams. We must address this gap in expertise now to avoid scale-limiting friction across the RTI customer base.
+
+## What This Course Provides
+
+This course was built to:
+
+- Equip senior engineers, architects, and partners with advanced technical insight into Fabric RTI’s architecture, performance characteristics, and behavioral nuances.
+- Demystify complex real-time patterns, including dynamic schema handling, alert suppression strategies, federated stream orchestration, and event-driven pipeline execution.
+- Enable best-practice implementations by showcasing what should happen in production—and what often goes wrong when you miss key details.
+- Accelerate onboarding of RTI experts to ensure Microsoft’s ecosystem can meet the growing customer demand for high-fidelity real-time solutions.
+
+The content is driven directly by interviews with Microsoft’s product engineering leaders, distilled into actionable knowledge and guided labs.
 
 ## Modalities
 
