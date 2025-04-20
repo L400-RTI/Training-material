@@ -226,6 +226,99 @@ architectures, making it a good fit for enterprise-wide observability, monitorin
 
 ### Technical deep dive
 
+Real-Time Intelligence in Microsoft Fabric is more than a data flow — it’s a system of reactive engines working together to process, detect, and act on data in milliseconds. This section introduces the internal workings behind the core components to help you understand why things behave the way they do. This is only a short summary.
+These topics are covered in the different Modules more in depth
+
+#### Eventstream Internals
+
+**Core Focus:** Buffering, parallelization, schema evolution, and latency management
+
+- Ingested data from streaming sources is processed via partitioned pipelines, often aligned to source partitions (e.g., Kafka topics).
+
+- Eventstream introduces a controlled buffer delay (typically ~10 seconds) to enable multi-sink routing and enrichment.
+
+- Supports schema inference and evolution, allowing downstream systems to adapt to changes in the payload shape.
+
+- Event delivery is parallelized but respects ordering guarantees per partition.
+
+**Implication:** Changes in source schemas, burst traffic, or improperly filtered data can delay or disrupt downstream pipelines.
+
+#### Eventhouse Mechanics
+
+**Core Focus:** Update policies, ingestion windows, materialized views
+
+- Data ingested by Eventstream to the Bronze layer can be written to Silver or Gold layers via update policies.
+- Ingestion into Eventhouse supports near real-time materialized views (MV) to precompute aggregates.
+- Ingestion windows define how often new records are committed and visible — typically every few seconds.
+
+**Implication:** Knowing how Eventhouse batches and evaluates data is essential for synchronizing analytics and trigger points with actual data availability.
+
+#### Activator
+
+**Core Focus:** Trigger resolution, delay models, retries, and action targeting
+
+- Activator receives event context from Reflex including all rule-evaluated fields and metadata.
+- Internally, Activator applies:
+
+  - Suppression logic (e.g., “no more than one alert per 60s”)
+  - Concurrency controls (to avoid over-firing actions)
+  - Execution retries for transient failures (e.g., webhook timeouts)
+
+- Supports multiple action targets, including notebooks, pipelines, Power Automate, and webhooks.
+
+**Implication:** Misconfigured rules or actions can overload endpoints or cause noisy alerting without proper debounce logic.
+
+#### State Handling in Reflex
+
+**Core Focus:** Stateless vs. stateful evaluation, cooldowns, suppression
+
+- Stateless rules match raw values (e.g., value > 100) — evaluated on every event.
+- Stateful rules track transitions (e.g., value DECREASES, EXIT RANGE, or absence over time).
+- Reflex maintains in-memory state per tracked entity, e.g., per device_id or bikepoint_id.
+- Cooldown timers and alert thresholds reduce false positives and spamming.
+
+**Implication:** Understanding how state is maintained and when it resets is crucial to correct and efficient pattern detection.
+
+#### Action Routing
+
+**Core Focus:** Execution paths, targeting logic, and custom extensions
+
+- Activator can execute multiple action types depending on business needs:
+  - Built-in Power Automate integration
+  - REST POST to web services or Teams
+  - Trigger Fabric Pipelines or Notebooks
+- Action routing can dynamically include payload data, headers, and even computed values.
+
+- Soon: Direct Web API integration to define fully custom actions.
+
+**Implication:** Building enterprise-grade reactions means understanding what each action path supports in terms of latency, retries, and payload structure.
+
+#### Performance Tuning Knobs
+
+**Core Focus:** Throughput, suppression, and buffer configuration
+
+- Eventstream allows tuning:
+  - Buffer sizes
+  - Output frequency
+  - Filtering complexity
+- Reflex rules can include alert frequency controls and aggregation windows
+- Activator supports deduplication, throttling windows, and max concurrency settings
+
+**Implication:** Understanding these levers helps reduce noise, optimize cost, and improve SLAs.
+
+#### Capacity Impact
+
+Core Focus: RTI’s consumption of Fabric Capacity Units (FCUs)
+
+- Each component consumes compute based on:
+- Data volume and frequency
+- Rule complexity
+- Action volume and concurrency
+
+Eventstream and Activator scale with event velocity, while Eventhouse depends on query concurrency and storage tiering.
+
+**Implication:** RTI capacity must be planned with sustained and peak loads in mind — especially for high-volume streaming applications.
+
 ### Implementations
 
 ### Troubleshooting
@@ -235,8 +328,6 @@ architectures, making it a good fit for enterprise-wide observability, monitorin
 ### Schemas and throughput
 
 ### Monitoring and pricing
-
-### Hands-on lab
 
 ## Module 2 - Real-Time Hub
 
