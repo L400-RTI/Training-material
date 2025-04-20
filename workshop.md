@@ -107,7 +107,7 @@ Each module has the same overall structure:
 
 <div class="info" data-title="Note">
 
-> **In some modules, you will find a section with only a "N/A". This is by intent, and shows that this specific section does not apply to this module, or the module does not contain any information about the section.**
+> **In some modules, you will not find all of the sections above. This is by intent, and shows that this specific section does not apply to this module, or the module does not contain any information about the section.**
 
 </div>
 
