@@ -254,7 +254,7 @@ These topics are covered in the different Modules more in depth
 **Implication:** Knowing how Eventhouse batches and evaluates data is essential for synchronizing analytics and trigger points with actual data availability.
 
 #### Activator
-
+  
 **Core Focus:** Trigger resolution, delay models, retries, and action targeting
 
 - Activator receives event context from Reflex including all rule-evaluated fields and metadata.
@@ -318,7 +318,7 @@ Core Focus: RTI’s consumption of Fabric Capacity Units (FCUs)
 Eventstream and Activator scale with event velocity, while Eventhouse depends on query concurrency and storage tiering.
 
 **Implication:** RTI capacity must be planned with sustained and peak loads in mind — especially for high-volume streaming applications.
-
+  
 ### Implementations
 
 ### Troubleshooting
