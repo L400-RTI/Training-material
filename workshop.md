@@ -656,6 +656,18 @@ Notice the difference in the **table** and **database** in the code above.
 
 </div>
 
+#### Schemas best practices
+
+When working with connectors and ingestion, it is good practice to work with *typed* columns when applicable. So try to avoid the dynamic datatype. If working with dynamic data type and some JSON fields are often used for searching and aggregration, then do an explicit convertion before storing and save it as string, long or ind for faster performance.
+
+When working with datetime columns, these should always be stored as the datetime data type. Long and int can also store datetime, but the storeage and performance will not be as effective as the datetime format.
+
+If a column can be converted from decimal to real, then do that. It will help the engine in the aggregation.
+
+Any identity columns in the source data should be converted to a string. Strings are much faster than int and other number formats, as the index on data is build to work with strings ootb.
+
+Use as narrow tables as possible for ingestion and in the same time try to denormalize data to limit joins.
+
 ### Monitoring and pricing
 
 Monitoring of connectors is not available, please see the Module for Ingestion to get the introduction to the ingetsion errors and monitoring.
