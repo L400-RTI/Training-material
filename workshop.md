@@ -461,7 +461,7 @@ Poor assumptions about these two dimensions are a leading cause of production is
 
 #### Why Schemas Matter in Real Time
 
-RTI services - Eventstream, KQL DB, Activator, Real-Time Hub - depend on explicit schema understanding to parse, correlate, and act on data. But in modern streaming systems, schemas are rarely fixed:
+RTI services - Eventstream, Eventhouse, Activator, Real-Time Hub - depend on explicit schema understanding to parse, correlate, and act on data. But in modern streaming systems, schemas are rarely fixed:
 
 - JSON payloads evolve
 - Fields become nullable or disappear
