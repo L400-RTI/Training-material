@@ -1225,10 +1225,11 @@ For pipelines and notebooks, use Fabric monitoring tools to inspect run status, 
 
 Activator follows a capacity-based pricing model within Microsoft Fabric:
 
-|Pricing Principle | Description |
-|Per capacity, not per rule|You pay for Activator runtime only while activators are actively running in your Fabric capacity.|
-|Usage-based billing|Cost is driven by duration of activation and number of running Activators—not volume of events or number of rules.|
-|Deactivation halts billing|If an Activator is paused or deactivated, it stops incurring cost.|
+| Pricing Principle          | Description                                                                                                          |
+| -------------------------- | -------------------------------------------------------------------------------------------------------------------- |
+| Per capacity, not per rule | You pay for Activator runtime only while activators are actively running in your Fabric capacity.                    |
+| Usage-based billing        | Cost is driven by duration of activation and number of running Activators - not volume of events or number of rules. |
+| Deactivation halts billing | If an Activator is paused or deactivated, it stops incurring cost.                                                   |
 
 <div class="info" data-title="Note">
 
