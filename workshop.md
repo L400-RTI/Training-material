@@ -1427,4 +1427,9 @@ This is a code section
 
 ##
 
-`this is a highlight`
+`this is code`
+
+```kql
+this
+| is a KQL Codeblock
+```
