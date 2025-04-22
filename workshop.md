@@ -361,7 +361,7 @@ In real-time architectures, failures don’t always come with clear error messag
 
 Microsoft Fabric Real-Time Intelligence (RTI) is a powerful suite—but also a distributed, low-latency system where:
 
-- Data flows continuously across services (Eventstream → KQL DB → Notebooks/Pipelines)
+- Data flows continuously across services (Eventstream → Eventhouse → Activator/Visualisation)
 - Latency thresholds are tight
 - Observability requires intentional design
 
@@ -628,7 +628,7 @@ Schemas will be configured for direct ingestion to the Eventhouse only. For data
 Schema validation is a part of the Ingestion module and will be handled there.
 
 When defining Eventhouse connectors, you must also define a schema to support that specific ingestion.
-This is done in an *ingestion mapping* in the Eventhouse itself. These exists on two levels: Database mapping and database, table mapping. The last mapping is fixed to a specific table in the database, where as the first one is only tied to a specific database.
+This is done in an _ingestion mapping_ in the Eventhouse itself. These exists on two levels: Database mapping and database, table mapping. The last mapping is fixed to a specific table in the database, where as the first one is only tied to a specific database.
 
 An ingestion mapping consists of the columns and the corresponding data type - for instance:
 
@@ -658,7 +658,7 @@ Notice the difference in the **table** and **database** in the code above.
 
 #### Schemas best practices
 
-When working with connectors and ingestion, it is good practice to work with *typed* columns when applicable. So try to avoid the dynamic datatype. If working with dynamic data type and some JSON fields are often used for searching and aggregration, then do an explicit convertion before storing and save it as string, long or ind for faster performance.
+When working with connectors and ingestion, it is good practice to work with _typed_ columns when applicable. So try to avoid the dynamic datatype. If working with dynamic data type and some JSON fields are often used for searching and aggregration, then do an explicit convertion before storing and save it as string, long or ind for faster performance.
 
 When working with datetime columns, these should always be stored as the datetime data type. Long and int can also store datetime, but the storeage and performance will not be as effective as the datetime format.
 
@@ -678,10 +678,7 @@ Pricing for connectors are free, they are only pointers to data and sources, and
 
 #### Ingest data from SQL server to Eventhouse
 
-
-
 #### Read data from JSON file to Eventhouse
-
 
 ## Module 4 - Ingestion
 
