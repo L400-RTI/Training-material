@@ -809,7 +809,7 @@ Data models in this environment are not just schemas — they are performance-cr
 
 ##### 1. Datatypes
 
-Datatypes in Microsoft Fabric RTI are foundational to modeling architecture. They define not only how data is stored and queried in KQL-based services like Eventhouse, but also how efficiently that data is joined, filtered, compressed, and consumed downstream (e.g., in Power BI). From an architectural perspective, datatypes:
+Datatypes in Microsoft Fabric RTI are foundational to data modeling. They define not only how data is stored and queried in KQL-based services like Eventhouse, but also how efficiently that data is joined, filtered, compressed, and consumed downstream (e.g., in Power BI). From an architectural perspective, datatypes:
 
 - Determine compression strategy and extent shaping, impacting storage efficiency and query scan times.
 - Affect join behavior and broadcast strategies in large distributed queries.
