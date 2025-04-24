@@ -714,10 +714,6 @@ The push method is the only method available when doing any transformations to t
 
 When manipulating data in the Eventstream service, we have the tranformations part of the Eventstream processor.
 
-Transformations are mostly out of the box experience, but we have a special option here to create a SQL script in the transformations to add our own custom SQL code to maniputale the incoming data.
-
-[Brian writes more in this if it is announced at build]
-
 #### Shortcuts
 
 Accelerated shortcuts:
@@ -733,7 +729,7 @@ Normal shortcuts (non accelerated):
 
 #### Direct ingestion
 
-When speaking of direct ingestion, we have a source, for which it is possible to connect directly from the Eventhouse and read the data. These sources are, but not limited to, SQL Server, EventHub, and [find more sources]
+When speaking of direct ingestion, we have a source, for which it is possible to connect directly from the Eventhouse and read the data. These sources are, but not limited to, SQL Server, EventHub, and [Brian to find more sources]
 
 ### Technical deep dive
 
