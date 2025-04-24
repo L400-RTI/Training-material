@@ -109,7 +109,17 @@ External tables expose datasets that reside in external storage (ADLS, Blob, SQL
 
 Partition pruning and pre-filtering play a critical role in maintaining performance. Effective modeling requires aligning the external table’s path structure with likely filter predicates.
 
-##### 4. Modeling for Power BI
+##### 4. Partitioning Policies
+
+Partitioning policies define how extents (immutable data shards) are organized post-ingestion to optimize query performance. From an architectural perspective, this:
+
+- Enables partition pruning by datetime or high-cardinality string keys (e.g., TenantId, AccountId),
+- Reduces data movement across nodes in distributed queries and joins,
+- Improves compression and caching efficiency for time-series and multi-tenant scenarios.
+
+Policies can be configured to assign partitioned extents using `ByPartition` (co-location on same node) or `Uniform` (balanced distribution). Effective modeling requires aligning the partition key with common filter patterns and join conditions.
+
+##### 5. Modeling for Power BI
 
 Power BI semantic models built atop KQL-Databases must accommodate latency, freshness, and cardinality. Key architectural considerations include:
 
@@ -121,6 +131,152 @@ Power BI semantic models built atop KQL-Databases must accommodate latency, fres
 Semantic models should be architected with DirectQuery for the fact tables and dual mode for the dimension tables to balance performance with real-time accuracy.
 
 ### Technical deep dive
+
+##### 1. Datatypes
+
+Datatypes in Microsoft Real-Time Intelligence (Eventhouse/KQL Database) are more than schema constraints - they directly affect storage efficiency, query performance, and downstream integration, particularly with Power BI and external consumers.
+
+**Core Datatypes and Storage Behavior**
+
+Fabric RTI relies on a columnar storage engine, where each column is encoded and compressed independently. The choice of datatype influences both compression ratio and query execution plan:
+
+- `datetime`: Always stored in UTC with nanosecond precision. Used extensively for filtering, binning, and temporal joins. Internally indexed for efficient range queries.
+
+- `timespan`: Represents durations; supports arithmetic and comparisons. Appears as decimal in Power BI (in days), requiring careful modeling to preserve interpretability.
+
+- `dynamic`: Stores JSON-like semi-structured data. Powerful for flexibility but expensive for parsing and filtering—avoid frequent projection or filtering on deep-nested fields.
+
+- `string`: High-cardinality strings can inflate dictionary sizes and affect memory utilization. From its history, Kusto is aimed at working with strings, so if you have e.g. a number that is not calculated with store it as string. Use `hash()` where possible in joins or aggregations. The `hash()` function is recommended in scenarios where:
+
+  - The actual string values are not needed in output,
+  - You’re performing joins or group-bys where cardinality is high,
+  - You need to reduce memory consumption and simplify value comparison.
+
+- `int`, `long`, `real`, `decimal`: Fixed-precision numerics. Prefer `long` or `real` over `decimal` unless exact scale/precision is needed; decimal has a higher query-time cost.
+
+**Modeling Implications**
+
+- Avoid overuse of dynamic fields in hot paths; consider pre-flattening or projecting frequently used fields into dedicated columns via update policies.
+
+- Be explicit with datetime handling when integrating with Power BI—timezone shifts (e.g., datetime_utc_to_local()) can degrade performance unless applied post-filtering.
+
+- Normalize categorical fields used in slicers/joins into dimension tables (especially in Power BI) to avoid scanning large fact tables for distinct values.
+
+- Enforce strong typing in ingestion paths—ambiguous schemas (e.g., mixing strings and numerics) can lead to costly type coercion at query time.
+
+**Interop with Power BI**
+
+When data is surfaced to Power BI:
+
+- datetime → datetime (assumed UTC),
+- timespan → decimal (duration in days),
+- dynamic → string (Power Query may parse if JSON),
+- bool, int, long, real → match directly.
+
+Type conversions and representations may affect filter behavior and visuals e.g., duration in decimal form requires DAX formatting to be user-friendly.
+
+##### 2. Update Policies
+
+Update policies in KQL-Databases are server-side data transformation rules that automatically populate one or more target tables during ingestion of data into a source table. They are defined declaratively and executed in real time, enabling near-synchronous materialization of derived views, enriched datasets, or pre-aggregated snapshots—without requiring post-processing jobs.
+
+**How Update Policies Work**
+
+An update policy links a source table (where data is ingested) to one or more target tables (where processed results are written). The transformation logic is defined as a KQL function that runs at ingestion time. Architecturally, this means:
+
+- The ingestion pipeline triggers the update policy as a side-effect of writing data to the source table.
+- The output of the query is materialized into the target table in a transactionally consistent manner.
+- Multiple target tables can be populated from the same source with different transformation logic.
+
+**Common Use Cases**
+
+- **Data filtering:** Routing only relevant records (e.g., where ErrorCode != 0) into a troubleshooting table.
+
+- **Schema transformation:** Projecting or renaming columns to standardize downstream data structure.
+
+- **Data enrichment:** Performing lookup joins against dimension tables to enhance the ingested records with descriptive metadata.
+
+- **Data forking:** Distributing data from a raw ingestion table into multiple shaped, consumer-friendly tables based on business context (e.g., telemetry vs. alerts vs. billing).
+
+**Technical Considerations**
+
+- **Performance:** Since update policies execute at ingestion time, they directly impact ingestion throughput. Complex policies (e.g., joins, regex parsing) may throttle ingestion if not tuned.
+
+- **Query behavior:** Policies must be ingestion-safe. That means they cannot use operators like `join kind=inner` on large tables without `hint.strategy=broadcast`, or call user-defined functions with unbounded logic.
+
+- **Transformation Function:** Must take no parameters and be deterministic. Think of it as a logical view over newly ingested data.
+
+- **Error handling:** If the update policy query fails, ingestion into the source table succeeds, but the target table is not updated. Failures are logged and can be monitored using .show ingestion failures.
+
+- **Debugging:** Use `.get ingestion failures` or temporarily disable the policy and run the transformation logic manually to troubleshoot.
+
+**Modeling Best Practices**
+
+- Keep update policies idempotent and stateless — they should only process new ingested records, using ingestion-time context if needed.
+
+- Precompute expensive transformations early via update policies if they are reused in queries, to offload query-time compute.
+
+- Use the `.ingest inline` command or simulated ingestion to test policy logic before enabling in production.
+
+- Avoid chaining update policies; Fabric does not support recursive execution between target tables with their own update policies.
+
+**Example for an update policy**
+
+In this example we enrich Logs using an update policy.
+
+Step 1: Create the source table
+
+```kql
+.create table RawLogs (
+    Timestamp: datetime,
+    DeviceId: string,
+    Message: string
+)
+```
+
+Step 2: Create the Target Table
+
+```kql
+.create table EnrichedLogs (
+    Timestamp: datetime,
+    DeviceId: string,
+    DeviceType: string,
+    Region: string,
+    Message: string
+)
+```
+
+Step 3: Create a Dimension Table for enrichment
+
+```kql
+.create table Devices (
+    DeviceId: string,
+    DeviceType: string,
+    Region: string
+)
+```
+
+Step 4: Define a Transformation Function
+
+```kql
+.create function with (folder = "UpdatePolicies") EnrichRawLogs() {
+    RawLogs
+    | lookup kind=leftouter Devices on DeviceId
+    | project Timestamp, DeviceId, DeviceType, Region, Message
+}
+```
+
+Step 5: Attach the Update Policy to table `RawLogs`
+
+```kql
+.alter table RawLogs policy update
+@'[{"IsEnabled": true, "Source": "RawLogs", "Query": "EnrichRawLogs()", "Destination": "EnrichedLogs"}]'
+```
+
+##### 3. External Tables
+
+##### 4. Partitioning Policies
+
+##### 5. Modeling for Power BI
 
 ### Implementations
 
