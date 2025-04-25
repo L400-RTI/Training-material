@@ -25,6 +25,7 @@ To support your learning journey and enable hands-on exploration, we’ve compil
   - [.export to storage](https://learn.microsoft.com/en-us/kusto/management/data-export/export-data-to-storage?view=microsoft-fabric)
   - [Eventhouse and KQL Database consumption](https://learn.microsoft.com/en-us/fabric/real-time-intelligence/real-time-intelligence-consumption)
   - [Fabric KQL Database Cost Estimator](https://dataexplorer.azure.com/KustoFabricCostEstimator.html)
+  - [materialized_view()](https://learn.microsoft.com/en-us/kusto/query/materialized-view-function?view=microsoft-fabric)
 
 - Analytics
 

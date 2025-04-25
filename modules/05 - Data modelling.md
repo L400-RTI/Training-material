@@ -130,9 +130,55 @@ Power BI semantic models built atop KQL-Databases must accommodate latency, fres
 
 Semantic models should be architected with DirectQuery for the fact tables and dual mode for the dimension tables to balance performance with real-time accuracy.
 
+##### 6. OneLake Availibility
+
+OneLake plays a pivotal role in unifying data access across Microsoft Fabric, enabling seamless integration of streaming data with analytical and operational workloads. In the context of Real-Time Intelligence (RTI), OneLake serves not only as a persistent, queryable data layer but also as a critical component in reducing latency, cost, and complexity when managing event-driven architectures at scale.
+
+This section dissects the architectural model that enables OneLake availability from Eventhouse, ensuring that data ingested in real time is efficiently exposed to downstream consumers in both raw and optimized formats.
+
+**Architectural Flow**
+
+At a high level, the architecture consists of the following stages:
+
+1. Ingestion into Eventhouse (KQL DB)
+
+   - Real-time data streams (via Eventstream or other pipelines) are ingested into Eventhouse in rowstore format for lowest latency.
+   - This format is immediately queryable, enabling near-instant analytics post-ingestion.
+
+2. Background Conversion to Columnstore
+
+   - Behind the scenes, Eventhouse asynchronously converts rowstore data into columnar Parquet format for long-term analytics performance and compression efficiency.
+   - These columnstore segments are co-located and made available through OneLake using shared storage pointers—avoiding data duplication.
+
+3. Exposure in OneLake
+
+   - The same Parquet-formatted data is made accessible through OneLake via logical shortcuts, either at the database level or for individual tables.
+
+   - These OneLake representations appear as external tables for downstream compute engines (e.g., Spark, SQL, Power BI).
+
+**Key Architectural Characteristics**
+
+| Feature                          | Description                                                                                                                                                                                        |
+| -------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Hot and Cold Tiering             | Data initially resides in hot SSD-backed storage (rowstore), then is tiered to colder columnstore Parquet segments optimized for cost and performance.                                             |
+| Parquet Exposure                 | The columnstore segments are exposed in Open Parquet format for compatibility with external engines.                                                                                               |
+| One Copy Design                  | No redundant storage—data is referenced, not duplicated. This enables zero additional storage cost for making Eventhouse data available in OneLake.                                                |
+| Latency Tuning                   | Trickling ingestion patterns (low event rates) can introduce delays (up to 3 hours) before data appears in OneLake. Heavier ingestion rates optimize latency by triggering faster materialization. |
+| Adaptive File Optimization       | Eventhouse determines optimal file size for Parquet segments to balance performance and cost. No additional tuning is required by users.                                                           |
+| Schema and Retention Constraints | Once OneLake exposure is enabled, schema changes and data deletion are restricted. Users cannot alter table schemas or delete data unless they disable OneLake availability.                       |
+
+**Architectural Best Practices**
+
+- **Design for Append-Only Workloads:** Due to schema immutability, datasets exposed to OneLake should be modeled as append-only where possible.
+- **Avoid Excessive Trickling:** Avoid scenarios with a very low ingestion rate over extended time (e.g., few events per second), as this will delay columnstore availability in OneLake.
+- **Use Logical Shortcuts Strategically:** Expose only the datasets that require cross-engine visibility; over-exposing datasets can lead to cost and operational overhead.
+- **Understand the Cold Path Behavior:** For long-term analysis or integrations with external engines (e.g., Spark ML or Lakehouse), design queries to leverage OneLake data via SQL or Lakehouse endpoints.
+
+##### 7. Vector Databases
+
 ### Technical deep dive
 
-##### 1. Datatypes
+#### 1. Datatypes
 
 Datatypes in Microsoft Real-Time Intelligence (Eventhouse/KQL Database) are more than schema constraints - they directly affect storage efficiency, query performance, and downstream integration, particularly with Power BI and external consumers.
 
@@ -272,7 +318,89 @@ Step 5: Attach the Update Policy to table `RawLogs`
 @'[{"IsEnabled": true, "Source": "RawLogs", "Query": "EnrichRawLogs()", "Destination": "EnrichedLogs"}]'
 ```
 
-##### 3. External Tables
+##### 3. Materialized Views
+
+Materialized Views (MVs) in Microsoft Fabric RTI are a performance-critical modeling construct that allow pre-aggregation and deduplication of high-volume data streams in a cost-effective and scalable manner. Unlike traditional views or on-the-fly aggregations, materialized views are physically materialized and maintained incrementally using a delta-and-cursor-based architecture.
+
+This section explores the internal mechanics, refresh behavior, query execution path, and advanced considerations for using Materialized Views effectively in Eventhouse and KQL Database.
+
+**Internal Architecture**
+
+Materialized Views are backed by a hidden physical table that stores precomputed results. The system maintains two key components:
+
+- **View Table:** The hidden storage table containing the materialized extents.
+
+- **Delta (Source Tail):** Newly ingested records not yet materialized.
+
+![alt](./assets/images/materialized_views1.png)
+
+The cursor tracks how far materialization has progressed in the source table. During materialization:
+
+- New data is read based on the cursor position.
+- Overlapping data is soft-deleted.
+- A single commit replaces the materialized extents.
+- The cursor is advanced accordingly.
+
+This allows the view to stay fresh without reprocessing the entire source table, which is critical for high-ingest scenarios​.
+
+**Query Execution Logic**
+
+When querying a materialized view, the system combines the hidden view table and the delta tail to produce the most up-to-date result.
+
+Query Planner Behavior:
+
+- Aggregates the delta (non-materialized records).
+- Joins it with the materialized part.
+- Applies rewrite rules and filter pushdown to optimize execution​.
+
+![alt](./assets/images/materialized_views2.png)
+
+This mechanism ensures consistency and freshness, even in between materialization cycles.
+
+You can also use the `materialized_view("ViewName", max_age)` function to explicitly reference only the materialized part, skipping delta aggregation. The function has an optional `max_age` argument. If the view was not materialized in the last `max_age` the entire view will be queried. This improves performance at the cost of data freshness and is useful for:
+
+- Serving pre-aggregated metrics to Power BI dashboards.
+
+- Running high-concurrency read queries under SLA constraints.
+
+![alt](./assets/images/materialized_views3.png)
+
+**Constraints and Characteristics**
+
+- Defined over a single source table with a single summarize statement.
+- Cannot contain joins, unions, or multiple stages of computation.
+- Schema is auto-inferred and updated unless schema auto-update is disabled.
+- MV over another MV is supported only if the first view uses `take_any()` (i.e., for deduplication).
+
+**Materialization Behavior and Capacity Limits**
+
+Materialization is an asynchronous background job, triggered when capacity allows. Triggers are based on:
+
+- Eventhouse capacity policy (per-cluster limit on concurrent materializations).
+- Extent age and size of delta region.
+
+To inspect the materialization status
+
+```kql
+.show materialized-view <ViewName> details
+```
+
+**Performance Tuning Tips**
+
+- Use `bin()` and `arg_max()`/`take_any()` to support time-based aggregations and deduplication.
+- Filter early and reduce cardinality before materialization to lower cost.
+- Avoid defining more MVs than the system can refresh concurrently.
+
+Consider partitioning policies on the source table if your view has predictable slice patterns (e.g., by customer, tenant, or time).
+
+**Use Cases**
+
+- **Sessionization:** `arg_max()` per session ID for last known state.
+- **Downsampling:** `summarize count() by bin(Timestamp, 1m)` for real-time visualizations.
+- **De-duplication:** `take_any()` for noisy or overlapping event streams.
+- **Power BI acceleration:** Precompute aggregates to reduce DirectQuery load and improve responsiveness.
+
+##### 4. External Tables
 
 ##### 4. Partitioning Policies
 
