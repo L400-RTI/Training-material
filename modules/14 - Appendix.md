@@ -26,6 +26,7 @@ To support your learning journey and enable hands-on exploration, we’ve compil
   - [Eventhouse and KQL Database consumption](https://learn.microsoft.com/en-us/fabric/real-time-intelligence/real-time-intelligence-consumption)
   - [Fabric KQL Database Cost Estimator](https://dataexplorer.azure.com/KustoFabricCostEstimator.html)
   - [materialized_view()](https://learn.microsoft.com/en-us/kusto/query/materialized-view-function?view=microsoft-fabric)
+  - [Kusto Partitioning Policy Documentation](https://learn.microsoft.com/en-us/kusto/management/partitioning-policy?view=azure-data-explorer&preserve-view=true)
 
 - Analytics
 

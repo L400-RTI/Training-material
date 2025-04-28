@@ -402,9 +402,334 @@ Consider partitioning policies on the source table if your view has predictable 
 
 ##### 4. External Tables
 
+External tables in Microsoft Fabric Real-Time Intelligence (RTI) are user-defined schema entities that reference data stored outside the native Kusto (Eventhouse/KQL DB) database.
+
+They provide a critical architectural capability for real-time access, cross-system integration, and cost optimization without requiring ingestion into the database engine.
+
+An external table behaves similarly to a regular KQL table in that it exposes a well-defined schema, supports partitions, and is addressable via standard KQL queries. However, the backing data is remote—stored either in cloud storage systems or SQL databases.
+
+**External Table Types**
+
+There are two primary external table types:
+
+- **Storage External Tables:** Reference files stored in Azure Blob Storage,
+  Azure Data Lake Storage Gen2, or Microsoft OneLake. Supported formats
+  include Parquet, Delta, CSV, JSON, and Cosmos DB's Stream format.
+- **SQL External Tables:** Reference relational database tables directly
+  from systems such as Azure SQL Database, Cosmos DB, PostgreSQL, and MySQL.
+
+Each type demands specific configuration:
+
+- **Storage tables** require storage connection strings, path formats,
+  and format specifications.
+- **SQL tables** require SQL connection strings and native query mappings.
+
+**How External Table Queries Work**
+
+When querying an external table, the Fabric engine does not ingest the
+data into Eventhouse. Instead, it issues an on-demand retrieval and
+parsing operation:
+
+- For **Storage External** Tables, file metadata is accessed first to plan
+  efficient reads (especially for partitioned datasets).
+- For **SQL External Tables**, queries are pushed down and executed
+  against the external SQL database whenever possible (pushdown optimization).
+
+Partition pruning, format-specific readers (Parquet, Delta), and
+optimized network retrieval are core backend mechanisms that ensure
+minimal latency and resource consumption.
+
+Example:
+
+```kql
+external_table("MyExternalStorageTable")
+| where Timestamp > ago(1d)
+| summarize count() by bin(Timestamp, 1h)
+```
+
+Behind the scenes, this pulls only the minimum required file segments
+or database rows.
+
+**Partitioning**
+
+Partitions are fundamental for scaling external table performance:
+
+- **Storage tables** often partition by date or tenant ID in the folder
+  path structure.
+- **SQL external** tables rely on database indexes for partitioning,
+  with optional KQL-side partition hints.
+
+Effective partitioning is crucial to avoid full scans and optimize query
+latency and cost. Partition keys must match query patterns for efficient pruning.
+
+**Authentication**
+
+Fabric supports multiple authentication models depending on the external system:
+
+- Managed Identity for Azure resources.
+- EntraID Principals for cross-service authentication.
+- SQL Authentication for SQL databases.
+
+Secure credential storage is enforced, and external table definitions
+reference credential entities abstracted from the user.
+
+**Query and Export**
+
+External tables can be used for both query and export workflows:
+
+- **Query:** Ad-hoc or scheduled queries reading from external
+  sources in place.
+- **Export:** Data in Eventhouse can be continuously or on-demand
+  exported to external storage using Continuous Export.
+
+<div class="info" data-title="Note">
+
+> **Continuous Export into external tables must account for schema drift and file format constraints (only Parquet, Delta, CSV, and JSON supported).**
+
+</div>
+
+**Performance Considerations**
+
+- **Cost Model:** No storage cost in Eventhouse; costs shift toward network, read transactions, and potentially compute from source systems​.
+- **Performance Tip:** Frequent heavy queries over external tables might be more expensive and slower than ingesting the data. Evaluate query frequency and data freshness needs.
+- **Query Acceleration:** Use Query Acceleration Policies where applicable (currently in preview) to speed up queries over OneLake shortcuts​.
+
+**Common Pitfalls**
+
+- High-latency storage or SQL servers severely affect query times.
+- Poor partitioning leads to full scans and excessive resource usage.
+- Schema mismatches between definition and actual data can cause query errors.
+- Authentication failures if tokens expire or credentials are rotated incorrectly.
+
+**Hidden Complexity**
+
+While external tables seem straightforward conceptually, under the hood they involve:
+
+- Distributed read scheduling
+- Partition pruning engines
+- Intelligent format readers
+- Secure and auditable access tracking
+- Error retries and partial query failure handling
+
+Fabric hides these complexities from the user but understanding them helps optimize architecture designs.
+
 ##### 4. Partitioning Policies
 
+Partitioning policies in Microsoft Fabric RTI (Real-Time Intelligence) allow database administrators and solution architects to control the physical layout of data inside tables.
+
+In a system designed for massive ingestion and low-latency querying, partitioning is critical for:
+
+- Minimizing query scan footprint (I/O optimization)
+- Accelerating aggregation and filtering
+- Optimizing storage lifecycle management (retention policies)
+- Reducing cost (compute and storage)
+
+Partitioning is **declarative:** it is defined in advance as part of the table’s metadata, and the engine automatically applies it during ingestion and query processing.
+
+**How Partitioning Policies Work**
+
+Partitioning policies logically segment the ingested data into extents based on one or more columns.
+
+An extent is the core internal storage unit in Kusto (Fabric Eventhouse) — it can be thought of as a "mini-table" with up to hundreds of megabytes of data.
+
+When a partitioning policy is configured:
+
+- During ingestion, data is bucketed based on the partition key(s).
+- During querying, only the relevant buckets (extents) are accessed, avoiding full table scans.
+- During retention, partition policies help the system efficiently delete or archive data.
+
+**Types of Partitioning**
+
+Partitioning in KQL databases is **column-based** and usually falls into two common scenarios:
+
+1. **Time-based Partitioning**
+
+   - Most critical for telemetry, log analytics, IoT, event data.
+   - Partition on a datetime column like Timestamp or EventTime.
+   - Typically combined with `bin()` functions in queries for efficient time slicing.
+
+   Example:
+
+   ```kql
+   .alter-merge table Events policy partitioning
+   { "PartitionKeys": [ { "ColumnName": "Timestamp", "Kind": "UniformRange" } ] }
+   ```
+
+2. **Key-based Partitioning**
+
+   Partitioning based on business keys, such as `CustomerID`, `DeviceID`, `Region`, or `TenantID`.
+   Common for multitenant solutions to improve query isolation and minimize noisy neighbor effects.
+
+   Example:
+
+   ```kql
+   .alter-merge table Metrics policy partitioning
+   { "PartitionKeys": [ { "ColumnName": "TenantId", "Kind": "Hash" } ] }
+   ```
+
+**Partition Key Kinds**
+Partition keys can have different partitioning strategies (Kind)​:
+
+- **UniformRange** — Used for datetime or numeric columns. Buckets are ranges (e.g., one-day intervals).
+- **Hash** — Used for categorical/text keys (e.g., `CustomerId`). Buckets are based on hash values.
+- **None** — No partitioning.
+
+Choosing the wrong kind (e.g., hashing timestamps) can severely degrade performance.
+
+**How Partitioning Affects Queries**
+
+During query compilation:
+
+- The query engine applies partition pruning: only relevant extents are scanned based on filter predicates.
+- Example: A query filtered on `Timestamp > ago(1d)` automatically limits the scan to recent partitions.
+
+Without a filter on the partition key(s), full table scan occurs - leading to worse performance than expected.
+
+<div class="warning" data-title="Critical Tip">
+
+> **Always filter on partition keys wherever possible for performance-sensitive queries.**
+
+</div>
+
+**Best Practices for Defining Partitioning Policies**
+
+- **Time-based data:** Always partition on a datetime column (e.g., event timestamp).
+- **High cardinality dimensions:** Partition on fields like `DeviceId` or `CustomerId` if you query by them.
+- **Low cardinality caution:** Avoid partitioning on fields with very few unique values (e.g., Status = Active/Inactive) — it provides no benefit.
+- **Multiple keys:** You can define multiple partition keys, but be mindful of complexity and diminishing returns.
+- **Retention and Cost:** Align partitioning keys with your retention policies for efficient aging-out of data.
+
+**Common Mistakes**
+
+- Partitioning on non-filtered columns: Leads to no pruning benefit.
+- Over-partitioning: Too many partitions (e.g., by `UserId`) can create operational overhead and metadata bloat.
+- Wrong partition key type: Hash when uniform range would be better (especially for time series).
+
+**Hidden Complexity**
+Internally, the Fabric Eventhouse engine:
+
+- Tracks partitions via extent metadata.
+- Automatically merges small extents and splits large ones during background optimization cycles (Compaction, Repartitioning).
+- Dynamically updates partition pruning hints during query plan optimization.
+
+Users **do not** manually manage partitions once policy is set - it's a fully managed, auto-optimized system.
+
 ##### 5. Modeling for Power BI
+
+When building real-time analytics solutions in Fabric RTI, modeling data properly for Power BI is essential to achieve:
+
+- Fast and scalable reports
+- Correct aggregations and slicing
+- Efficient storage and memory usage
+- Seamless end-user experiences
+
+While raw data might be optimized for ingestion and storage in Eventhouse (KQL DB), it must be remodeled to match Power BI’s semantic and performance requirements​.
+
+**Fabric to Power BI Connection Modes**
+
+When connecting Power BI to Eventhouse (KQL DB) you typically use:
+
+| Mode        | Description                                                 | When to Use                                                                        |
+| ----------- | ----------------------------------------------------------- | ---------------------------------------------------------------------------------- |
+| DirectQuery | Queries the Eventhouse database live at query time.         | Real-time freshness is critical. Data size too large to fit in memory.             |
+| Import      | Imports a static snapshot of the data into Power BI memory. | When query latency from Eventhouse is high, or high-performance dashboards needed. |
+| Dual        | Supports both import and DirectQuery dynamically.           | Best of both worlds; for filtering and small lookups.                              |
+| DirectLake  | For lakehouse scenarios, not typical for KQL sources.       | Only when sourcing via OneLake or Delta tables.                                    |
+
+**Best Practice:**
+
+- Use **DirectQuery** or **Dual** for live real-time datasets.
+- Use **Import** for heavy aggregations on large datasets that can tolerate some latency​.
+
+**Importance of Star Schema**
+
+A star schema remains best practice for Power BI models even when sourcing from KQL​:
+
+- **Fact Tables:** Large tables capturing events (telemetry, transactions, logs).
+- **Dimension Tables:** Smaller tables for descriptive attributes (users, devices, categories).
+
+**Benefits:**
+
+- Improved performance (Power BI query engine optimizations)
+- Cleaner DAX and simpler relationships
+- Enables Dual storage mode for dimensions, allowing fast slicing without live Eventhouse queries.
+
+**Storage Mode Strategy**
+
+Real-world guidance for fabric RTI to Power BI modeling:
+
+| Table Type                       | Recommended Storage Mode | Reason                                   |
+| -------------------------------- | ------------------------ | ---------------------------------------- |
+| Fact Table (Events, Logs)        | DirectQuery              | Real-time freshness; too big for import. |
+| Small Dimensions (Lookup Tables) | Dual                     | Faster slicer/filtering; caches locally. |
+| Large Dimensions                 | DirectQuery              | If size > 1M rows and freshness needed.  |
+
+<div class="info" data-title="Key Tuning Tip">
+
+> **Set dimensions that do not change often (e.g., country, device type) to Dual mode to avoid query latency during filtering​.**
+
+</div>
+
+**Key Tuning Tip:**
+
+**Handling DateTime Columns**
+
+Datetime modeling is non-trivial with KQL sources​​​:
+
+- Always treat DateTime columns as UTC.
+- Create a Calendar Table to filter by dates.
+- Use datetime_utc_to_local() only carefully (performance penalty if used extensively​).
+- Use relative time slicers in Power BI for "Last N hours/minutes" analysis​.
+
+Example of generating a DateTime table (M Query):
+
+```M
+let
+    StartDate = DateTime.From(Date.AddDays(DateTime.LocalNow(), -30)),TimeSeries = List.DateTimes(StartDate, 43200, #duration(0,0,1,0)),
+    #"Converted to Table" = Table.FromList(TimeSeries, Splitter.SplitByNothing(), {"Timestamp"})
+in
+    #"Converted to Table"
+```
+
+**Query Pushdown and Native Query**
+
+When using the Azure Data Explorer (Kusto) connector:
+
+- Native Query folding is supported: KQL runs server-side.
+- Avoid heavy Power Query (M) transformations post-load — push filtering and aggregation into KQL as much as possible.
+
+Best practice:
+Model complex transformations as Kusto Functions inside Fabric and reference them from Power BI.
+
+**Monitoring Power BI Query Performance**
+
+In large RTI solutions:
+
+- Use Performance Analyzer in Power BI Desktop.
+- Watch for slow DirectQuery requests.
+- Profile KQL query execution in Eventhouse side (.show queries).
+
+Typical signs of bad modeling:
+
+- High row retrieval counts
+- Slow slicer/filter performance
+- Repeated queries without result reuse
+
+**Common Modeling Pitfalls**
+
+- No star schema: Flat wide tables slow down slicers.
+- DirectQuery everything: Even for small dimension tables — causes unnecessary latency.
+- Local time conversions in visuals: Slows queries massively.
+- Missing relationships: Forces Power BI to do expensive cartesian joins.
+- Overuse of calculated columns: Instead, compute fields at the source using KQL.
+
+**Hidden Complexity**
+
+Behind the scenes:
+
+- Power BI maintains a query cache even for DirectQuery datasets.
+- Dual-mode tables automatically switch modes depending on query patterns.
+- Advanced users can parameterize KQL queries via M dynamic parameters for multi-tenant or on-demand filtering.
 
 ### Implementations
 
