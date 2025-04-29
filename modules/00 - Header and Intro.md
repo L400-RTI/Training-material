@@ -101,11 +101,10 @@ architectural approaches, Security and Networking.
 7. [AI + Copilot](./07%20-%20AI%20+%20Copliot.md) (Matt)
 8. [Dashboards](./08%20-%20Dashboards.md) (Matt)
 9. [Rules (Activator)](#module-9---rules-activator) (Frank)
-10. [Actions](./10%20-%20Actions.md) (Frank)
-11. [Security](./11%20-%20Security.md) (Matt)
-12. [Networking](./12%20-%20Networking.md) (Brian)
-13. [CI/CD and ALM](./13%20-%20CICD%20and%20ALM.md) (Frank)
-14. [Appendix](./14%20-%20Appendix.md) (all)
+10. [Security](./10%20-%20Security.md) (Matt)
+11. [Networking](./11%20-%20Networking.md) (Brian)
+12. [CI/CD and ALM](./12%20-%20CICD%20and%20ALM.md) (Frank)
+13. [Appendix](./13%20-%20Appendix.md) (all)
 
 ![Real-Time Intelligence in Microsoft Fabric](/assets/images/Real-Time%20Intelligence%20in%20Microsoft%20Fabric.png)
 
