@@ -1164,4 +1164,101 @@ In real-time architectures powered by Microsoft Fabric's Eventhouse and KQL Data
 
 ### Monitoring and pricing
 
+Monitoring performance and controlling costs are critical when deploying real-time data models in Microsoft Fabric using Eventhouse, KQL Databases, External Tables, and Materialized Views. This section will guide you through performance monitoring strategies, throughput tracking, error detection, and cost management techniques specifically for real-time data modeling scenarios.
+
+#### Monitoring Data Models
+
+**Metrics and Observability**
+
+- **Query Metrics**
+
+  Use `.show queries` and `.show running queries` in KQL to inspect current and historical query performance:
+
+  - CPU time
+  - Memory consumption
+  - Extents scanned
+  - Query text and plan​​
+
+- **Ingestion Monitoring**
+
+  For queued and streaming ingestion:
+
+  - `.show ingestion failures` to inspect error records
+  - `.show operations` for ingestion state and diagnostics​
+
+- **Materialized Views Health**
+
+  - Track cursor advancement to ensure that offline materialization processes are up-to-date​​.
+  - Use the `materialized_view()` function to check materialization age and determine whether queries are served from materialized or delta data​.
+
+- **External Tables Query Performance**
+  - External tables incur latency depending on storage type (Azure Blob, ADLS, SQL, etc.)​.
+  - Monitor query times, retries, and data sizes particularly when using OneLake shortcuts​.
+
+**Tools and Integrations**
+
+- **Fabric Monitoring**
+  Fabric provides integrated monitoring across Eventhouse, Real-Time Analytics, and Lakehouse artifacts.
+
+  - Use Fabric’s built-in Monitoring Hub to visualize resource utilization.
+  - Set up Metrics Alerts on critical ingestion latencies, query execution times, or cost thresholds.
+
+- **Power BI Monitoring**
+  - Monitor DirectQuery query durations from Power BI using Performance Analyzer.
+  - Track Query Folding behavior and detect when KQL queries are inefficiently translated​​.
+
+#### Pricing Considerations
+
+**Key Cost Drivers**
+
+| Component          | Cost Implication                                          |
+| ------------------ | --------------------------------------------------------- |
+| Ingestion          | Cost associated with data volume ingested into Eventhouse |
+| Query Execution    | Compute cost based on CPU seconds used by queries         |
+| Storage            | Hot/cold storage pricing based on data volume             |
+| Materialized Views | Additional compute for offline materialization processes  |
+| External Tables    | No ingestion costs, but pay for query compute and egress​ |
+
+- **Ingestion Costs**
+
+  - Streaming ingestion is relatively more expensive per GB compared to queued ingestion due to higher resource intensiveness​.
+  - Continuous export from Eventhouse to external storage also incurs export operation costs​.
+
+- **Storage Costs**
+
+  - Hot Storage (SSD) is more expensive but optimized for performance​.
+  - Cold Storage provides lower cost but higher query latencies.
+  - Data duplication across Eventhouse and OneLake is avoided using shortcut mechanisms​​.
+
+- **Query Acceleration Policy** For workloads heavily dependent on external shortcuts or real-time freshness, leveraging Query Acceleration Policies can optimize cost per query​​.
+
+**Cost Optimization Strategies**
+
+- **Materialize Strategically**
+  Materialize only highly queried aggregations to reduce online compute resource consumption​.
+
+- **Manage Data Retention Policies**
+  Reduce retention on raw source tables once data is safely materialized, thus saving on storage​​.
+
+- **Monitor Shard Management**
+  Excessive small shards lead to storage inefficiencies. Monitor shard distribution and ensure ingestion batches are reasonably sized​.
+
+- **Optimize External Table Queries** When querying external tables:
+
+  - Prefer Parquet or Delta formats for efficiency.
+  - Leverage partitioned data structures to minimize scanned data​.
+
+- **Use DirectQuery + Dual Models** in Power BI
+  Push as much filtering to KQL queries as possible to avoid large data pulls and reduce Fabric compute charges​​.
+
+**Best Practices Summary**
+
+| Area                 | Best Practice                                                                                        |
+| -------------------- | ---------------------------------------------------------------------------------------------------- |
+| Ingestion Monitoring | Automate failure alerts based on .show ingestion failures                                            |
+| Query Monitoring     | Regularly audit expensive queries and refactor or materialize common patterns                        |
+| Storage Optimization | Implement aggressive retention on raw ingestion tables, and use Parquet compression where applicable |
+| External Data Access | Prefer native storage-based external tables over SQL-based ones when possible                        |
+| Cost Monitoring      | Set up Fabric cost alerts and monitor per-capacity usage trends weekly                               |
+
 ### Hands-on lab
