@@ -733,7 +733,268 @@ Behind the scenes:
 
 ### Implementations
 
+Implementing effective data modeling practices in Fabric RTI is critical to ensuring performance, scalability, and maintainability of real-time analytics solutions.
+This section details how to implement key modeling elements, provides deep walkthroughs of functionality, and highlights critical design choices to be aware of.
+
+#### Update Policied Implementation
+
+Update policies automate transformation of ingested data by triggering materializations into other tables during ingestion​.
+
+**Implementation Steps:**
+
+1. Define a source table (raw ingestion).
+2. Create a target table (transformed storage).
+3. Attach an update policy to the target table with a transformation query.
+4. Ensure the policy runs at ingestion or at batching intervals.
+
+Example:
+
+```kql
+.alter table CleanEvents policy update
+@'{
+  "IsEnabled": true,
+  "Source": "RawEvents",
+  "Query": "RawEvents | extend CleanTime = tostring(datetime_column) | project CleanTime, OtherFields",
+  "IsTransactional": true
+}'
+```
+
+**Key Implementation Considerations:**
+
+- The update query must be idempotent.
+- Avoid complex joins in the update query (performance impact).
+- Update policies increase ingestion costs, design carefully.
+
+#### Materialized Views Implementation
+
+Materialized views are offline, incremental aggregations over a source table​​.
+
+**Implementation Steps:**
+
+1. Design a summarize-based KQL query suitable for materialization.
+2. Define a materialized view over a single source table.
+3. Configure materialization schedule (automatic behind the scenes).
+
+```kql
+.create materialized-view DailyEventCounts on table Events
+{
+  Events
+  | summarize Count = count() by bin(EventTime, 1d)
+}
+```
+
+**Key Implementation Considerations:**
+
+- Only one summarize per materialized view.
+- Supports low-latency queries at the cost of some materialization overhead.
+- Monitor for late-arriving data and lookback settings for re-materialization.
+
+#### Export Policies Implementation
+
+(If included — continuous export is optional)
+Export policies allow continuous streaming of ingested data to external systems​.
+
+**Implementation Steps:**
+
+1. Define the external storage location and format (Parquet, Delta, CSV, JSON).
+2. Create an export policy scoped to the source table.
+3. Configure cursor management for delta-based exports.
+
+```kql
+.alter table Events policy continuous-export
+@'{
+  "IsEnabled": true,
+  "ExportFormat": "parquet",
+  "ExportPathPattern": "https://<storageaccount>.dfs.core.windows.net/container/exports/",
+  "IntervalBetweenExports": "5m"
+}'
+```
+
+**Key Implementation Considerations:**
+
+- Align schema compatibility between source and export destination.
+- Export costs are separate from query costs.
+- Be mindful of storage transactions when exporting at high frequency.
+
+#### Joins in Fabric RTI
+
+Efficient joins are critical in KQL modeling, especially in real-time environments.
+
+**Implementation Steps:**
+
+1. Use hash joins for large table-to-large table joins.
+2. Use broadcast joins when one side is very small.
+3. Pre-aggregate or pre-filter as much as possible before the join.
+4. If modeling for Power BI, minimize the number of joins by using star schemas.
+
+```kql
+EventData
+| join kind=inner hint.strategy=hash (
+    DeviceRegistry
+) on DeviceId
+```
+
+**Key Implementation Considerations:**
+
+- Excessive cross joins can lead to query throttling.
+- Always align join keys by type (avoid implicit conversions).
+- Push down filters to both sides of the join when possible.
+
+#### Modeling for Power BI Implementation
+
+Modeling for Power BI must align with both semantic and performance needs​.
+
+**Implementation Steps:**
+
+1. Expose datasets through Querysets or direct table access.
+2. Use star schema modeling wherever possible.
+3. Set storage modes:
+   - Fact tables: DirectQuery
+   - Dimension tables: Dual (if small) or DirectQuery (if large).
+4. Handle DateTime columns carefully:
+   - Always work in UTC inside Eventhouse.
+   - Create Calendar/Time tables in Power BI.
+5. Monitor query folding and optimize KQL for folding efficiency.
+
+**Key Implementation Considerations:**
+
+- Limit calculated columns inside Power BI; prefer precomputed fields in KQL.
+- Be careful with slicers and filters on high-granularity DateTime columns.
+- Tune visuals to minimize DirectQuery hits.
+
+#### External Tables Implementation
+
+External tables enable querying remote storage or SQL sources without ingestion​.
+
+**Implementation Steps:**
+
+1. Define an external table with connection parameters and schema mapping.
+2. Reference external storage (e.g., ADLS, OneLake) or SQL sources.
+3. Implement partition pruning strategies for high-performance external queries.
+
+Example (Storage External Table):
+
+```kql
+.create external table ExtEvents
+(
+    EventId: string,
+    Timestamp: datetime
+)
+kind=storage
+with (location="https://<storageaccount>.dfs.core.windows.net/container/events/", format="parquet")
+```
+
+**Key Implementation Considerations:**
+
+- Partition the data appropriately on storage side for query efficiency.
+- Be mindful of authentication (Managed Identity or Service Principal).
+- Storage transaction costs can be significant on large-scale external queries.
+
 ### Troubleshooting
+
+Troubleshooting in the Data Modeling domain for Fabric RTI focuses on diagnosing issues across:
+
+- Update policies
+- Materialized views
+- External tables
+- Power BI modeling
+- Partitioning and join performance
+
+In high-scale, real-time architectures, small misconfigurations can cause large performance and cost penalties.
+This section describes how to identify, diagnose, and resolve common issues with clear, production-grade practices.
+
+#### Troubleshooting Update Policies
+
+| Symptom                             | Possible Causes                                                | Resolution                                                                          |
+| ----------------------------------- | -------------------------------------------------------------- | ----------------------------------------------------------------------------------- |
+| Update policy failures at ingestion | Syntax errors, missing columns, schema mismatch.               | Validate update query manually outside policy. Ensure all referenced columns exist. |
+| Unexpected data duplication         | Update policy is not idempotent.                               | Redesign update query to be idempotent (e.g., using `arg_max()` patterns).          |
+| High ingestion cost or slowness     | Update queries are too heavy (joins, complex transformations). | Simplify update logic; offload enrichment to post-ingestion ETL if necessary.       |
+| Partial updates or skipped batches  | Source ingestion is faster than policy execution.              | Scale out ingestion cluster if necessary or redesign update flow to batch mode.     |
+
+**Diagnostics Tools:**
+
+- Inspect ingestion failures in Kusto ingestion failures blade.
+- Use `.show ingestion failures` command.
+
+#### Troubleshooting Materialized Views
+
+| Symptom                                          | Possible Causes                                     | Resolution                                                                  |
+| ------------------------------------------------ | --------------------------------------------------- | --------------------------------------------------------------------------- |
+| Query over materialized view missing recent data | Delay in materialization; late-arriving data.       | Check materialization lag. Adjust lookback window if necessary.             |
+| Query performance unexpectedly slow              | Delta part too large compared to materialized part. | Force more frequent materialization or optimize source ingestion.           |
+| Materialized view refresh failures               | Schema drift or incompatible summarize queries.     | Check view definition for schema assumptions; avoid schema drift at source. |
+
+**Diagnostics Tools:**
+
+- `.show materialized-views` command.
+- Inspect `LastProcessedTimestamp` and materialization error fields.
+
+#### Troubleshooting External Tables
+
+| Symptom                         | Possible Causes                                                          | Resolution                                                                  |
+| ------------------------------- | ------------------------------------------------------------------------ | --------------------------------------------------------------------------- |
+| Query failure on external table | Authentication error, invalid path, corrupted file.                      | Verify connection strings, storage permissions, and file format compliance. |
+| Slow query performance          | No partition pruning, inefficient file format (e.g., CSV).               | Partition external data; prefer Parquet/Delta over text formats.            |
+| Partial data returned           | Misaligned schema between external source and external table definition. | Explicitly map all columns and validate format before query.                |
+
+**Diagnostics Tools:**
+
+- Monitor KQL query diagnostics (.show queries with failures).
+- Storage account diagnostics (Azure Monitor).
+
+#### Troubleshooting Power BI Modeling
+
+| Symptom                               | Possible Causes                                                           | Resolution                                                                            |
+| ------------------------------------- | ------------------------------------------------------------------------- | ------------------------------------------------------------------------------------- |
+| Slow report performance (DirectQuery) | No star schema, inefficient slicers, high-granularity DateTime filtering. | Implement star schema; use Dual mode for small dimensions; reduce slicer cardinality. |
+| Incorrect aggregations or joins       | Missing relationships; incorrectly modeled schema.                        | Validate relationships in Power BI Model View.                                        |
+| Frequent "Query timeout" errors       | Inefficient KQL queries; too many rows fetched.                           | Push summarizations into KQL layer; reduce initial data load.                         |
+| DAX measures extremely slow           | Computations over raw fields without aggregation.                         | Precompute measures inside KQL if possible (e.g., summarize before Power BI load).    |
+
+**Diagnostics Tools:**
+
+- Power BI Performance Analyzer.
+- Fabric Diagnostic Queries (`.show queries` with `client_request_id` filtering).
+
+#### Troubleshooting Partitioning and Joins
+
+| Symptom                                           | Possible Causes                                                 | Resolution                                                          |
+| ------------------------------------------------- | --------------------------------------------------------------- | ------------------------------------------------------------------- |
+| Full table scans despite filters                  | Partition key mismatch in query.                                | Ensure where clause filters on partition keys exactly.              |
+| Slow joins causing throttling                     | Hash join not used when needed, or broadcast join not feasible. | Apply `hint.strategy=hash manually`; pre-filter both sides of join. |
+| Extent management issues (too many small extents) | Improper partitioning during ingestion.                         | Review and adjust ingestion batching and partitioning policies.     |
+
+**Diagnostics Tools:**
+
+- `.show table extents` to inspect extent distribution.
+- `.show ingestion failures` and ingestion batching configuration review.
+
+#### General Diagnostic Commands in Fabric RTI
+
+Useful Kusto commands for general modeling troubleshooting:
+
+```kql
+.show ingestion failures
+.show materialized-views
+.show queries
+.show operations
+.show extents
+```
+
+Useful monitoring areas:
+
+- Eventhouse Metrics (CPU, Query Load, Storage Transactions)
+- Storage Account Metrics (for external tables)
+- Power BI Service Dataset Refresh Logs
+
+#### Best Practices for Troubleshooting
+
+- Always start troubleshooting at the source (ingestion) before looking at downstream artifacts.
+- Use `.show queries` extensively to understand real query bottlenecks.
+- Test policies and materializations manually before automating them.
+- Monitor and alert on ingestion failures and materialization lag.
+- Log `client_request_id` in Power BI and KQL queries for cross-system tracing.
 
 ### Orchestration and optimization
 
