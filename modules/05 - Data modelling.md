@@ -998,7 +998,169 @@ Useful monitoring areas:
 
 ### Orchestration and optimization
 
+In Fabric RTI, Data Modeling orchestration ensures that ingestion, transformation, materialization, and serving processes happen in a coordinated, reliable, and scalable manner.
+Optimization ensures these processes run with minimal latency, controlled cost, and maximum throughput, maintaining real-time performance under production conditions.
+
+This section describes how to effectively orchestrate and optimize core data modeling components, including update policies, materialized views, external tables, joins, and Power BI semantic models.
+
+#### Orchestration in Data Modeling
+
+**Ingestion and Transformation Orchestration**
+
+- Update Policies:
+
+  Automatically transform raw ingested data at write-time.
+
+  - Use update policies to enrich, filter, or project incoming data into new tables.
+  - Keep policies simple to avoid impacting ingestion throughput.
+
+- Eventstream + Eventhouse Integration:
+
+  - Route different event types to different Eventhouse tables.
+  - Apply update policies only where transformation adds business value.
+
+**Best Practice:**
+
+Clearly separate ingestion layers (raw landing) from modeled, clean layers (curated tables) using update policies.
+
+**Materialization Orchestration**
+
+- Materialized Views:
+
+  Maintain continuously updated pre-aggregations for query acceleration.
+
+  - Materialization is triggered automatically based on ingestion delta.
+  - Late-arriving data is handled via lookback windows.
+
+- Continuous Export (if configured):
+
+  Export modeled data to OneLake for integration with other services (e.g., Data Science, Synapse, OneLake shortcuts).
+
+**Best Practice:**
+
+- Monitor materialization lag and failures proactively. Ensure lookback settings match data arrival patterns.
+
+**Query Serving Orchestration**
+
+- Querysets:
+  - Define stable, reusable KQL queries.
+  - Act as the semantic abstraction layer between Eventhouse and Power BI.
+- Power BI Dataset Integration:
+  - Build datasets on Querys or curated tables.
+  - Orchestrate schema versions between Eventhouse tables and Power BI models.
+
+**Best Practice:**
+
+Automate deployment of Querysets and semantic models via Fabric Deployment Pipelines and GitOps to ensure environment consistency.
+
+#### Optimization of Data Modeling Components
+
+**Update Policies Optimization**
+
+- Simplify queries: Minimize projections and calculations.
+- Avoid joins inside update policies unless necessary.
+- Partition input tables to reduce processing overhead during ingestion.
+
+**Materialized Views Optimization**
+
+- Pre-aggregate early: Push aggregations into materialized views.
+- Tune lookback settings: Ensure materialization covers late-arriving data efficiently.
+- Align retention and materialization: Drop extents efficiently when both policies work together.
+
+**Partitioning Optimization**
+
+- Partition fact tables on datetime or major filtering columns (e.g., Timestamp, TenantId).
+- Avoid over-partitioning (e.g., per second granularity unless absolutely required).
+- Monitor extent sizes: Target ~200–500MB extents for balance between query efficiency and metadata load.
+
+**Joins and Query Optimization**
+
+- Prefer hash joins for large table joins; use hints if necessary.
+- Pre-filter data on both sides before joining to reduce shuffle and memory pressure.
+- Pre-aggregate where possible before the join operation.
+
+**External Tables Optimization**
+
+- Partition storage paths (e.g., /year=/month=/day=/).
+- Use efficient file formats: Parquet or Delta preferred over CSV or JSON.
+- Query pruning: Ensure your KQL queries filter partition keys early.
+
+**Power BI Semantic Model Optimization**
+
+- Build star schemas: Facts and dimension separation.
+- Set storage modes strategically:
+  - **Fact tables:** DirectQuery
+  - **Dimension tables:** Dual (small) or DirectQuery (large)
+  - **Pre-compute heavy measures:** Materialize them into Querysets or materialized views instead of calculating in DAX at runtime.
+  - **Handle DateTime columns carefully:** Avoid dynamic local-time shifting in visuals unless necessary.
+
+**Cost and Performance Optimization**
+
+| Area           | Optimization Techniques                                                                    |
+| -------------- | ------------------------------------------------------------------------------------------ |
+| Ingestion Cost | Filter and transform early with update policies.                                           |
+| Storage Cost   | Retain only necessary history; archive older data.                                         |
+| Query Cost     | Partition tables correctly; use materialized views to accelerate queries.                  |
+| Power BI Cost  | Minimize DirectQuery operations by optimizing storage modes and reducing result set sizes. |
+
+**Common Pitfalls and Remediation**
+
+| Pitfall                 | Cause                                                                | Remediation                                                      |
+| ----------------------- | -------------------------------------------------------------------- | ---------------------------------------------------------------- |
+| Materialized view lag   | High ingestion rate without tuned lookback window                    | Adjust view parameters and ingestion batching.                   |
+| Full table scans        | Missing partition filters                                            | Ensure query filters match partitioning keys.                    |
+| Power BI query slowness | Poor star schema design, heavy DirectQuery over facts and dimensions | Model dimensions properly, use Dual mode, pre-aggregate.         |
+| Export overload         | Continuous export interval too aggressive                            | Tune export frequency to match system load and avoid contention. |
+
 ### Schemas and throughput
+
+In real-time architectures powered by Microsoft Fabric's Eventhouse and KQL Databases, designing optimal schemas and understanding throughput mechanics are foundational for achieving scalable, high-performance systems. This section discusses how schemas impact ingestion, query execution, materialization, and integration with services like Power BI. It also highlights key considerations for throughput optimization in high-concurrency, high-ingestion-rate environments.
+
+#### Schema Design Principles
+
+- **Well-Defined Schemas Are Mandatory**
+
+  External Tables, Materialized Views, and Update Policies all require pre-defined, rigid schemas​​​. Schema drift (unexpected schema changes) is not natively tolerated; ingestion will fail if the incoming data format deviates without adjustments.
+
+- Schema Alignment Across Services
+  For integration with Power BI semantic models, enforcing a star schema is highly recommended​: - Fact tables should store event or transactional data. - Dimension tables should represent slowly changing reference data (e.g., users, products). - Using Dual Mode for dimensions improves slicer/filter performance significantly​.
+
+- **Dynamic Columns Handling**
+
+  When working with dynamic data types (e.g., JSON), M transformations or parsing logic in Power Query are essential to flatten the structure for efficient downstream use​.
+
+- **Datetime Columns**
+  - Always modeled in UTC at the database level​​.
+  - Local time shifts should be handled at query time or visualization layer (Power BI) to maintain efficient indexing​​.
+
+#### Throughput Considerations
+
+- **Eventhouse Storage Behavior**
+
+  Eventhouse organizes data in hot and cold storage, dynamically optimizing Parquet file sizes for throughput​​.
+
+  - Hot storage (SSD-backed) serves low-latency queries.
+  - Cold storage optimizes for cost but slightly higher access times.
+  - Adaptive file optimization minimizes the ingestion and query latency trade-off​.
+
+- **Query Throughput**
+
+  - Materialized Views pre-aggregate data and significantly reduce query load at runtime​​.
+  - During query execution, new deltas are combined with the materialized part, maintaining near real-time freshness with optimized resource usage.
+
+- **Partitioning and Sharding**
+  - Manual partitioning policies on large tables (e.g., by datetime bins) help control throughput and improve performance under concurrent query pressure​.
+  - Always monitor shard counts to avoid overhead caused by excessive micro-partitions.
+
+#### Best Practices
+
+| Scenario                                          | Recommendation                                                                                 |
+| ------------------------------------------------- | ---------------------------------------------------------------------------------------------- |
+| High cardinality dimensions                       | Pre-aggregate if possible; avoid direct slicing/filtering on massive dynamic columns.          |
+| Continuous ingestion with frequent schema changes | Implement Update Policies to stabilize output schema​.                                         |
+| Power BI semantic models                          | Build star schemas; dimensions in Dual mode, fact tables can be DirectQuery​.                  |
+| Real-time query requirements                      | Use Materialized Views or Query Acceleration Policies (where available) to minimize latency​​. |
+| Handling datetime in local time                   | Convert after filtering using UTC datetime indexes to maximize query pushdowns​.               |
 
 ### Monitoring and pricing
 
