@@ -4,7 +4,7 @@
 
 In the landscape of real-time analytics, the fidelity and flexibility of your data model can be the decisive factor between a scalable solution and a bottlenecked architecture. This module focuses on the advanced practices of data modeling within the Microsoft Fabric Real-Time Intelligence platform, enabling precise, performant, and production-grade implementations.
 
-Real-time systems differ fundamentally from traditional Business Intelligence Systems. They must ingest, transform and serve analytical insights with sub-minute latency—often against massive, high-cardinality, high-granular datasets. This requires a new class of modeling techniques tailored to streaming-first architectures.
+Real-time systems differ fundamentally from traditional Business Intelligence Systems. They must ingest, transform and serve analytical insights with sub-minute latency—often against massive, high-cardinality, high-granular datasets. This requires a new class of modeling techniques tailored to streaming - first architectures.
 
 This module delivers expert-level guidance on structuring data for streaming and hybrid workloads in Fabric’s KQL-based ecosystem, especially Eventhouse and KQL Database. It bridges theory and implementation through deep dives into update policies, materialized views and external tables, alongside schema strategies for performant Power BI Reports. These concepts are foundational to driving low-latency queries, minimizing compute cost and supporting downstream consumers like dashboards and alerting systems.
 
@@ -136,7 +136,7 @@ The internal materialized view architecture includes delta tracking and cursor-b
 
 Although materialized views are a handy tool to reduce query time and pre-calculate you should not have too many of them because multi-tenancy is required. Always think about if it would be possible to replace a materialized view by a real table and an update policy.
 
-##### 3. External Tables
+##### 4. External Tables
 
 External tables expose datasets that reside in external storage (ADLS, Blob, SQL) or OneLake, allowing you to query operational data without ingesting it. From an architectural perspective, this:
 
@@ -146,7 +146,7 @@ External tables expose datasets that reside in external storage (ADLS, Blob, SQL
 
 Partition pruning and pre-filtering play a critical role in maintaining performance. Effective modeling requires aligning the external table’s path structure with likely filter predicates.
 
-##### 4. Partitioning Policies
+##### 5. Partitioning Policies
 
 Partitioning policies define how extents (immutable data shards) are organized post-ingestion to optimize query performance. From an architectural perspective, this:
 
@@ -156,18 +156,19 @@ Partitioning policies define how extents (immutable data shards) are organized p
 
 Policies can be configured to assign partitioned extents using `ByPartition` (co-location on same node) or `Uniform` (balanced distribution). Effective modeling requires aligning the partition key with common filter patterns and join conditions.
 
-##### 5. Modeling for Power BI
+##### 6. Modeling for Power BI
 
 Power BI semantic models built atop KQL-Databases must accommodate latency, freshness, and cardinality. Key architectural considerations include:
 
 - Using star schemas over flat tables to improve slicer/filter efficiency,
-- Ensuring dimension tables are set to Dual mode when feasible to reduce joins on Direct Query paths,
+- Ensuring dimension tables are set to Dual mode when feasible to reduce joins on Direct Query paths
+- Ensuring fact tables are set to DirectQuery mode
 - Modeling datetime fields for efficient filtering (e.g., via time rounding or calendar relationships),
-- Using KQL functions as semantic objects for reuse and clarity.
+- Using KQL functions or materialized views as semantic objects for reuse and clarity.
 
 Semantic models should be architected with DirectQuery for the fact tables and dual mode for the dimension tables to balance performance with real-time accuracy.
 
-##### 6. OneLake Availibility
+##### 7. OneLake Availibility
 
 OneLake plays a pivotal role in unifying data access across Microsoft Fabric, enabling seamless integration of streaming data with analytical and operational workloads. In the context of Real-Time Intelligence (RTI), OneLake serves not only as a persistent, queryable data layer but also as a critical component in reducing latency, cost, and complexity when managing event-driven architectures at scale.
 
