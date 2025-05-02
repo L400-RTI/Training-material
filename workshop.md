@@ -2378,7 +2378,7 @@ Fx. IP address lookup, convertions in scales, datetime functions etc.
 ### Hands-on lab
 
 ---
-## Module 9 - Rules (Activator)
+## Module 9 - Activator
 
 ### Introduction
 

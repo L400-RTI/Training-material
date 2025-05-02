@@ -1,4 +1,4 @@
-## Module 9 - Rules (Activator)
+## Module 9 - Activator
 
 ### Introduction
 
