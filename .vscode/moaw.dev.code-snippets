@@ -1,0 +1,100 @@
+{
+  "MOAW admonition": {
+    "scope": "markdown",
+    "prefix": "moaw-info",
+    "body": [
+      "<div class=\"${1|info,tip,warning,important,task|}\" data-title=\"${2:title}\">",
+      "",
+      "> ${3:The note goes here.}",
+      "",
+      "</div>"
+    ],
+    "description": "Creates a MOAW admonition"
+  },
+  "MOAW image": {
+    "scope": "markdown",
+    "prefix": "moaw-image",
+    "body": ["![${1:Image Description}](${2:assets/image.png})"],
+    "description": "Inserts an image with a description"
+  },
+  "MOAW link": {
+    "scope": "markdown",
+    "prefix": "moaw-link",
+    "body": ["[${1:Link text}](${2:assets/code-solution.zip})"],
+    "description": "Inserts an link"
+  },
+  "MOAW Video": {
+    "scope": "markdown",
+    "prefix": "moaw-video",
+    "body": [
+      "<div class=\"video-embed\">",
+      "   <iframe width=\"${1:560}\" height=\"${2:315}\" src=\"${3:https://www.youtube.com/embed/zchTNKmay6M}\" title=\"${4:YouTube video player}\" frameborder=\"${5:0}\" allow=\"${6:accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share}\" allowfullscreen></iframe>",
+      "</div>"
+    ],
+    "description": "Inserts a video"
+  },
+  "MOAW Audio": {
+    "scope": "markdown",
+    "prefix": "moaw-audio",
+    "body": ["<audio controls src=\"${1:assets/audio.mp3}\"></audio>"],
+    "description": "Inserts an audio element"
+  },
+  "MOAW Foldable Section": {
+    "scope": "markdown",
+    "prefix": "moaw-foldable",
+    "body": [
+      "<details>",
+      "<summary>${1:Click to expand}</summary>",
+      "",
+      "${2:This is the content of the foldable section. You can user *any* **Markdown** syntax as  usual here.}",
+      "",
+      "</details>"
+    ],
+    "description": "Inserts an foldable section"
+  },
+  "MOAW section": {
+    "scope": "markdown",
+    "prefix": "moaw-section",
+    "body": [
+      "# ${1:Section Title}",
+      "",
+      "${2:This is section text}",
+      "",
+      "---"
+    ],
+    "description": "Creates a MOAW admonition"
+  },
+  "MOAW Metadata": {
+    "scope": "markdown",
+    "prefix": "moaw-metadata",
+    "body": [
+      "---",
+      "published: ${1|false,true|}                        # Optional. Set to true to publish the workshop (default: false)",
+      "type: workshop                          # Required.",
+      "title: ${2:Full Workshop Title}              # Required. Full title of the workshop",
+      "short_title: ${3:Short title for header}     # Optional. Short title displayed in the header",
+      "description: ${4:This is a workshop for...}  # Required.",
+      "level: ${5|beginner,intermediate,advanced|}                         # Required. Can be 'beginner', 'intermediate' or 'advanced'",
+      "authors:                                # Required. You can add as many authors as needed",
+      "  - ${6:Author 1}",
+      "  - ${7:Author 2}",
+      "contacts:                               # Required. Must match the number of authors",
+      "  - ${8:1st Author's email, Twitter...}",
+      "  - ${9:2nd Author's email, Twitter...}",
+      "duration_minutes: ${10:20}                    # Required. Estimated duration in minutes",
+      "tags: ${11:javascript, api, node.js}          # Required. Tags for filtering and searching",
+      "banner_url: ${12:workshops/create-workshop/assets/banner.jpg}            # Optional. Should be a 1280x640px image",
+      "video_url: ${13:https://youtube.com/link}     # Optional. Link to a video of the workshop",
+      "audience: ${14:students}                      # Optional. Audience of the workshop (students, pro devs, etc.)",
+      "wt_id: ${15:<cxa_tracking_id>}                # Optional. Set advocacy tracking code for supported links",
+      "oc_id: ${16:<marketing_tracking_id> }         # Optional. Set marketing tracking code for supported links",
+      "navigation_levels: ${17:2}                    # Optional. Number of levels displayed in the side menu (default: 2)",
+      "navigation_numbering: ${18|true,false|}              # Optional. Enable numbering in the side menu (default: true)",
+      "sections_title:                         # Optional. Override titles for each section to be displayed in the side bar",
+      "  - ${19:Section 1 title}",
+      "  - ${20:Section 1 title}",
+      "---"
+    ],
+    "description": "Creates the MOAW Metadata Section"
+  }
+}
