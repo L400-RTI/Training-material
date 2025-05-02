@@ -518,7 +518,7 @@ External tables can be used for both query and export workflows:
 - **Export:** Data in Eventhouse can be continuously or on-demand
   exported to external storage using Continuous Export.
 
-<div class="info" data-title="Note">
+<div class="important" data-title="Important">
 
 > **Continuous Export into external tables must account for schema drift and file format constraints (only Parquet, Delta, CSV, and JSON supported).**
 
