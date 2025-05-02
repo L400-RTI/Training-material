@@ -3262,13 +3262,439 @@ Putting it all together, here’s the technical flow when deploying a KQL Databa
 
 ### Implementations
 
+Implementing Continuous Integration and Continuous Deployment (CI/CD) in Microsoft Fabric for Real-Time Intelligence (RTI) workloads involves selecting a workflow that aligns with your team's development practices and deployment requirements. Microsoft Fabric supports multiple CI/CD strategies, each catering to different organizational needs.
+
+#### Option 1: Git-Based Deployments with Multiple Branches
+
+In this approach, each environment stage—Development, Test, and Production—corresponds to a dedicated branch in your Git repository.
+
+Workflow:
+
+1. Developers commit changes to the Development branch.
+2. Upon approval, a release pipeline deploys updates to the Development workspace using Fabric Git APIs.
+3. Changes are merged into the Test branch, triggering deployment to the Test workspace.
+4. After successful testing, changes are merged into the Production branch for final deployment.
+
+Considerations:
+
+- Suitable for teams following Gitflow branching strategies.
+- Ensures clear separation between environments.
+- Requires managing multiple branches and coordinating merges.
+
+#### Option 2: Git-Based Deployments Using Build Environments
+
+This method utilizes a single main branch, with build and release pipelines handling environment-specific configurations.
+
+**Workflow:**
+
+1. Changes are committed to the main branch.
+2. A build pipeline creates a build environment, runs tests, and adjusts configurations (e.g., data source connections) for the Development stage.
+3. A release pipeline deploys the adjusted artifacts to the Development workspace.
+4. The process repeats for Test and Production stages, with necessary configuration adjustments at each step.
+
+**Considerations:**
+
+- Ideal for teams following trunk-based development.
+- Allows dynamic configuration per environment.
+- Requires scripting to handle environment-specific adjustments.
+
+#### Option 3: Deployments Using Fabric Deployment Pipelines
+
+Fabric's built-in deployment pipelines facilitate direct promotion of artifacts between workspaces without relying solely on Git branches.
+
+**Workflow:**
+
+1. Developers commit changes to the main branch connected to the Development workspace.
+2. Upon approval, Fabric deployment pipelines promote changes from Development to Test, and subsequently to Production workspaces.
+3. Automated and manual tests can be integrated at each stage.
+
+**Considerations:**
+
+- Simplifies deployment by managing promotions within Fabric.
+- Useful when Git is primarily used for development, and deployments are managed within Fabric.
+- Provides features like deployment history and change tracking.
+
+#### Option 4: CI/CD for ISVs Managing Multiple Customers
+
+Independent Software Vendors (ISVs) serving multiple customers can adopt a CI/CD approach that accommodates multi-tenant deployments.
+
+**Workflow:**
+
+1. A centralized development process handles common features.
+2. Build and release pipelines adjust configurations for each customer (e.g., data connections) using scripts or APIs.
+3. Deployments are executed in parallel across customer-specific workspaces.
+
+**Considerations:**
+
+- Suitable for managing numerous customer environments.
+- Requires handling customer-specific configurations dynamically.
+- Demands careful coordination to ensure consistency across deployments.
+
+Selecting the appropriate CI/CD strategy in Microsoft Fabric depends on factors such as team structure, development practices, and deployment complexity. Each option offers distinct advantages, and organizations may adopt a hybrid approach to best meet their needs.
+
+#### Implementation: CI/CD with the REST API
+
+While Microsoft Fabric provides Git integration and deployment pipelines as first-class CI/CD tools, direct use of the Fabric REST API offers maximum control and flexibility for advanced automation scenarios. This approach is especially valuable for:
+
+- Fine-grained deployment orchestration across environments
+- Integrating Fabric into existing enterprise CI/CD pipelines (e.g., Azure DevOps, GitHub Actions, Jenkins)
+- Dynamic deployments where artifact definitions are generated or transformed at runtime
+
+This implementation guide explains how to leverage the REST API for managing Eventhouse, KQL Databases, and Event Streams in Real-Time Intelligence workloads.
+
+<div class="info" data-title="information">
+
+> In the example we use PowerShell. The same is possible with any other language that can call REST Apis.
+
+</div>
+
+##### Understanding the API Model
+
+Fabric’s REST API follows a declarative artifact model:
+
+- Every deployable item (Eventhouse, KQL Database, Event Stream) is treated as an “item” in the workspace.
+
+Creation is performed by POSTing an "item definition", which includes:
+
+- platform.json metadata (type, name, logical ID)
+- properties.json configuration (caching, retention)
+- In case of a KQL Database A CSL schema script encoded in Base64 (the actual KQL schema)
+
+The REST API exposes endpoints to:
+
+- Create items
+- Retrieve item definitions
+- Update items
+- Delete items
+- Manage item properties
+
+##### Deploying a KQL Database via REST API
+
+A typical deployment flow for a KQL Database looks like this:
+
+**Step 1: Export the schema**
+
+Use KQL command in your dev workspace:
+
+```kql
+.show database schema
+```
+
+Save the output .csl file.
+
+This script contains:
+
+- create table
+- create materialized-view
+- alter-merge policy
+- create function
+- permissions
+
+**Step 2: Encode schema**
+
+Encode the .csl schema file as Base64:
+
+```powershell
+$schemaText = Get-Content "C:\path\schema.csl" `
+                    -Raw
+
+$schemaBase64 = [Convert]::ToBase64String([System.Text.Encoding]::UTF8.GetBytes($schemaText))
+```
+
+**Step 3: Prepare API payload**
+
+Construct the JSON body:
+
+```powershell
+$body = @{
+  "displayName": "MyDatabase",
+  "type": "KQLDatabase",
+  "properties": {
+    "readOnly": false,
+    "hotCachePeriod": "30d"
+  },
+  "definition": "<Base64 schema string>"
+} | ConvertTo-Json `
+        -Depth 2
+```
+
+Adjust properties to set caching and retention.
+
+**Step 4: Call the API**
+
+Invoke the REST API endpoint:
+
+```powershell
+$WorkspaceID = '<GUID>'
+
+$uri = "https://api.fabric.microsoft.com/workspaces/$workspaceId/items"
+
+$response = Invoke-RestMethod `
+                    -Headers @{ Authorization = "Bearer $token" } `
+                    -Method POST `
+                    -Uri $uri `
+                    -Body ($body) `
+                    -ContentType "application/json"
+```
+
+- This creates the KQL Database, schema, and configuration declaratively.
+
+##### Updating an Existing Database
+
+- Use PUT or PATCH API with updated definition payload.
+
+<div class="important" data-title="important">
+
+> Changes are additive; deletions (dropping tables/columns) must be explicitly scripted in the .csl schema.
+> API doesn’t automatically diff schema or remove objects.
+
+</div>
+
+##### Automating Across Environments
+
+To deploy across Dev → Test → Prod:
+
+1. Parameterize workspace IDs and environment-specific configurations in your CI/CD pipeline.
+2. Use the same API payload, adjusting displayName or properties as needed.
+3. Map logical IDs in platform.json to maintain artifact dependencies (e.g., Eventhouse binding).
+
+Implement validation after deployment by querying:
+
+```kql
+.show cluster
+.show database schema
+.show tables details 5. Advantages and Considerations
+
+```
+
+**Advantages:**
+
+- Full control over deployment sequencing
+- Can integrate with any CI/CD orchestrator
+- Supports dynamic generation of schema
+- Decouples from Git integration
+
+**Considerations:**
+
+- Requires manual schema diffing for destructive changes
+- No built-in rollback; must implement idempotent scripts
+- Requires authentication handling (OAuth token acquisition)
+
+##### Implementation Example: End-to-End Flow
+
+1. Developer commits schema .csl to Git.
+
+2. CI pipeline:
+
+- Pulls schema from Git
+- Encodes schema to Base64
+- Builds JSON API payload
+- Calls `POST /items` API for Dev workspace
+
+3. Automated tests validate schema + queries in Dev.
+4. If passed, same pipeline deploys to Test → Prod via REST API.
+
+Implementing CI/CD for Fabric RTI using the REST API provides maximum flexibility and environment control. It aligns with Infrastructure-as-Code principles by deploying declarative definitions via API calls, supporting dynamic, automated deployments independent of Git integration or built-in deployment pipelines.
+
+**Recommended for:**
+
+- Enterprise DevOps teams integrating Fabric into existing CI/CD stacks
+- ISVs deploying into multiple customer tenants
+- Scenarios requiring dynamic schema generation or transformation at deployment time
+
 ### Troubleshooting
 
-### Orchestration and optimization
+Implementing CI/CD and ALM in Microsoft Fabric Real-Time Intelligence introduces new operational challenges. Troubleshooting deployment issues requires a deep understanding of how Fabric manages artifacts, schema, and deployment state across environments.
 
-### Schemas and throughput
+This section provides actionable guidance for diagnosing and resolving common issues in Git integration, deployment pipelines, REST API deployment, and schema management.
 
-### Monitoring and pricing
+#### Git Integration Issues
+
+##### Issue: Uncommitted or Out-of-Sync Artifacts\*\*
+
+**Symptoms:**
+
+- Artifact shows as Uncommitted or Update Required in Git integration view.
+- Unable to sync changes from Git or push to Git.
+
+**Root Causes:**
+
+- Artifact modified directly in workspace but not committed to Git.
+- Manual edits in Git repository not reflected in Fabric workspace.
+- Branch mismatch or merge conflicts in Git.
+
+**Resolution:**
+
+- Use Source Control → Commit in Fabric to push local changes to Git.
+- Use Source Control → Update to pull latest changes from Git into workspace.
+- Verify correct Git branch is connected in Workspace Settings → Git Integration.
+- Check Git repo permissions and authentication.
+
+<div class="tip" data-title="tip">
+
+> Avoid manual edits to platform.json or properties.json unless you understand schema-binding dependencies (e.g., logical IDs).
+
+</div>
+
+##### Issue: Missing or Incomplete Artifact Definitions in Git
+
+**Symptoms:**
+
+- Some artifacts missing in Git repo.
+- Missing schema updates in database.csl.
+
+**Root Causes:**
+
+- Certain database-level properties (e.g., streaming policies) not yet supported by Git integration export.
+- Artifact created outside Git-connected workspace.
+
+**Resolution:**
+
+- Validate schema export with .show database schema to compare definitions.
+- For unsupported properties, use post-deployment scripts via REST API or manual configuration.
+- Recreate artifact inside Git-connected workspace.
+
+#### Deployment Pipeline Issues
+
+##### Issue: Artifact Not Deploying to Target Workspace
+
+**Symptoms:**
+
+- Deployment pipeline shows Update Required but does not apply changes.
+- Target workspace does not reflect promoted changes.
+
+**Root Causes:**
+
+- Artifact dependencies not resolved (e.g., KQL Database missing binding to Eventhouse).
+- Logical ID mismatch between source and target workspace.
+- Manual changes in target workspace creating drift.
+
+**Resolution:**
+
+- Inspect logical IDs in platform.json to confirm mappings.
+- Use Fabric UI to manually bind KQL Database to correct Eventhouse if automatic rebinding fails.
+- Reset workspace state by redeploying from clean Git source.
+- Check deployment pipeline logs for skipped artifacts.
+
+<div class="tip" data-title="tip">
+
+> Deployment pipelines are non-destructive: deletions in source workspace or Git are not automatically deleted in downstream environments.
+
+</div>
+
+#### REST API Deployment Issues
+
+##### Issue: API Call Fails with Validation Error
+
+**Symptoms:**
+
+- 400 Bad Request or validation error when calling POST /items.
+- Error referencing missing schema, invalid payload, or undefined references.
+
+**Root Causes:**
+
+- Invalid Base64-encoded schema string.
+- Required fields missing in payload (displayName, type, properties).
+- Artifact dependencies unresolved (e.g., Eventhouse ID missing for KQL Database).
+
+**Resolution:**
+
+- Validate Base64 schema by decoding and manually inspecting KQL.
+- Use .show database schema output to regenerate accurate schema.
+- Ensure platform.json includes valid logicalId and correct parent references.
+- Test schema manually in development workspace before API deployment.
+
+##### Issue: Deployment Succeeds but Schema Not Applied
+
+**Symptoms:**
+
+- API call returns 200 OK but target workspace missing tables, views, or policies.
+
+**Root Causes:**
+
+- Schema script missing create table / create materialized-view statements.
+- Schema execution partial or skipped due to dependency errors.
+- Platform applies artifact definition without executing invalid schema.
+
+**Resolution:**
+
+- Confirm .csl schema includes complete DDL statements.
+- Check .show database schema violations for broken dependencies.
+- Run schema manually in KQL editor to validate before encoding.
+
+<div class="tip" data-title="tip">
+
+> The REST API executes schema declaratively; any failed statement does not stop deployment but silently fails downstream schema objects.
+
+</div>
+
+#### Schema Drift and Object Violations
+
+##### Issue: Materialized Views or Update Policies Broken
+
+**Symptoms:**
+
+- Queries referencing materialized views fail.
+- Update policies no longer execute.
+
+**Diagnostic Command:**
+
+```kql
+.show database schema violations
+```
+
+**Common Causes:**
+
+- Upstream table schema changes breaking dependent objects.
+- Dropped columns or renamed fields without updating dependent objects.
+- Manual schema changes bypassing deployment process.
+
+**Resolution:**
+
+- Rebuild broken objects using corrected schema in .csl.
+- Add schema evolution scripts alongside declarative schema to manage object drops/renames.
+
+**Best Practice:**
+
+- Always validate schema with `.show database schema violations` after deploying schema changes via Git or API.
+
+#### Capacity and Scaling-Related Troubleshooting
+
+Although not CI/CD-specific, capacity issues can block deployments in Real-Time Intelligence workloads:
+
+**Symptoms:**
+
+- Auto-scaling causes throttling.
+- Deployment blocked due to insufficient capacity.
+
+Queries slow or failing after deployment.
+
+```kql
+.show cluster
+.show cluster diagnostics
+.show tables details
+```
+
+**Resolution:**
+
+- Adjust table-level caching policy via .alter-merge to reduce hot cache pressure.
+- Monitor capacity via Capacity App.
+- Scale minimum cluster capacity if always-on or minimum consumption enabled.
+
+<div class="tip" data-title="tip">
+
+> Include caching and retention policies explicitly in .csl schema to control capacity impacts at deployment.
+
+</div>
+
+#### Summary of Troubleshooting Strategies
+
+- Use Fabric UI, Git repo inspection, and REST API response logs as primary sources of troubleshooting evidence.
+- Validate schema at each stage (Dev, Test, Prod) using `.show database schema` and `.show database schema violations`.
+- Understand that Fabric’s deployment model is additive, non-destructive: drift and undeployed deletions require manual intervention.
+- Document and maintain migration scripts for schema evolution outside declarative .csl schema.
+
+This troubleshooting guidance ensures that CI/CD and ALM implementations for RTI in Microsoft Fabric remain resilient, transparent, and auditable across environments.
 
 ### Hands-on lab
 
