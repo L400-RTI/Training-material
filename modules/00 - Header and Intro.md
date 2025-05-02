@@ -2,7 +2,7 @@
 published: false # Optional. Set to true to publish the workshop (default: false)
 type: workshop # Required.
 title: Project Peritus - Real-Time Intelligence expert training # Required. Full title of the workshop
-short_title: Real-Time Intelligence expoert training # Optional. Short title displayed in the header
+short_title: Real-Time Intelligence expert training # Optional. Short title displayed in the header
 description: In this deep technical workshop, you will build a complete analytics platform with streaming data using Microsoft Fabric Real-Time Intelligence components and other features of Microsoft Fabric. This is a proctor led worksop in which each section is accompanied by a technical overview of Fabric RTI components. # Required.
 level: advanced # Required. Can be 'beginner', 'intermediate' or 'advanced'
 authors: # Required. You can add as many authors as needed
