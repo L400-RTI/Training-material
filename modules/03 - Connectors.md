@@ -89,3 +89,5 @@ Pricing for connectors are free, they are only pointers to data and sources, and
 #### Ingest data from SQL server to Eventhouse
 
 #### Read data from JSON file to Eventhouse
+
+---

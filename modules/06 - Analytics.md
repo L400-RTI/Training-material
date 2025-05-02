@@ -38,11 +38,11 @@ print ip_location = geo_info_from_ip_address('20.53.203.50')
 
 Output:
 
-| ip_location |
-|--------------|
-|{"country": "Australia", "state": "New South Wales", "city": "Sydney", "latitude": -33.8715, "longitude": 151.2006}|
+| ip_location                                                                                                         |
+| ------------------------------------------------------------------------------------------------------------------- |
+| {"country": "Australia", "state": "New South Wales", "city": "Sydney", "latitude": -33.8715, "longitude": 151.2006} |
 
-As you see from above statement the *geo_info_from_ip_address* is just as you would say it when you have a dialogue with another person.
+As you see from above statement the _geo_info_from_ip_address_ is just as you would say it when you have a dialogue with another person.
 
 We can't list all the capabitlities in this module, so we have chosen a list of functions and will walk you throigh each of them:
 
@@ -61,21 +61,25 @@ To work effectively with geospatial data in KQL, it's essential to structure you
 ##### Key Capabilities
 
 - Geospatial Data Types
+
   - geo_point: Represents a location using latitude and longitude.
   - geo_polygon: Represents a closed area using a list of geo points.
   - geo_line: Represents a series of connected points (e.g., a path).
   - These are typically stored as WKT (Well-Known Text) or GeoJSON strings.
 
 - Distance and Proximity
+
   - geo_distance_2points(): Calculates the distance between two geo points in meters.
   - Use case: Track proximity of a mobile user to a point of interest (e.g., store, hospital).
 
 - Spatial Relationships
+
   - geo_point_in_polygon(): Checks if a point lies within a polygon.
   - Use case: Determine if a delivery driver entered a restricted area or service zone.
   - geo_polygon_intersects_polygon(): Check if two regions overlap.
 
 - Clustering and Grouping
+
   - Geohashing: KQL allows geohashing using geo_point_to_geohash(), grouping nearby points spatially.
   - Use case: Cluster user activity for heatmap generation or anomaly detection.
 
@@ -136,7 +140,7 @@ For forecasting, KQL provides the series_decompose_forecast() function, which pr
 ##### Key capabilities
 
 1. Time-Series Preparation
-Before you can detect anomalies or forecast trends, you need to structure your data using make-series. This aggregates metrics over a time grain:
+   Before you can detect anomalies or forecast trends, you need to structure your data using make-series. This aggregates metrics over a time grain:
 
 ```kql
 MyMetricsTable
@@ -180,7 +184,7 @@ To work effectively with JSON and XML in KQL, it's important to understand the d
 ##### Key capabilities
 
 1. JSON Parsing
-Example 1 – Parse a JSON string:
+   Example 1 – Parse a JSON string:
 
 ```kql
 datatable(log: string)
@@ -238,3 +242,5 @@ Incl., but not limited to, distances, areas, polygons, and routes
 #### Built-in datasets which can be used
 
 Fx. IP address lookup, convertions in scales, datetime functions etc.
+
+---

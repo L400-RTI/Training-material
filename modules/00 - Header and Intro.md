@@ -127,3 +127,5 @@ Each module has the same overall structure:
 > **In some modules, you will not find all of the sections above. This is by intent, and shows that this specific section does not apply to this module, or the module does not contain any information about the section.**
 
 </div>
+
+---

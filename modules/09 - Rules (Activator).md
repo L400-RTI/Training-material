@@ -522,3 +522,5 @@ Activator follows a capacity-based pricing model within Microsoft Fabric:
   Where appropriate, trigger pipelines or flows that can handle multiple events in one execution to reduce downstream workload costs.
 
 ### Hands-on lab
+
+---

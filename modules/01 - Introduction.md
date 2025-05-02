@@ -436,3 +436,5 @@ By the end of the course, you will be able to:
 - Make design trade-offs that balance latency, fidelity, and financial impact
 
 In production-grade RTI systems, what gets monitored gets trusted—and what gets priced gets optimized.
+
+---

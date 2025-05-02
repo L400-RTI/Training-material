@@ -80,7 +80,7 @@ Or by altering the shortcut’s data policy in KQL script:
 
 ```
 
-With the *Hot* variable to define the timespan needed for chaching.
+With the _Hot_ variable to define the timespan needed for chaching.
 
 When you create a shortcut with acceleration enabled, the underlying Kusto engine begins to load the data from the source to memory. Depending on the size of the data, this can take a while.
 
@@ -103,3 +103,5 @@ Other than that, the direct ingestion is pretty straight forward.
 #### Have people build a direct ingestion
 
 #### Have people come up with a solution for ingesting large volume data and find the correct settings for all 3 areas of throughput
+
+---

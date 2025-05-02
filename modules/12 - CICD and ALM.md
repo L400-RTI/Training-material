@@ -307,3 +307,5 @@ Putting it all together, here’s the technical flow when deploying a KQL Databa
 ### Monitoring and pricing
 
 ### Hands-on lab
+
+---
