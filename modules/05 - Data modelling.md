@@ -1158,7 +1158,8 @@ In real-time architectures powered by Microsoft Fabric's Eventhouse and KQL Data
 
   External Tables, Materialized Views, and Update Policies all require pre-defined, rigid schemas​​​. Schema drift (unexpected schema changes) is not natively tolerated; ingestion will fail if the incoming data format deviates without adjustments.
 
-- Schema Alignment Across Services
+- **Schema Alignment Across Services**
+
   For integration with Power BI semantic models, enforcing a star schema is highly recommended​: - Fact tables should store event or transactional data. - Dimension tables should represent slowly changing reference data (e.g., users, products). - Using Dual Mode for dimensions improves slicer/filter performance significantly​.
 
 - **Dynamic Columns Handling**
