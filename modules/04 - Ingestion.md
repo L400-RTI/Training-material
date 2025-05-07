@@ -51,6 +51,16 @@ The throughput can be configured from Low, through Medium to High.
 - Medium gives you 16 partitions in the Eventhub
 - High gives you 32 partitions in the Eventhub
 
+When changing the throughput of the Eventstream it will have an impact on the cost of the Eventstream. This due to the underlying compute for each partition in the Eventhub and from this the number of messages the Eventstream is processing.
+
+With "Low" set in "Event throughput setting", the processor CU consumption rate starts at 1/3 base-rate (0.778 CU hour) and autoscale within 2/3 base-rate (1.555 CU hour), 1 base-rate (2.333 CU hour), 2 base-rates, and 4 base-rates.
+
+With "Medium" set in "Event throughput setting", the processor CU consumption rate starts at 1 base-rate and autoscale within multiple possible base-rates.
+
+With "High" set in "Event throughput setting", the processor CU consumption rate starts at 2 base-rates and autoscale within multiple possible base-rates.
+
+For more details on the cost of Eventstream, please see the official documentation from Microsoft Learn right [here](https://learn.microsoft.com/en-us/fabric/real-time-intelligence/event-streams/monitor-capacity-consumption)
+
 The throughput does not in itself boost the overall throughput of ingestion in the Eventstream area. Every throughput has 3 limitations:
 
 1. The inlet (in this case the Event hub)
@@ -100,8 +110,8 @@ Other than that, the direct ingestion is pretty straight forward.
 
 ### Hands-on lab
 
-#### Have people build a direct ingestion
+#### Build a direct ingestion
 
-#### Have people come up with a solution for ingesting large volume data and find the correct settings for all 3 areas of throughput
+#### Come up with a solution for ingesting large volume data and find the correct settings for all 3 areas of throughput
 
 ---
