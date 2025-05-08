@@ -1,15 +1,5 @@
 ## Module 6 - Analytics
 
-    - Can we use geospatial clustering on the RTIIad dataset?
-    - Can we calculate distance?
-    - Can we use contains?
-    - Can we use anomaly detection on the data?
-    - Can we use forecasting on the data?
-    - Can we use the scan operator on the data?
-    - Can we use parse on the data?
-    - Can we show some of the parse_ functions
-    - Can we show IP-Address functions? Or is this too far off?
-
 ### Introduction
 
 One of the huge benefits of the Kusto engine is the power to do complex analytics with a more simple approach than compared to other database engines.

@@ -27,10 +27,29 @@ These connectors are always expanding and contains sources for Microsoft out-of-
 
 ![Connectors for Eventstream](./assets/images/Connectors1.png)
 
+Every time a connector is created in Eventstream, a new connection between the underlying EventHub and the source is created. This connection has a list of properties. The most important of this property, is the configuration of either pulling the data from the source, or accepting the push of data from the source.
+Even though it might be interesting to be able to configure this setting your self, it is not possible. It all comes down to the way the connection is developed by the underlying service in Azure.
+
+For instance, when configuring a CDC source from a database, the connection is querying the CDC change feed in a schedule, and reads the data when there is new data to get. This then again implies, that the connection keeps a track of the watermark for the source and each table in the database.
+
+<div class="info" data-title="Note">
+
+> When working with CDC feeds from any source, it is important to configure the CDC on the specific database. Or else the connection will not get any data from the source, even though it will create itself wiht no error.
+
+</div>
+
+A differnet example is the connection to a data-emitting source. A source which sends data out to "the world" by itself. In this case the connection accepts the emitted data from the source, and pipes it directly to the EventHub and through to the Eventstream for futher processing.
+
 Connectors for Eventhouse are built on top of the Azure Data Explorer database engine and can only be configured using the KQL script language.
 These connectors are not as extensive as the ones found for Eventstream.
 
 ![Connectors 2](./assets/images/Connectors2.png)
+
+When creating connectors directly in the KQL database, the KQL engine uses different SDKs to connect to the source.
+
+The list of sources and SDKs can be found on [Microsoft Learn](https://learn.microsoft.com/en-us/azure/data-explorer/integrate-overview?tabs=connectors#detailed-descriptions).
+
+The third option when working with connections is the cross-tenant data connection. This type of connection gets data from an EventGrid or EventHub in a different tenant thant the one the KQL database is currently residing in. To create such a connection you can only use the [Create Data connections API](https://learn.microsoft.com/en-us/rest/api/azurerekusto/data-connections/create-or-update?view=rest-azurerekusto-2024-04-13&tabs=HTTP).
 
 ### Schemas and throughput
 
@@ -88,6 +107,46 @@ Pricing for connectors are free, they are only pointers to data and sources, and
 
 #### Ingest data from SQL server to Eventhouse
 
+In this lab you will have the task to read data from a SQL server in Azure and be able to live query data from the SQL server and join it to data already existing in the KQL database.
+
+##### Situation
+
+You are the RTI developer of Fabricam and the infrastructure is built to have a Master Data serbvices application in a SQL server. The KQL data is ingesting live and the business have the following requirements:
+
+1. The Master Data from the SQL server must be read live
+2. The SQL server has a stored procedure which must be used. This stored procedure has already implemented business logic.
+3. The KQL query must have a join with the Master Data to create the needed insights in a Real-Time Dashboard
+
+Your task is to create a connection to the SQL server directly from the KQL engine (not using an Eventstream or one-time ingestion).
+
+The information you have are the following:
+
+SQL Server connection string:
+SQL server username:
+SQL server password:
+
+Stored procedure name: *stored procedure name will be provided*
+
+Create the connection to the SQL server in such a way that it can be used to live query data and joined in a KQL query for further processing.
+Use the live connection to create a query which uses the newly created connection in a KQL statement. The statement can be made in your own liking, as long as it uses both data from the SQL server and the existing KQL database.
+
 #### Read data from JSON file to Eventhouse
+
+In this task, you will build a ingestion process directly in the KQL database. So no use of Evenstrem, shortcuts or other "built-in" connectors.
+
+The JSON file has a floating schema, and the existing schema is as follows:
+
+*add JSON schema here*
+
+Your task is:
+
+1. Create a connection to the JSON file and make sure to expand the needed business columns from the JSON file.
+2. The needed buisness columns are:
+   1. column1
+   2. column2
+3. For all other columns, the JSON payload must be loaded to the KQL database in the same table.
+4. Every new key-value pair from the JSON must also be accepted in the connection and be stored in the destination table
+
+*Add json file and connection to the file*
 
 ---

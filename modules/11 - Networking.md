@@ -16,7 +16,7 @@ All of this said, the handling and maintennence of network setup is handled thro
 
 ### Technical deep dive
 
-When implementing connections through private endpoints, the Eventstream item does a lot of things behind the scenes.
+When implementing connections through private endpoints, the Eventstream item does a lot of things behind the scenes. Here are the highlight of these things.
 
 #### Connecting to an EventHub in a vNET
 
