@@ -46,7 +46,12 @@ It fits into a reactive, event-driven architecture where data flows continuously
 
   - Data Pipelines or Notebooks in Fabric.
 
-  - External actions via Power Automate (e.g., send email, Teams message, create ticket).
+  - External actions via Power Automate
+    (e.g. create ticket).
+
+  - Send Teams Message
+
+  - Send E-Mail
 
   - (Coming soon) Direct API integrations to custom systems using Webhooks or REST endpoints.
 
