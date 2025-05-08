@@ -1,21 +1,2 @@
-## Module 8 - Dashboards
+# Module 8 - Real-Time Dashboards in Microsoft Fabric Real-Time Intelligence
 
-### Introduction
-
-### Architectural deep dive
-
-### Technical deep dive
-
-### Implementations
-
-### Troubleshooting
-
-### Orchestration and optimization
-
-### Schemas and throughput
-
-### Monitoring and pricing
-
-### Hands-on lab
-
----
