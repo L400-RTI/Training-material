@@ -239,11 +239,11 @@ For real-time data, this streamlines routing telemetry or events from Eventstrea
 
 ## 4. Implementations
 
-### ✅ Working Scenarios:
+### Working Scenarios:
 - **Telemetry ingestion** into Eventhouse with filtering via update policies.
 - **Cold storage monitoring** using Activator with correct `changes()` logic.
 
-### ❌ Common Failures:
+### Common Failures:
 - Filtering in Eventstream for high-frequency events → use Eventhouse instead.
 - Misuse of `greater than` in Activator → causes alert spamming.
 
@@ -445,13 +445,3 @@ Designing high-throughput, real-time ingestion pipelines in Microsoft Fabric RTI
 - [Kusto Query Language Reference](https://learn.microsoft.com/azure/data-explorer/kusto/query/)
 
 ---
-
-## 👷 Contributing
-
-If you have ideas for new scenarios, improvements to the hands-on lab, or want to contribute better alerting strategies for Activator, please submit a pull request or contact the module maintainers.
-
----
-
-## 📜 License
-
-© 2025 Microsoft Fabric RTI Curriculum. Licensed under MIT.
