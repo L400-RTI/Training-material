@@ -6,7 +6,15 @@ When ingesting data to the Real-Time Intelligence solution, you have several opt
 
 - Using an Eventstream to get data
 - Direct ingest to the Eventhouse
-- Shortcuts from outside the Eventhouse
+- Shortcuts from outside the Eventhouse*
+
+<div class="info" data-title="Note on shortcuts">
+
+> Shortcuts in themselfes can be discussed if they are an ingestion. From a technical point of view shortcuts are only pointers to data and not actual ingestion. Not even the accelerated shortcuts, as they are cached on disk outside of the Eventhouse.
+
+</div>
+
+**Move shortcuts as a seperate section as they are not ingestion and double click on the scenarios. Highlight that we have more than one destionation - also OneLake and Lakehouse. Add ingestion mapping and mapping transformations**
 
 This module dives into the details of each method and will give you insights to the technical implementation and give you and understanding on how and when to choose what method.
 
@@ -16,7 +24,7 @@ The lab will challenge you in the ingestion methods, and help you understand the
 
 With the three highlevel approaches to ingestion, we have a possible architecture (with selections) which looks like this:
 
-![Ingestion selections](./assets/images/Ingestion1.png)
+![Ingestion selections](./assets/images/Ingestion0.png)
 
 #### Eventstream ingestion
 
@@ -38,7 +46,7 @@ To enhance the performance of queries over external data, Microsoft Fabric offer
 
 #### Direct ingestion
 
-When speaking of direct ingestion, we have a source, for which it is possible to connect directly from the Eventhouse and read the data. These sources are, but not limited to, SQL Server, EventHub, and [Brian to find more sources]
+When speaking of direct ingestion, we have a source, for which it is possible to connect directly from the Eventhouse and read the data. These sources are, but not limited to, SQL Server, EventHub, EventGrid etc.
 
 ### Technical deep dive
 
@@ -68,6 +76,16 @@ The throughput does not in itself boost the overall throughput of ingestion in t
 3. The speed of the destination
 
 So when configuring the throughput of the Eventstream, also remember to think of the other two areas of the total throughput configuration for a better and overall technical implementation.
+
+##### Schema validation in Eventstream
+
+Schema validation in Microsoft Fabric’s Eventstream plays a critical role in ensuring that incoming streaming data adheres to a predefined structure before it's processed or routed to downstream systems. When data is ingested from streaming sources such as Azure Event Hubs, IoT Hub, or Kafka, Eventstream attempts to infer the schema based on sample events or allows users to manually define it. This schema typically includes field names, data types, and expected structures. Once the schema is set, Eventstream continuously validates incoming events against it in real-time. If incoming events deviate—such as missing required fields, having unexpected types, or containing structural inconsistencies, they can be flagged, rejected, or optionally rerouted to a dead-letter destination for debugging and remediation. This mechanism helps maintain data quality and protects downstream systems like Eventhouse and Lakehouse from ingesting malformed data.
+
+Technically, schema validation is implemented using a combination of schema definitions and runtime checks embedded in the Eventstream pipeline. Users can define strict or relaxed validation rules, depending on the use case, with options to enable automatic schema evolution or enforce rigid typing. 
+
+Eventstream supports JSON schema validation and may extend to support formats like Avro or Parquet as needed. A key consideration during implementation is to ensure that schema changes in upstream systems are coordinated with the Eventstream pipeline; otherwise, even minor alterations like renaming a field or changing a data type can break the pipeline. Additionally, high-throughput environments must be optimized to handle validation errors at scale without introducing latency.
+
+To maintain reliability, it’s recommended to use schema registries or maintain a versioned schema strategy, especially in enterprise-grade solutions.
 
 #### Shortcuts
 
@@ -104,9 +122,37 @@ To get a status of this process, you can execute the following command:
 
 When ingesting data using the direct ingestion mode, you are configuring the database to read the data from the source directly, basicly using a KQL query.
 
-At normal situtations any KQL query will only run for 10 mins - whereas the ingestion queries are running on a different node in the cluster and will not have this limit of the 10 minute exetution time.
+At normal situtations any KQL query will only run for 4 mins by default which can be overwritten to max 10 mins - whereas the ingestion queries are running on a different node in the cluster and will not have this limit of the 10 minute exetution time.
+**Brians waits for slides from Devang to rewrite the above paragraph**
 
 Other than that, the direct ingestion is pretty straight forward.
+
+#### Ingestion mapping
+
+Ingestion mapping in Microsoft Fabric Real-Time Intelligence is a vital mechanism that defines how incoming streaming data is transformed and structured as it's ingested into destination stores like KQL Database (Eventhouse), Lakehouse, or Data Warehouse. When data flows through Eventstream, ingestion mappings specify how source fields from raw event payloads (often in formats like JSON, Avro, or CSV) are extracted and assigned to columns in the destination schema.
+
+This mapping process enables fine-grained control over field selection, renaming, type casting, and data reshaping, ensuring that only relevant and correctly typed data is stored. In practical terms, this allows developers to map nested fields, apply default values, flatten complex JSON structures, and handle missing or optional attributes — all without writing custom transformation code.
+
+From an implementation standpoint, ingestion mappings are configured either through the Eventstream UI or programmatically using KQL commands or REST APIs.
+
+Users define column-to-field relationships, specify data formats, and apply validation rules. These mappings are then associated with a specific output destination, ensuring consistent data transformation for all events routed through that stream.
+
+It’s important to monitor mapping consistency during schema changes in upstream sources; mismatches can lead to ingestion failures or silent data loss. Additionally, for high-throughput pipelines, efficient mapping practices—such as avoiding deeply nested structures and minimizing real-time transformations—help reduce latency and resource usage.
+
+A good practice is to regularly test ingestion mappings against live data samples and maintain versioned configurations to support rollback and debugging in dynamic environments.
+
+#### Mapping transformations
+
+Mapping transformations in Microsoft Fabric Real-Time Intelligence allow users to reshape, enrich, and filter streaming data before it is routed to a destination such as a KQL Database (Eventhouse) or Lakehouse.
+These transformations are part of the Eventstream pipeline and are typically applied in a no-code or low-code environment using the Eventstream visual editor. It can also be applied in the direct ingestion methods described above in this module.
+
+Users can define rules to rename fields, extract nested JSON attributes, change data types, add calculated fields, or remove irrelevant information. This ensures that downstream systems receive clean, structured, and relevant data, optimized for analytics and storage. Mapping transformations are executed in real-time, which means they must be efficient and lightweight to avoid introducing latency into the pipeline.
+
+From a technical standpoint, mapping transformations are implemented within the Eventstream canvas as configurable blocks or as defined code in the definition of the mapping in the Eventhouse.
+
+Each transformation is applied sequentially to events as they pass through the stream. Users define transformations such as “rename column,” “convert to datetime,” or “parse JSON path,” and these are stored as part of the Eventstream and Eventhouse ingestion configuration.
+
+Under the hood, Microsoft Fabric ensures these mappings are executed with minimal processing overhead. However, it’s important to watch for pitfalls like mismatched data types, schema drift in source events, or overly complex transformation chains that could degrade performance. Additionally, since these transformations run in real time, testing them on sample data and validating output before pushing to production is crucial. Incorporating schema validation alongside transformations helps ensure data integrity and resilience as the upstream schema evolves.
 
 ### Hands-on lab
 
