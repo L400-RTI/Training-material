@@ -137,6 +137,60 @@ From an implementation standpoint, ingestion mappings are configured either thro
 
 Users define column-to-field relationships, specify data formats, and apply validation rules. These mappings are then associated with a specific output destination, ensuring consistent data transformation for all events routed through that stream.
 
+Supported file formats for ingetsion mappings can be found in [Microsoft Learn](https://learn.microsoft.com/en-us/kusto/management/mappings?view=microsoft-fabric)
+
+You can create ingestion mappings directly when creating the ingestion or create the mapping as a reusable mapping and then referenc it in the ingtesion.
+
+##### Mapping in ingestion
+
+Below example is using a mapping directly in the ingestion command:
+
+```kql
+.ingest into table RawEvents ('https://kustosamplefiles.blob.core.windows.net/jsonsamplefiles/simple.json') 
+    with (
+            format = "json",
+            ingestionMapping =
+            ```
+            [ 
+              {"column":"timestamp","Properties":{"path":"$.timestamp"}},
+              {"column":"deviceId","Properties":{"path":"$.deviceId"}},
+              {"column":"messageId","Properties":{"path":"$.messageId"}},
+              {"column":"temperature","Properties":{"path":"$.temperature"}},
+              {"column":"humidity","Properties":{"path":"$.humidity"}}
+            ]
+            ```
+          )
+```
+
+##### Reusable mapping and referencing mapping in ingetsion
+
+Below example show the creation of a reusable mapping and the use of that mapping in an ingestion command:
+
+**Mapping:**
+
+```kql
+.create table RawEvents ingestion json mapping 'RawEventMapping' 
+    ```
+  [ 
+    {"column":"timestamp","Properties":{"path":"$.timestamp"}},
+    {"column":"deviceId","Properties":{"path":"$.deviceId"}},
+    {"column":"messageId","Properties":{"path":"$.messageId"}},
+    {"column":"temperature","Properties":{"path":"$.temperature"}},
+    {"column":"humidity","Properties":{"path":"$.humidity"}}
+  ]
+    ```
+```
+
+**Use of the above mapping:**
+
+```kql
+.ingest into table RawEvents ('https://kustosamplefiles.blob.core.windows.net/jsonsamplefiles/simple.json') 
+  with (
+          format="json",
+          ingestionMappingReference="RawEventMapping"
+        )
+```
+
 It’s important to monitor mapping consistency during schema changes in upstream sources; mismatches can lead to ingestion failures or silent data loss. Additionally, for high-throughput pipelines, efficient mapping practices—such as avoiding deeply nested structures and minimizing real-time transformations—help reduce latency and resource usage.
 
 A good practice is to regularly test ingestion mappings against live data samples and maintain versioned configurations to support rollback and debugging in dynamic environments.
@@ -152,11 +206,37 @@ From a technical standpoint, mapping transformations are implemented within the 
 
 Each transformation is applied sequentially to events as they pass through the stream. Users define transformations such as “rename column,” “convert to datetime,” or “parse JSON path,” and these are stored as part of the Eventstream and Eventhouse ingestion configuration.
 
+##### Example usages
+
+**Dropping a mapped field**
+
+Given below JSON object
+
+```JSON
+{
+    "Time": "2012-01-15T10:45",
+    "Props": {
+        "EventName": "CustomEvent",
+        "Revenue": 0.456
+    }
+}
+```
+
+A drop of the *props* object is done with this code:
+
+```json
+[
+    { "Column": "Time", "Properties": { "Path": "$.Time" } },
+    { "Column": "EventName", "Properties": { "Path": "$.Props.EventName" } },
+    { "Column": "Props", "Properties": { "Path": "$.Props", "Transform":"DropMappedFields" } },
+]
+```
+
 Under the hood, Microsoft Fabric ensures these mappings are executed with minimal processing overhead. However, it’s important to watch for pitfalls like mismatched data types, schema drift in source events, or overly complex transformation chains that could degrade performance. Additionally, since these transformations run in real time, testing them on sample data and validating output before pushing to production is crucial. Incorporating schema validation alongside transformations helps ensure data integrity and resilience as the upstream schema evolves.
 
 ### Hands-on lab
 
-#### Build a direct ingestion
+#### Build ingestion with a mapping transformation of a JSON file
 
 #### Come up with a solution for ingesting large volume data and find the correct settings for all 3 areas of throughput
 
