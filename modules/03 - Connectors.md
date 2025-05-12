@@ -135,7 +135,7 @@ Monitoring of connectors is not available, please see the Module for Ingestion t
 
 Pricing for connectors are free, they are only pointers to data and sources, and does not generate cost in themselfes. It cost money when you use them to read data from the source. It that case the pricing is 0.611 CUs per hour.
 
-*Note from Microsoft learn on CU for connections:*
+_Note from Microsoft learn on CU for connections:_
 
 The CU consumption of the Eventstream connector is for charging computing resources when pulling real-time data from sources, excluding Azure Event Hubs, Azure IoT Hub, and Custom endpoints. Data from Azure Event Hubs and Azure IoT Hub is pulled using the Eventstream Processor.
 Connector CU consumption is designed to correlate with throughput. When throughput increases, the number of vCores increases (autoscale), resulting in higher CU consumption. Currently, connector autoscaling is unavailable, so only one vCore is used per connector source.
@@ -148,7 +148,7 @@ In this lab you will have the task to read data from a SQL server in Azure and b
 
 ##### Situation
 
-You are the RTI developer of Fabricam and the infrastructure is built to have a Master Data serbvices application in a SQL server. The KQL data is ingesting live and the business have the following requirements:
+You are the Real-Time Intelligence developer of Fabricam and the infrastructure is built to have a Master Data serbvices application in a SQL server. The KQL data is ingesting live and the business have the following requirements:
 
 1. The Master Data from the SQL server must be read live
 2. The SQL server has a stored procedure which must be used. This stored procedure has already implemented business logic.
@@ -162,7 +162,7 @@ SQL Server connection string: TBA
 SQL server username: TBA
 SQL server password: TBA
 
-Stored procedure name: *stored procedure name will be provided*
+Stored procedure name: _stored procedure name will be provided_
 
 Create the connection to the SQL server in such a way that it can be used to live query data and joined in a KQL query for further processing.
 Use the live connection to create a query which uses the newly created connection in a KQL statement. The statement can be made in your own liking, as long as it uses both data from the SQL server and the existing KQL database.
@@ -175,22 +175,22 @@ In this task, you will build a ingestion process directly in the KQL database. S
 
 The JSON file has a floating schema, and the existing schema is as follows:
 
-   {
-      ProductKey
-      ,age
-      ,name
-      ,email
-      ,phone
-      ,address
-      ,about
-      ,registered
-      ,latitude
-      ,longitude
-      ,tags
-      ,friends
-      ,greeting
-      ,favoriteFruit
-   }
+{
+ProductKey
+,age
+,name
+,email
+,phone
+,address
+,about
+,registered
+,latitude
+,longitude
+,tags
+,friends
+,greeting
+,favoriteFruit
+}
 
 Your task is:
 

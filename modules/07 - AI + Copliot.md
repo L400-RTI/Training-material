@@ -2,7 +2,7 @@
 
 ## Introduction to the Module
 
-- **Objective:** Introduce advanced AI use cases within RTI using Microsoft Fabric.
+- **Objective:** Introduce advanced AI use cases within Real-Time Intelligence using Microsoft Fabric.
 - **Audience:** Data engineers, architects, and consultants building AI-powered real-time applications.
 - **Focus Areas:**
   - Vectors in Eventhouse
@@ -15,16 +15,19 @@
 ## Architectural Deep Dive Highlights
 
 ### Eventhouse as a Vector Store
+
 - Dual storage model: Rowstore (real-time) + Columnstore (analytics)
 - Embeddings stored in `dynamic` columns for scalability
 - Partitioning strategy for high performance vector similarity
 
 ### OneLake Mirroring
+
 - Delta Parquet format with adaptive mirroring
 - Auto-compaction avoids Spark optimize overhead
 - Zero-copy architecture enables Lakehouse/Power BI shortcuts
 
 ### Plugins Architecture
+
 - Seamless integration with Azure OpenAI
 - Plugin runtime execution from within KQL context
 
@@ -34,7 +37,7 @@ At the heart of Microsoft Fabric’s real-time intelligence (RTI) capabilities i
 
 Eventhouse extends the core Kusto engine, but differentiates itself with seamless integration into Fabric's unified compute and storage layers. It leverages a dual-storage model: an ephemeral **rowstore** for low-latency access and a persistent **columnstore** optimized for analytical workloads. When streaming data arrives, it is first ingested into the rowstore, providing sub-second availability. Later, Eventhouse transforms this data into an optimized shard-based columnar format for long-term querying and integration.
 
-Crucially, Eventhouse introduces **adaptive mirroring into OneLake**, Fabric’s centralized storage backbone. This allows ingested data to be automatically written to **Delta Parquet** format in OneLake, following industry-standard, open data formats. Unlike traditional pipelines, this mirroring is handled *internally* and *intelligently*. Eventhouse batches files into ~250MB sizes, aligning with Delta Lake optimization guidance, without requiring the user to run Spark optimize jobs or compaction flows. This makes the system exceptionally cost- and performance-efficient, especially for continuous, high-frequency streaming workloads.
+Crucially, Eventhouse introduces **adaptive mirroring into OneLake**, Fabric’s centralized storage backbone. This allows ingested data to be automatically written to **Delta Parquet** format in OneLake, following industry-standard, open data formats. Unlike traditional pipelines, this mirroring is handled _internally_ and _intelligently_. Eventhouse batches files into ~250MB sizes, aligning with Delta Lake optimization guidance, without requiring the user to run Spark optimize jobs or compaction flows. This makes the system exceptionally cost- and performance-efficient, especially for continuous, high-frequency streaming workloads.
 
 The mirrored data can then be accessed in real-time by other Fabric components—Lakehouse, Warehouse, or even external tools—using **shortcuts**. This promotes a zero-copy architecture, enabling developers to build AI pipelines and dashboards on top of event-driven data without duplication or delay.
 
@@ -47,16 +50,19 @@ Finally, this architecture is enriched by **plugin extensibility**. Plugins like
 ## Module 3: Technical Deep Dive Highlights
 
 ### Vectors and Embeddings
+
 - Embedding generation using `ai_embed_text` plugin
 - Supports OpenAI embeddings (`text-embedding-ada-002`)
 - KQL support for storing and querying high-dimensional vectors
 
 ### Similarity Search
+
 - Use of `vector_cosine_distance()` in KQL
 - Indexing for scalable top-K retrieval
 - Threshold tuning for relevance control
 
 ### Plugin Deep Dive
+
 - `ai_embed_text`: Generates vector embeddings from text
 - `ai_chat_completion_prompt`: Contextual response generation from structured/unstructured logs
 
@@ -81,15 +87,18 @@ In short, Eventhouse transforms the traditional telemetry engine into a high-per
 ## Implementation Example Scenarios
 
 ### Scenario 1: Build Your Own Copilot
+
 - Use vector similarity for RAG (Retrieval-Augmented Generation)
 - Store previous chat contexts in Eventhouse
 - Use LLMs for personalized responses
 
 ### Scenario 2: Threat Detection
+
 - Ingest security logs
 - Use embeddings + LLM to detect anomalous or malicious activity
 
 ### Scenario 3: Semantic Recommendation Engine
+
 - Ingest product/ingredient metadata
 - Recommend based on contextual similarity of vector embeddings
 
@@ -98,15 +107,18 @@ In short, Eventhouse transforms the traditional telemetry engine into a high-per
 ## Troubleshooting
 
 ### Common Pitfalls
+
 - Mismatched embedding dimensions across datasets
 - Long similarity search execution due to lack of partitioning
 
 ### Best Practices
+
 - Pre-check model encoding settings
 - Use `vector_score_threshold()` to limit results
 - Regularly validate embedding schema compatibility
 
 ### Best Practices Deep Dive
+
 ## Best Practices for Operationalizing Vectors in Microsoft Fabric RTI
 
 Effectively implementing vector storage and semantic search in Microsoft Fabric Real-Time Intelligence (RTI) requires not only technical fluency but also architectural discipline. As vector-based applications mature beyond proof-of-concept, operational resilience and precision become critical. This section outlines three advanced best practices that help ensure reliability, performance, and maintainability in real-world deployments.
@@ -146,22 +158,24 @@ When schema drift is detected, downstream vector queries should be halted or red
 
 ---
 
-By integrating these best practices into your architecture, you ensure that vector-powered applications in Microsoft Fabric RTI are not just functional, but also production-grade—capable of scaling with enterprise demand and surviving real-world complexity.
-
+By integrating these best practices into your architecture, you ensure that vector-powered applications in Microsoft Fabric Real-Time Intelligence are not just functional, but also production-grade—capable of scaling with enterprise demand and surviving real-world complexity.
 
 ---
 
 ## Orchestration and Optimization
 
 ### Adaptive Mirroring
+
 - Eventhouse auto-determines write frequency and file size (250MB optimal)
 - Write delay customizable (default 3 hours, configurable to 5 min)
 
 ### Plugin Optimization
+
 - Batch queries via `ai_chat_completion_prompt` for throughput
 - Minimize cost by caching embeddings rather than repeated generation
 
 ### RAG Architecture
+
 - Use Eventhouse as a persistent memory vector DB
 - Ingest → Embed → Store → Retrieve → Prompt
 
@@ -170,14 +184,17 @@ By integrating these best practices into your architecture, you ensure that vect
 ## Schemas and Throughput
 
 ### Schema Design for AI Workloads
+
 - Use `dynamic` for embedding storage
 - Include metadata like timestamp, source ID, context tags
 
 ### Performance Considerations
+
 - Partition by high-cardinality fields (e.g., customer_id)
 - Separate raw and enriched tables for clean modeling
 
 ### Schemas and Throughput Deep Dive
+
 ## Schema Design and Performance Best Practices for AI Workloads in Fabric RTI
 
 Designing an efficient, scalable schema is foundational to the success of AI-enhanced real-time intelligence solutions in Microsoft Fabric. As workloads increasingly incorporate embeddings, vector similarity queries, and context-aware inference, traditional schema practices fall short. This section outlines essential best practices for schema modeling and performance optimization, ensuring that your Fabric Eventhouse solutions are prepared to operate under enterprise-scale, low-latency demands.
@@ -208,7 +225,7 @@ This combination of vector and metadata supports both similarity search and cont
 
 #### Partition by High-Cardinality Fields
 
-Performance in RTI vector workloads is tightly linked to how well data is partitioned for parallel processing. In Eventhouse, this means leveraging horizontal partitioning via ingestion-time sharding. The recommended approach is to partition tables using a high-cardinality field such as `customer_id`, `device_id`, or `session_id`.
+Performance in Real-Time Intelligence vector workloads is tightly linked to how well data is partitioned for parallel processing. In Eventhouse, this means leveraging horizontal partitioning via ingestion-time sharding. The recommended approach is to partition tables using a high-cardinality field such as `customer_id`, `device_id`, or `session_id`.
 
 Partitioning by a high-cardinality identifier achieves two critical objectives:
 
@@ -236,14 +253,17 @@ Additionally, by separating concerns, you can apply differing retention policies
 ## Module 8: Monitoring and Pricing
 
 ### Plugin Telemetry
+
 - Log latency and error rates from AI plugins
 - Capture embedding generation counts per model and table
 
 ### Storage Cost Management
+
 - OneLake mirroring is free (same logical copy)
 - Embedding generation charged via Azure OpenAI subscription
 
-### RTI Query Cost Control
+### Real-Time Intelligence Query Cost Control
+
 - Use query limits and time filters in similarity searches
 - Materialize static embedding scenarios if re-used often
 
@@ -254,10 +274,12 @@ Additionally, by separating concerns, you can apply differing retention policies
 ### Lab Title: Semantic Search on Product Reviews
 
 #### Objectives:
+
 - Embed text, store vectors, and perform similarity search
 - Augment with AI reasoning using OpenAI
 
 #### Steps:
+
 1. Ingest product review dataset into Eventhouse
 2. Use `ai_embed_text` to generate embeddings
 3. Store vectors using `dynamic` column
@@ -265,6 +287,7 @@ Additionally, by separating concerns, you can apply differing retention policies
 5. Use `ai_chat_completion_prompt` to generate review summaries
 
 #### Bonus:
+
 - Add Activator trigger for negative sentiment alerts
 - Export embeddings to OneLake for ML training
 

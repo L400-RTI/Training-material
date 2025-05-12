@@ -1,6 +1,6 @@
 # Module 2 - Microsoft Fabric Real-time Hub in Microsoft Fabric Real-Time Intelligence
 
-> This module provides a comprehensive module on the architecture, advanced configuration, and optimization of Real-time Hub in Microsoft Fabric Real-Time Intelligence (RTI).
+> This module provides a comprehensive module on the architecture, advanced configuration, and optimization of Real-time Hub in Microsoft Fabric Real-Time Intelligence.
 
 ---
 
@@ -27,6 +27,7 @@ Real-time Hub acts as the central surface for discovering, configuring, and rout
 ## 2. Architectural Deep Dive
 
 ### Key Components:
+
 - **Event Ingestion**: Azure Event Hubs, OneLake, S3, local files.
 - **Real-time Routing**: To Eventstream, Eventhouse, Activator.
 - **Execution Layer**: Kusto Engine and Data Management Service (DM).
@@ -35,7 +36,7 @@ Real-time Hub acts as the central surface for discovering, configuring, and rout
 
 ## Kusto Engine and Data Management Service (DM)
 
-The execution layer of Microsoft Fabric’s Real-time Hub underpins the system’s ability to handle high-volume, low-latency data ingestion with enterprise-grade scalability. This layer is powered by two foundational services inherited and evolved from Azure Data Explorer (ADX): the Kusto Engine and the Data Management (DM) Service. Understanding their roles, orchestration, and operational mechanics is crucial to designing performant and reliable RTI solutions.
+The execution layer of Microsoft Fabric’s Real-time Hub underpins the system’s ability to handle high-volume, low-latency data ingestion with enterprise-grade scalability. This layer is powered by two foundational services inherited and evolved from Azure Data Explorer (ADX): the Kusto Engine and the Data Management (DM) Service. Understanding their roles, orchestration, and operational mechanics is crucial to designing performant and reliable Real-Time Intelligence solutions.
 
 ## Kusto Engine: The Analytical Core
 
@@ -47,7 +48,7 @@ The Kusto Engine is optimized for time-series and event data and is responsible 
 
 - **Ingestion Mapping**: The engine uses ingestion mapping definitions—JSON-based or KQL-declared—to correlate raw data fields to structured table schemas. This ensures both consistency and flexibility across ingestion pipelines.
 
-- **Update Policies Execution**: For scenarios that require transformation or partitioning (e.g., splitting telemetry into multiple tables), the Kusto Engine executes update policies in near real time. This allows for lightweight, declarative stream processing without the need for additional compute layers.
+- **Update Policies Execution**: For scenarios that require transformation or paReal-Time Intelligencetioning (e.g., splitting telemetry into multiple tables), the Kusto Engine executes update policies in near real time. This allows for lightweight, declarative stream processing without the need for additional compute layers.
 
 - **Query Execution**: After ingestion, the same engine supports ultra-fast query performance across vast amounts of streaming and historical data. This dual-purpose design—serving both ingestion and analytical querying—eliminates latency layers between processing and insight.
 
@@ -69,7 +70,7 @@ DM serves several crucial roles:
 
 - **Ingestion Throttling and Protection**: To ensure system stability, DM enforces quotas and throttles ingestion where necessary. For example, if a workspace exceeds predefined limits or a pipeline initiates an excessive number of ingestion attempts, DM will defer processing and emit warnings. This protects shared infrastructure and ensures quality of service across tenants.
 
-## Kusto + DM: Carefully Coordinated 
+## Kusto + DM: Carefully Coordinated
 
 The power of the execution layer lies in the tight coupling and orchestrated flow between Kusto and DM. Data ingested through Real-time Hub doesn’t simply pass through a single monolithic pipe. Instead, it follows a carefully managed pipeline:
 
@@ -80,11 +81,11 @@ The power of the execution layer lies in the tight coupling and orchestrated flo
 - **Post-ingestion Logic**: Update policies (if configured) are executed.
 - **Query Availability**: The data becomes immediately available for querying in Eventhouse or downstream via dashboards and notebooks.
 
-This pipeline is elastic, scalable, and largely automated—but it exposes hooks for expert users to tune behavior via KQL mappings, ingestion properties, and routing rules.
+This pipeline is elastic, scalable, and largely automated—but it exposes hooks for expert users to tune behavior via KQL mappings, ingestion propeReal-Time Intelligencees, and routing rules.
 
 ## Design Implications for Architects
 
-For architects and engineers working on enterprise-grade RTI solutions, understanding the Kusto-DM dynamic is essential. Decisions about schema design, ingestion frequency, mapping granularity, and update policy complexity all impact engine load and DM throughput.
+For architects and engineers working on enterprise-grade Real-Time Intelligence solutions, understanding the Kusto-DM dynamic is essential. Decisions about schema design, ingestion frequency, mapping granularity, and update policy complexity all impact engine load and DM throughput.
 
 **Best practices include:**
 
@@ -92,8 +93,8 @@ For architects and engineers working on enterprise-grade RTI solutions, understa
 - Use update policies judiciously; chain transformations only when needed.
 - Monitor ingestion metrics and capacity events to tune pipeline performance.
 
-
 ### Design Principles:
+
 - Decoupled ingestion and consumption.
 - Declarative routing via Fabric UI.
 - Powered by Azure Event Grid for system events.
@@ -103,26 +104,28 @@ For architects and engineers working on enterprise-grade RTI solutions, understa
 ## 3. Technical Deep Dive
 
 ### Connector Types:
+
 - **Native**: Event Hubs, Amazon S3, Azure Storage.
 - **Fabric-native**: Pipelines, Eventstream, Embedded Real-time Hub in Get Data.
 - **System Events**: Fabric + Azure services via Event Grid.
 
 ### Advanced Features:
+
 - Embedded schema inference engine.
 - Ingestion mapping with visual and KQL support.
 - Get Data Wizard: integrated view of streaming + static sources.
 
 ### Advanceed Features Deep Dive
 
-# Advanced Features of Real-time Hub in Microsoft Fabric RTI
+# Advanced Features of Real-time Hub in Microsoft Fabric Real-Time Intelligence
 
-The Real-time Hub in Microsoft Fabric Real-time Intelligence (RTI) offers a streamlined yet sophisticated surface for connecting data sources, managing real-time data flows, and orchestrating ingestion across the broader Fabric platform. At Level 400/500, it's essential to understand not just how to connect data, but how Real-time Hub intelligently adapts to complex and variable datasets through **schema inference**, **ingestion mapping**, and the **Get Data Wizard**. These advanced features play a pivotal role in unlocking usability, performance, and extensibility.
+The Real-time Hub in Microsoft Fabric Real-time Intelligence (Real-Time Intelligence) offers a streamlined yet sophisticated surface for connecting data sources, managing real-time data flows, and orchestrating ingestion across the broader Fabric platform. At Level 400/500, it's essential to understand not just how to connect data, but how Real-time Hub intelligently adapts to complex and variable datasets through **schema inference**, **ingestion mapping**, and the **Get Data Wizard**. These advanced features play a pivotal role in unlocking usability, performance, and extensibility.
 
 ---
 
 ## Embedded Schema Inference Engine
 
-One of the most powerful and often underappreciated components of Real-time Hub is its **schema inference engine**, embedded within the data onboarding workflows. At a high level, schema inference refers to the automatic deduction of a table’s structure—columns, types, and relationships—based on a sample of incoming data. In the context of Microsoft Fabric, this capability is built directly into the ingestion path, particularly when using tools like the Get Data Wizard or Real-time Hub-integrated workflows.
+One of the most powerful and often underappreciated components of Real-time Hub is its **schema inference engine**, embedded within the data onboarding workflows. At a high level, schema inference refers to the automatic deduction of a table’s structure—columns, types, and relationships—based on a sample of incoming data. In the context of Microsoft Fabric, this capability is built directly into the ingestion path, paReal-Time Intelligencecularly when using tools like the Get Data Wizard or Real-time Hub-integrated workflows.
 
 ### How It Works
 
@@ -133,12 +136,12 @@ When a user selects or uploads a data file (e.g., CSV, JSON, or Parquet), the Re
 - Column order
 - Formatting irregularities (e.g., delimiters, quoting)
 
-If multiple files are uploaded at once, the engine allows the user to select a *representative sample* for schema inference. This is crucial in scenarios where batch files may vary slightly in structure. Once inferred, the schema is shown to the user for validation and optionally edited before ingestion.
+If multiple files are uploaded at once, the engine allows the user to select a _representative sample_ for schema inference. This is crucial in scenarios where batch files may vary slightly in structure. Once inferred, the schema is shown to the user for validation and optionally edited before ingestion.
 
 ### Benefits
 
 - **Speed**: Users can go from file to live ingestion in minutes without manually writing table definitions.
-- **Reduced friction**: Schema inference enables non-expert users (e.g., data analysts) to participate in ingestion workflows.
+- **Reduced friction**: Schema inference enables non-expert users (e.g., data analysts) to paReal-Time Intelligencecipate in ingestion workflows.
 - **Consistency**: Inferred schemas can be reused and promoted to shared ingestion pipelines.
 
 ### Considerations for Advanced Users
@@ -170,7 +173,7 @@ Users can select from existing ingestion mappings or create a new one during the
 For advanced users or scenarios that require granular control, ingestion mappings can be authored and deployed using Kusto Query Language (KQL). The syntax supports formats such as:
 
 ```kusto
-.create table MyTable ingestion csv mapping "MyMapping" 
+.create table MyTable ingestion csv mapping "MyMapping"
 [
   {"column":"timestamp", "datatype":"datetime", "ordinal":0},
   {"column":"temperature", "datatype":"real", "ordinal":1},
@@ -178,7 +181,7 @@ For advanced users or scenarios that require granular control, ingestion mapping
 ]
 ```
 
-Mappings can also specify transformations, default values, and optional properties. When authored via KQL, these mappings can be version-controlled, included in deployment scripts, or parameterized via DevOps pipelines.
+Mappings can also specify transformations, default values, and optional propeReal-Time Intelligencees. When authored via KQL, these mappings can be version-controlled, included in deployment scripts, or parameterized via DevOps pipelines.
 
 ---
 
@@ -234,16 +237,17 @@ For real-time data, this streamlines routing telemetry or events from Eventstrea
 - **Low-code onboarding**: Ideal for self-service and departmental usage.
 - **Accelerates prototype-to-production**: Streamlined flow from data sample to operational table.
 
-
 ---
 
 ## 4. Implementations
 
 ### Working Scenarios:
+
 - **Telemetry ingestion** into Eventhouse with filtering via update policies.
 - **Cold storage monitoring** using Activator with correct `changes()` logic.
 
 ### Common Failures:
+
 - Filtering in Eventstream for high-frequency events → use Eventhouse instead.
 - Misuse of `greater than` in Activator → causes alert spamming.
 
@@ -251,18 +255,18 @@ For real-time data, this streamlines routing telemetry or events from Eventstrea
 
 ## 5. Troubleshooting
 
-| Problem | Cause | Solution |
-|--------|--------|---------|
-| Missing schema inference | Complex CSV structure | Use KQL mapping manually |
-| High latency in dashboards | Overloaded Eventstream filters | Shift filtering to Eventhouse |
-| Excess alerts in Activator | Improper conditions | Use `changes()` and cool-down logic |
+| Problem                    | Cause                          | Solution                            |
+| -------------------------- | ------------------------------ | ----------------------------------- |
+| Missing schema inference   | Complex CSV structure          | Use KQL mapping manually            |
+| High latency in dashboards | Overloaded Eventstream filters | Shift filtering to Eventhouse       |
+| Excess alerts in Activator | Improper conditions            | Use `changes()` and cool-down logic |
 
 ---
 
 ## 6. Orchestration and Optimization
 
 - Use Eventhouse update policies to reduce processing load.
-- Route mission-critical events through Activator for stateful alerting.
+- Route mission-critical events through Activator for stateful aleReal-Time Intelligenceng.
 - Apply selective ingestion using routing filters in Real-time Hub.
 - Consolidate mappings to avoid ingestion redundancy.
 
@@ -281,7 +285,7 @@ For real-time data, this streamlines routing telemetry or events from Eventstrea
 
 # Schemas and Throughput Optimization in Real-time Hub
 
-Ingesting real-time data at enterprise scale requires more than just configuring connections and tables—it demands an intentional strategy around **schema management**, **data routing**, and **throughput optimization**. Real-time Hub in Microsoft Fabric RTI provides flexible schema tools and ingestion primitives that support both fast onboarding and high-performance stream processing. This section explores how advanced practitioners can leverage inferred schemas for agility, define ingestion mappings for robustness, and apply architectural techniques like sharding, parallelism, and staging uploads to maximize ingestion throughput.
+Ingesting real-time data at enterprise scale requires more than just configuring connections and tables—it demands an intentional strategy around **schema management**, **data routing**, and **throughput optimization**. Real-time Hub in Microsoft Fabric Real-Time Intelligence provides flexible schema tools and ingestion primitives that support both fast onboarding and high-performance stream processing. This section explores how advanced practitioners can leverage inferred schemas for agility, define ingestion mappings for robustness, and apply architectural techniques like sharding, parallelism, and staging uploads to maximize ingestion throughput.
 
 ---
 
@@ -318,7 +322,7 @@ As real-time pipelines move from prototype to production, schema management must
 Using `create table` in KQL allows teams to precisely control:
 
 - Column names and data types
-- Table partitioning and retention policies
+- Table paReal-Time Intelligencetioning and retention policies
 - Governance over changes (e.g., schema versioning)
 
 ```kusto
@@ -328,6 +332,7 @@ Using `create table` in KQL allows teams to precisely control:
     DeviceId: string
 )
 ```
+
 This table becomes the anchor for ingestion pipelines and can be referenced across environments and automation frameworks.
 
 ## Ingestion Mapping
@@ -338,7 +343,6 @@ After defining a table, ingestion mappings define how incoming data (structured 
 - **Type coercion rules**
 - **Defaults for missing or null values**
 
-
 ```kusto
 .create table SensorData ingestion csv mapping "csvMap1"
 [
@@ -347,6 +351,7 @@ After defining a table, ingestion mappings define how incoming data (structured 
     { "column": "DeviceId", "datatype": "string", "ordinal": 2 }
 ]
 ```
+
 Mappings ensure ingestion consistency and act as a contract between source systems and the KQL table.
 
 ## Best Practices Include:
@@ -369,19 +374,19 @@ Once the schema is locked down and mappings are defined, the next focus is perfo
 
 **Use cases include:**
 
-- Uploading large CSVs or JSON blobs  
-- Parallel ingest from many Event Hubs or Kafka partitions  
-- Reducing contention on high-throughput KQL tables  
+- Uploading large CSVs or JSON blobs
+- Parallel ingest from many Event Hubs or Kafka paReal-Time Intelligencetions
+- Reducing contention on high-throughput KQL tables
 
 ---
 
 ### 2. Parallelism
 
-Fabric RTI supports **parallel ingestion pipelines** at both ingestion and query layers:
+Fabric Real-Time Intelligence supports **parallel ingestion pipelines** at both ingestion and query layers:
 
-- Use multiple ingestion sources (e.g., Event Hub partitions)  
-- Batch multiple files or blobs  
-- Distribute ingestion using update policies and mappings  
+- Use multiple ingestion sources (e.g., Event Hub paReal-Time Intelligencetions)
+- Batch multiple files or blobs
+- Distribute ingestion using update policies and mappings
 
 The ingestion engine handles multithreaded scheduling, improving throughput while maintaining consistency.
 
@@ -391,9 +396,9 @@ The ingestion engine handles multithreaded scheduling, improving throughput whil
 
 Files uploaded through the Get Data Wizard are staged in secure blob storage before ingestion begins. This **staging layer** enables:
 
-- **Asynchronous uploads** decoupled from ingestion  
-- **Scalable buffering** for large or bursty workloads  
-- **Retry logic** for resiliency  
+- **Asynchronous uploads** decoupled from ingestion
+- **Scalable buffering** for large or bursty workloads
+- **Retry logic** for resiliency
 
 This process is abstracted from the user but is essential for large-scale or batch ingestion scenarios.
 
@@ -401,17 +406,19 @@ This process is abstracted from the user but is essential for large-scale or bat
 
 ### Summary
 
-Designing high-throughput, real-time ingestion pipelines in Microsoft Fabric RTI requires a balance of agility, precision, and scale. Practitioners can begin with schema inference for quick wins, then transition to explicit table and mapping definitions for operational maturity. Performance can be tuned using architectural strategies such as sharding and parallel ingestion, while Fabric’s managed infrastructure—like staging blob uploads—ensures resilience under load.
+Designing high-throughput, real-time ingestion pipelines in Microsoft Fabric Real-Time Intelligence requires a balance of agility, precision, and scale. Practitioners can begin with schema inference for quick wins, then transition to explicit table and mapping definitions for operational maturity. Performance can be tuned using architectural strategies such as sharding and parallel ingestion, while Fabric’s managed infrastructure—like staging blob uploads—ensures resilience under load.
 
 ---
 
 ## 8. Monitoring and Pricing
 
 ### Monitoring:
+
 - Use Activator for anomaly detection.
 - Analyze ingestion logs and failures from Event Grid.
 
 ### Pricing Considerations:
+
 - Ingestion volume and frequency drive costs.
 - Activator executions metered by action triggers.
 - Minimize TCO by optimizing stream routing logic.
@@ -423,6 +430,7 @@ Designing high-throughput, real-time ingestion pipelines in Microsoft Fabric RTI
 ### Scenario: IoT Vehicle Telemetry Routing
 
 **Objectives**:
+
 - Ingest CSV telemetry via Get Data Wizard.
 - Route data to Eventhouse.
 - Apply update policies to split stream.
@@ -430,6 +438,7 @@ Designing high-throughput, real-time ingestion pipelines in Microsoft Fabric RTI
 - Trigger Power Automate flow when anomaly is detected.
 
 ### Steps:
+
 1. Upload two CSV files to a new KQL DB using Get Data.
 2. Configure ingestion mapping and preview schema.
 3. Set up Real-time Hub connection via Eventstream.
