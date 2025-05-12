@@ -158,9 +158,9 @@ Your task is to create a connection to the SQL server directly from the KQL engi
 
 The information you have are the following:
 
-SQL Server connection string:
-SQL server username:
-SQL server password:
+SQL Server connection string: TBA
+SQL server username: TBA
+SQL server password: TBA
 
 Stored procedure name: *stored procedure name will be provided*
 
