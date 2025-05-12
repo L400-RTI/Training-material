@@ -133,7 +133,12 @@ Use as narrow tables as possible for ingestion and in the same time try to denor
 
 Monitoring of connectors is not available, please see the Module for Ingestion to get the introduction to the ingetsion errors and monitoring.
 
-Pricing for connectors are free, they are only pointers to data and sources, and does not generate cost in themselfes. It cost money when you use them to read data from the source. It that case the pricing is xxx CUs per hour
+Pricing for connectors are free, they are only pointers to data and sources, and does not generate cost in themselfes. It cost money when you use them to read data from the source. It that case the pricing is 0.611 CUs per hour.
+
+*Note from Microsoft learn on CU for connections:*
+
+The CU consumption of the Eventstream connector is for charging computing resources when pulling real-time data from sources, excluding Azure Event Hubs, Azure IoT Hub, and Custom endpoints. Data from Azure Event Hubs and Azure IoT Hub is pulled using the Eventstream Processor.
+Connector CU consumption is designed to correlate with throughput. When throughput increases, the number of vCores increases (autoscale), resulting in higher CU consumption. Currently, connector autoscaling is unavailable, so only one vCore is used per connector source.
 
 ### Hands-on lab
 
