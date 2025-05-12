@@ -34,7 +34,7 @@ Output:
 
 As you see from above statement the _geo_info_from_ip_address_ is just as you would say it when you have a dialogue with another person.
 
-We can't list all the capabitlities in this module, so we have chosen a list of functions and will walk you throigh each of them:
+We can't list all the capabitlities in this module, so we have chosen a list of functions and will walk you through each of them:
 
 - Geospacial analytics
 - Anomoly detection and forecasting
