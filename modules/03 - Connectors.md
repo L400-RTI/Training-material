@@ -175,17 +175,32 @@ In this task, you will build a ingestion process directly in the KQL database. S
 
 The JSON file has a floating schema, and the existing schema is as follows:
 
-*add JSON schema here*
+   {
+      ProductKey
+      ,age
+      ,name
+      ,email
+      ,phone
+      ,address
+      ,about
+      ,registered
+      ,latitude
+      ,longitude
+      ,tags
+      ,friends
+      ,greeting
+      ,favoriteFruit
+   }
 
 Your task is:
 
 1. Create a connection to the JSON file and make sure to expand the needed business columns from the JSON file.
 2. The needed buisness columns are:
-   1. column1
-   2. column2
+   1. Name
+   2. email
 3. For all other columns, the JSON payload must be loaded to the KQL database in the same table.
 4. Every new key-value pair from the JSON must also be accepted in the connection and be stored in the destination table
 
-**Add json file and connection to the file**
+Use [this file](./modules/assets/datafiles/import.json) to complete the task described above.
 
 ---

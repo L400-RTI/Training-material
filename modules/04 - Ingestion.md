@@ -238,6 +238,24 @@ Under the hood, Microsoft Fabric ensures these mappings are executed with minima
 
 #### Build ingestion with a mapping transformation of a JSON file
 
+Using the file from the Module 3 - connectors, import the file using mapping transformations which does the following:
+
+1. Drop the 3 columns: friends, registered and favoriteFruit
+2. Ingest the rest of the columns as normal "exploded" columns - one for each key/value pair
+3. Handles any changes in the future structure of the file and makes sure to add a new column which holds new key/value pairs in case of schema drift
+
+You can find the file [here](/modules/assets/datafiles/import.json).
+
 #### Come up with a solution for ingesting large volume data and find the correct settings for all 3 areas of throughput
+
+In pairs of two people, discuss and draw solutions to the 2 scenarios below. Present to the team to your right and discuss the differences in solutions.
+
+1. Streaming data from Google pub/sub
+   1. Data is streamed live from a website trafic
+   2. Trafic is estimated to flow at a rate of 12.700 messages a second
+2. JSON files from storage account
+   1. JSON must be imported on a schedule - every 10 mins (filenames indicate the timestamp, take only the latest)
+   2. JSON must be exploded for all elements of the key/value pairs
+   3. Mapping of the JSON must be able to be used in other ingestion configurations on the same KQL database
 
 ---

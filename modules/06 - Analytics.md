@@ -225,12 +225,25 @@ print data = parse_xml("<config><key>value</key></config>")
 
 #### Geospacial analytics on data
 
-Incl., but not limited to, distances, areas, polygons, and routes
+Using the ingestion made in Module 3, use the same dataset to do the following:
+
+1. Calculate the clustering of latitude and logitude of the dataset, grouped by the [H3](https://h3geo.org/) algorithm in resolution 10. Return the number of observations
+2. Select two polygons from the above task and calcuclate the distance between the two in kilometers
+3. Given the two points in the world
+   1. Lat: 51.470020 Long: -0.454296 (Heathrow, London)
+   2. Lat: 35.698700 Long: -97.494659 (Redmond, Seattle)
+   3. Calculate the shortest route between the two points as if it was an airline calculating the route to save fuel.
 
 #### Anomoly detection and forecasting
 
-#### Built-in datasets which can be used
+Import [this file](/modules/assets/datafiles/art_load_balancer_spikes.csv) into your KQL database.
 
-Fx. IP address lookup, convertions in scales, datetime functions etc.
+Create KQL statement which find and points out the anomolies found in the dataset.
+
+Visualize the findings in a chart in the KQL statement.
+
+#### (Extra) Built-in datasets which can be used
+
+Using the imported data set from module 3, try to play around with the convertion features. For instance between KG to stones, pounds, etc. Or from CM to Miles, Inches etc.
 
 ---
