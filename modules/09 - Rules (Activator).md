@@ -8,7 +8,7 @@ One of Activator’s defining characteristics is that it is a no-code, low-laten
 
 From detecting anomalies in IoT telemetry to reacting to operational changes in supply chains or public infrastructure, Activator transforms raw event data into automated, intelligent responses. It enables organizations to move from passive monitoring to proactive, event-driven decision-making - a shift critical in high-velocity data environments.
 
-Throughout this module, you will explore how Activator can be integrated into enterprise-grade RTI architectures, how it interoperates with Reflex, Eventstreams, Pipelines, and Power Automate, and how to optimize it for performance, precision, and cost-efficiency.
+Throughout this module, you will explore how Activator can be integrated into enterprise-grade Real-Time Intelligence architectures, how it interoperates with Activator, Eventstreams, Pipelines, and Power Automate, and how to optimize it for performance, precision, and cost-efficiency.
 
 By the end of this module, you will be equipped to:
 
@@ -16,7 +16,7 @@ By the end of this module, you will be equipped to:
 
 - Build responsive pipelines triggered by real-time events and patterns.
 
-- Implement best practices to avoid alert fatigue, manage state transitions, and orchestrate Activator with the wider Fabric RTI suite.
+- Implement best practices to avoid alert fatigue, manage state transitions, and orchestrate Activator with the wider Fabric Real-Time Intelligence suite.
 
 - Understand the pricing, monitoring, and schema evolution considerations essential for stable production use.
 
@@ -65,12 +65,12 @@ It fits into a reactive, event-driven architecture where data flows continuously
 
 Activator instances are deployed per workspace and bound to specific data sources. Multiple Activators can monitor the same stream, enabling parallel rule evaluations for distinct business functions. Because Activator is capacity-bound, pay-as-you-go pricing only applies when rules are actively running—providing cost efficiency for intermittent detection scenarios.
 
-#### Integration Points within Fabric RTI
+#### Integration Points within Fabric Real-Time Intelligence
 
 | Component      | Interaction with Activator                                                              |
 | -------------- | --------------------------------------------------------------------------------------- |
 | Eventstream    | Supplies federated data to Activator via low-latency stream ingestion.                  |
-| Reflex         | Can generate events (e.g., enriched entities or inferred labels) that trigger Activator |
+| Activator      | Can generate events (e.g., enriched entities or inferred labels) that trigger Activator |
 | Pipeline       | Target of Activator’s rule triggers—automates downstream processing                     |
 | Power BI       | Consumes the result of triggered pipelines or notebooks for real-time visualizations    |
 | Power Automate | Allows event-driven ops via templated or custom actions                                 |
@@ -138,7 +138,7 @@ When a rule fires:
   - Power Automate Flows (for business process integration)
   - Teams Notifications (using template-based messaging)
 
-- Payloads are parameterized automatically using event properties (e.g., filename, device status)
+- Payloads are parameterized automatically using event propeReal-Time Intelligencees (e.g., filename, device status)
 
 Actions are **non-blocking**, and Activator does not wait for downstream execution to complete—enabling scalable asynchronous flows.
 
@@ -187,7 +187,7 @@ Trigger:
 - Data pipelines to transform or ingest data downstream
 - Notebooks for scoring models or enrichment
 - Power Automate flows for notifications, tickets, or system updates
-- Microsoft Teams for alerting or collaboration (via Flow Builder or future Web API)
+- Microsoft Teams for aleReal-Time Intelligenceng or collaboration (via Flow Builder or future Web API)
 
 - **Preview and test**
   Validate the expected behavior before activation. Activator allows rule preview and event replay, showing how often a rule would have fired on recent data.
@@ -221,7 +221,7 @@ Trigger:
   As seen in the bikepoint example, Activator can be used to track real-time bike availability at docking stations and send alerts when inventory falls or rises unexpectedly.
 
 - **Security & Compliance**
-  Future support for sensitivity labels (e.g., from Reflex) will allow context-aware triggers, such as alerting on files labeled as “Confidential” being moved or accessed.
+  Future support for sensitivity labels (e.g., from Activator) will allow context-aware triggers, such as aleReal-Time Intelligenceng on files labeled as “Confidential” being moved or accessed.
 
 #### Reusability and Maintainability
 
@@ -297,16 +297,16 @@ Where possible:
 
 Effective use of Activator in enterprise-grade real-time architectures requires intentional orchestration across Microsoft Fabric components and performance tuning for event volume, object cardinality, and rule complexity. This section explores how to orchestrate Activator with other services and how to optimize detection logic and runtime behavior to support low-latency, cost-efficient automation at scale.
 
-#### Orchestration Patterns in Fabric RTI
+#### Orchestration Patterns in Fabric Real-Time Intelligence
 
 Activator plays a central role in event-driven pipelines by evaluating data at the point of arrival and triggering actions downstream. Typical orchestration patterns include:
 
-| Pattern                                | Flow Description                                                                                                              |
-| -------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- |
-| Ingestion → Detection → Transformation | Events flow from Eventstream into Activator, which triggers a Data Pipeline to enrich or move the data.                       |
-| Ingestion → Detection → Notification   | Activator triggers Power Automate to send alerts or push status into Teams, Outlook, or ServiceNow.                           |
-| Ingestion → Detection → Model Scoring  | Activator triggers a Notebook to score an ML model or perform advanced analytics based on real-time anomalies.                |
-| Feedback Loop with Reflex (planned)    | Reflex-generated insights (e.g., sensitivity labels) are fed into Activator rules, enabling semantically enriched automation. |
+| Pattern                                | Flow Description                                                                                                                 |
+| -------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
+| Ingestion → Detection → Transformation | Events flow from Eventstream into Activator, which triggers a Data Pipeline to enrich or move the data.                          |
+| Ingestion → Detection → Notification   | Activator triggers Power Automate to send alerts or push status into Teams, Outlook, or ServiceNow.                              |
+| Ingestion → Detection → Model Scoring  | Activator triggers a Notebook to score an ML model or perform advanced analytics based on real-time anomalies.                   |
+| Feedback Loop with Activator (planned) | Activator-generated insights (e.g., sensitivity labels) are fed into Activator rules, enabling semantically enriched automation. |
 
 <div class="info" data-title="Note">
 
@@ -320,7 +320,7 @@ Activator plays a central role in event-driven pipelines by evaluating data at t
 
 - Use transitional operators (`DECREASES`, `BECOMES`, `EXIT RANGE`) to reduce rule churn.
 
-- Avoid overly broad or nested rules that track too many properties—split rules per logical condition or concern.
+- Avoid overly broad or nested rules that track too many propeReal-Time Intelligencees—split rules per logical condition or concern.
 
 - Combine `AND`/`OR` conditions carefully; complex chains can slow evaluation on large object sets.
 
@@ -352,7 +352,7 @@ Activator plays a central role in event-driven pipelines by evaluating data at t
 
 While Activator is fundamentally event-driven, its outputs often trigger components that require sequential or dependent execution. For example:
 
-- A triggered pipeline may depend on recent output from a Reflex process.
+- A triggered pipeline may depend on recent output from a Activator process.
 
 - A notebook scoring function may require cached feature lookups before scoring.
 
@@ -397,13 +397,13 @@ Key characteristics:
 
   - If a field is missing in an event but referenced in a rule, the condition may evaluate as false or not at all.
 
-  - Design rules to be resilient to partial records where appropriate (e.g., via fallback conditions or default values downstream in the pipeline).
+  - Design rules to be resilient to paReal-Time Intelligenceal records where appropriate (e.g., via fallback conditions or default values downstream in the pipeline).
 
 #### Structured vs. Semi-Structured Input
 
 - Activator is best suited for structured or semi-structured data (e.g., JSON, CSV with consistent keys).
 
-- For unstructured payloads (e.g., raw logs, text blobs), preprocessing must be handled in Eventstream or Reflex before rule application.
+- For unstructured payloads (e.g., raw logs, text blobs), preprocessing must be handled in Eventstream or Activator before rule application.
 
 #### Object Granularity and Evaluation Impact
 

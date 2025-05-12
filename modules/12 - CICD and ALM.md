@@ -2,16 +2,16 @@
 
 ### Introduction
 
-In this module, we explore the critical role of Application Lifecycle Management (ALM) and Continuous Integration / Continuous Deployment (CI/CD) within the context of Microsoft Fabric’s Real-Time Intelligence (RTI) ecosystem. As real-time data solutions mature from experimentation to production workloads, the need for robust, repeatable, and automated deployment practices becomes paramount—not only to scale, but to maintain trust, compliance, and operational excellence.
+In this module, we explore the critical role of Application Lifecycle Management (ALM) and Continuous Integration / Continuous Deployment (CI/CD) within the context of Microsoft Fabric’s Real-Time Intelligence (Real-Time Intelligence) ecosystem. As real-time data solutions mature from experimentation to production workloads, the need for robust, repeatable, and automated deployment practices becomes paramount—not only to scale, but to maintain trust, compliance, and operational excellence.
 
-We will dive deep into the tools, APIs, pipelines, and integration patterns that enable enterprise-grade DevOps practices for core RTI components, including Eventstreams, KQL Databases, Eventhouse, and Data Activator. This module addresses both platform-native capabilities like Git integration and deployment pipelines, as well as external orchestration through Azure DevOps and GitHub Actions.
+We will dive deep into the tools, APIs, pipelines, and integration patterns that enable enterprise-grade DevOps practices for core Real-Time Intelligence components, including Eventstreams, KQL Databases, Eventhouse, and Data Activator. This module addresses both platform-native capabilities like Git integration and deployment pipelines, as well as external orchestration through Azure DevOps and GitHub Actions.
 
 Beyond the mechanics of deployment, we will cover key ALM considerations:
 
-- How to version, test, and promote RTI artifacts across environments
+- How to version, test, and promote Real-Time Intelligence aReal-Time Intelligencefacts across environments
 - How to leverage automation APIs for declarative deployments
 - How to troubleshoot deployment issues and schema inconsistencies
-- Known limitations and workarounds in current CI/CD support for RTI
+- Known limitations and workarounds in current CI/CD support for Real-Time Intelligence
 - Strategies for monitoring deployment health, governance, and compliance
 
 By the end of this module, you will have the knowledge to design, implement, and operate a CI/CD pipeline tailored to Microsoft Fabric’s Real-Time Intelligence workloads, with the rigor and reliability demanded by enterprise production systems.
@@ -22,7 +22,7 @@ In this section, we explore the architecture underlying Continuous Integration, 
 
 #### Key Architectural Components and Interactions
 
-The core RTI components relevant to ALM are:
+The core Real-Time Intelligence components relevant to ALM are:
 
 - **Eventhouse:** A scalable ingestion and query platform, leveraging Azure Data Explorer (ADX) backend capabilities but optimized for Fabric’s capacity and operational model.
 
@@ -30,16 +30,16 @@ The core RTI components relevant to ALM are:
 
 - **Event Streams:** Managed streaming ingestion pipelines feeding Eventhouse, enabling low-latency data arrival for analytical and operational scenarios.
 
-ALM architecture integrates these components into a source-controlled deployment workflow, either via Git integration or REST APIs, enabling version-controlled schema definitions, policies, and artifacts. Git integration comes with the Fabric Workspaces. If you want to do autmation on your own you can use the REST APIs.
+ALM architecture integrates these components into a source-controlled deployment workflow, either via Git integration or REST APIs, enabling version-controlled schema definitions, policies, and aReal-Time Intelligencefacts. Git integration comes with the Fabric Workspaces. If you want to do autmation on your own you can use the REST APIs.
 
-##### CI/CD Architecture in Fabric RTI
+##### CI/CD Architecture in Fabric Real-Time Intelligence
 
-There are two architectural paths for deploying and managing RTI artifacts:
+There are two architectural paths for deploying and managing Real-Time Intelligence aReal-Time Intelligencefacts:
 
 **Git Integration and Deployment Pipelines:**
 
-- Workspaces can be connected to Azure DevOps or GitHub repositories to synchronize artifacts bidirectionally.
-- Upon sync, Fabric serializes RTI objects (Eventhouse, KQL Database, etc.) into a folder-based schema with platform metadata, properties JSON, and KQL schema files.
+- Workspaces can be connected to Azure DevOps or GitHub repositories to synchronize aReal-Time Intelligencefacts bidirectionally.
+- Upon sync, Fabric serializes Real-Time Intelligence objects (Eventhouse, KQL Database, etc.) into a folder-based schema with platform metadata, propeReal-Time Intelligencees JSON, and KQL schema files.
 - Deployment pipelines orchestrate multi-environment promotion (Dev → Test → Prod) without external tools, using these serialized definitions.
 
 **API-driven deployments:**
@@ -50,7 +50,7 @@ There are two architectural paths for deploying and managing RTI artifacts:
 
 **Notable architectural decisions:**
 
-- Artifact deletions in Git do not trigger deletions in Fabric; only additive and non-destructive changes are propagated.
+- AReal-Time Intelligencefact deletions in Git do not trigger deletions in Fabric; only additive and non-destructive changes are propagated.
 - Platform maintains logical IDs to rebind resources across environments during promotion.
 
 #### Architectural Considerations for Capacity and Cost
@@ -84,7 +84,7 @@ Putting it together:
    - Use of API payloads or Git sync to apply schema and metadata.
 
 3. CD Pipeline:
-   - Deployment pipelines promote artifacts from Dev → Test → Prod.
+   - Deployment pipelines promote aReal-Time Intelligencefacts from Dev → Test → Prod.
    - Declarative definitions ensure environment-specific rebinding without manual adjustments (e.g., Eventhouse IDs rebinding via logical ID resolution).
 
 Integration with external DevOps tooling (e.g., Azure DevOps pipelines, GitHub Actions) optionally calls Fabric REST APIs for advanced orchestration.
@@ -93,15 +93,15 @@ Integration with external DevOps tooling (e.g., Azure DevOps pipelines, GitHub A
 
 In this section, we examine the mechanics and internals of how CI/CD and ALM are implemented for Real-Time Intelligence workloads in Microsoft Fabric, with a focus on Eventhouse, KQL Database, Event Streams, and their integration into deployment pipelines and Git.
 
-#### How Fabric Serializes and Deploys RTI Artifacts
+#### How Fabric Serializes and Deploys Real-Time Intelligence AReal-Time Intelligencefacts
 
-At the technical core, Fabric’s CI/CD architecture relies on artifact serialization into a platform-defined schema, stored in Git. Each RTI artifact (e.g., Eventhouse, KQL Database, Event Stream) is exported into a set of structured files per artifact:
+At the technical core, Fabric’s CI/CD architecture relies on aReal-Time Intelligencefact serialization into a platform-defined schema, stored in Git. Each Real-Time Intelligence aReal-Time Intelligencefact (e.g., Eventhouse, KQL Database, Event Stream) is exported into a set of structured files per aReal-Time Intelligencefact:
 
-- **platform.json:** metadata about the artifact type, logical ID, display name
-- **properties.json:** configuration like caching policy, retention, read/write flags
+- **platform.json:** metadata about the aReal-Time Intelligencefact type, logical ID, display name
+- **propeReal-Time Intelligencees.json:** configuration like caching policy, retention, read/write flags
 - **database.csl:** the KQL script representing schema and objects
 
-Here are some examples for different artifact serialization files
+Here are some examples for different aReal-Time Intelligencefact serialization files
 
 **platform.json of a KQL Database**
 
@@ -109,7 +109,7 @@ This file describes the Fabric Metadata of the database.
 
 ```json
 {
-  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformPropeReal-Time Intelligencees/2.0.0/schema.json",
   "metadata": {
     "type": "KQLDatabase",
     "displayName": "coffee_eh",
@@ -144,8 +144,8 @@ This file creates the assets within the KQL Database.
 // Use management commands in this script to configure your database items, such as tables, functions, materialized views, and more.
 
 
-.create-merge table BronzeCoffee (eventType:string, eventID:string, timestamp:string, machine_id:long, user:string, cup_size:string, strength:string, milk_added:string, sugar_packets:long, flavor_syrup:string, temperature:long, refill_required:long, beans_left_percentage:long, water_level_percentage:long, milk_level_percentage:long, used_grounds_container_full:long, cleaning_needed:long, usage_time:string, last_cleaning_date:string, next_scheduled_cleaning:string, filter_status:string, coffee_type:string, EventProcessedUtcTime:datetime, PartitionId:long, EventEnqueuedUtcTime:datetime)
-.create-merge table BronzeMaintenance (eventType:string, eventID:string, timestamp:string, machine_id:long, user:string, cup_size:string, strength:string, milk_added:string, sugar_packets:long, flavor_syrup:string, temperature:long, refill_required:long, beans_left_percentage:long, water_level_percentage:long, milk_level_percentage:long, used_grounds_container_full:long, cleaning_needed:long, usage_time:string, last_cleaning_date:string, next_scheduled_cleaning:string, filter_status:string, coffee_type:string, EventProcessedUtcTime:datetime, PartitionId:long, EventEnqueuedUtcTime:datetime)
+.create-merge table BronzeCoffee (eventType:string, eventID:string, timestamp:string, machine_id:long, user:string, cup_size:string, strength:string, milk_added:string, sugar_packets:long, flavor_syrup:string, temperature:long, refill_required:long, beans_left_percentage:long, water_level_percentage:long, milk_level_percentage:long, used_grounds_container_full:long, cleaning_needed:long, usage_time:string, last_cleaning_date:string, next_scheduled_cleaning:string, filter_status:string, coffee_type:string, EventProcessedUtcTime:datetime, PaReal-Time IntelligencetionId:long, EventEnqueuedUtcTime:datetime)
+.create-merge table BronzeMaintenance (eventType:string, eventID:string, timestamp:string, machine_id:long, user:string, cup_size:string, strength:string, milk_added:string, sugar_packets:long, flavor_syrup:string, temperature:long, refill_required:long, beans_left_percentage:long, water_level_percentage:long, milk_level_percentage:long, used_grounds_container_full:long, cleaning_needed:long, usage_time:string, last_cleaning_date:string, next_scheduled_cleaning:string, filter_status:string, coffee_type:string, EventProcessedUtcTime:datetime, PaReal-Time IntelligencetionId:long, EventEnqueuedUtcTime:datetime)
 .create-merge table SilverCoffee (eventID:string, timestamp:datetime, machineid:int, user:string, cup_size:string, strength:string, milk_added:bool, sugar_packets:int, flavor_syrup:string, temperature:int, beans_left_percentage:int, water_level_percentage:int, milk_level_percentage:int, used_grounds_container_full:int, usage_time:string, coffee_type:string)
 .create-merge table SilverMaintenance (eventID:string, eventDate:datetime, machineid:int, beans_left_percentage:int, water_level_percentage:int, milk_level_percentage:int, used_ground_container_full:int, last_cleaning_date:datetime, next_scheduled_cleaning:datetime, filter_status:string)
 .create-or-alter function with (folder = "Bronze to Silver Transformations", skipvalidation = "true") prepareCoffee() {
@@ -192,18 +192,18 @@ This declarative schema is idempotent: reapplying it will create/update without 
 
 #### How API Deployments Work Internally
 
-Fabric exposes REST APIs for automation. Most of the Create functions also accept a definition file as payload, for example [Items - Create KQL Database](https://learn.microsoft.com/en-us/rest/api/fabric/kqldatabase/items/create-kql-database?tabs=HTTP#create-a-readwrite-kql-database-with-definition-example). As seen in the next code block you can pass the three files `DatabaseProperties.json`, `DatabaseSchema.klq` and `.platform` as InlineBase64 Strings.
+Fabric exposes REST APIs for automation. Most of the Create functions also accept a definition file as payload, for example [Items - Create KQL Database](https://learn.microsoft.com/en-us/rest/api/fabric/kqldatabase/items/create-kql-database?tabs=HTTP#create-a-readwrite-kql-database-with-definition-example). As seen in the next code block you can pass the three files `DatabasePropeReal-Time Intelligencees.json`, `DatabaseSchema.klq` and `.platform` as InlineBase64 Strings.
 
 ```html
-POST https://api.fabric.microsoft.com/v1/workspaces/cfafbeb1-8037-4d0c-896e-a46fb27ff229/kqlDatabases { "displayName": "KQLDatabase_1", "description": "A KQL database description.", "definition": { "parts": [ { "path": "DatabaseProperties.json", "payload": "ewogICJkYXRhYmFzZVR5cGUiOiAiUmVhZFdyaXRlIiwKICAicGFyZW50RXZlbnRob3VzZUl0ZW1JZCI6ICI1YjIxODc3OC1lN2E1LTRkNzMtODE4Ny1mMTA4MjQwNDc4MzYiLAogICJvbmVMYWtlQ2FjaGluZ1BlcmlvZCI6ICJQMzY1MDBEIiwKICAib25lTGFrZVN0YW5kYXJkU3RvcmFnZVBlcmlvZCI6ICJQMzY1MDBEIgp9", "payloadType": "InlineBase64" }, { "path": "DatabaseSchema.kql", "payload": "Ly8gS1FMIHNjcmlwdAovLyBVc2UgbWFuYWdlbWVudCBjb21tYW5kcyBpbiB0aGlzIHNjcmlwdCB0byBjb25maWd1cmUgeW91ciBkYXRhYmFzZSBpdGVtcywgc3VjaCBhcyB0YWJsZXMsIGZ1bmN0aW9ucywgbWF0ZXJpYWxpemVkIHZpZXdzLCBhbmQgbW9yZS4KCi5jcmVhdGUtbWVyZ2UgdGFibGUgTXlMb2dzIChMZXZlbDpzdHJpbmcsIFRpbWVzdGFtcDpkYXRldGltZSwgVXNlcklkOnN0cmluZywgVHJhY2VJZDpzdHJpbmcsIE1lc3NhZ2U6c3RyaW5nLCBQcm9jZXNzSWQ6aW50KQ==", "payloadType": "InlineBase64" }, { "path": ".platform", "payload": "ZG90UGxhdGZvcm1CYXNlNjRTdHJpbmc=", "payloadType": "InlineBase64" } ] } }
+POST https://api.fabric.microsoft.com/v1/workspaces/cfafbeb1-8037-4d0c-896e-a46fb27ff229/kqlDatabases { "displayName": "KQLDatabase_1", "description": "A KQL database description.", "definition": { "parts": [ { "path": "DatabasePropeReal-Time Intelligencees.json", "payload": "ewogICJkYXRhYmFzZVR5cGUiOiAiUmVhZFdyaXRlIiwKICAicGFyZW50RXZlbnRob3VzZUl0ZW1JZCI6ICI1YjIxODc3OC1lN2E1LTRkNzMtODE4Ny1mMTA4MjQwNDc4MzYiLAogICJvbmVMYWtlQ2FjaGluZ1BlcmlvZCI6ICJQMzY1MDBEIiwKICAib25lTGFrZVN0YW5kYXJkU3RvcmFnZVBlcmlvZCI6ICJQMzY1MDBEIgp9", "payloadType": "InlineBase64" }, { "path": "DatabaseSchema.kql", "payload": "Ly8gS1FMIHNjcmlwdAovLyBVc2UgbWFuYWdlbWVudCBjb21tYW5kcyBpbiB0aGlzIHNjcmlwdCB0byBjb25maWd1cmUgeW91ciBkYXRhYmFzZSBpdGVtcywgc3VjaCBhcyB0YWJsZXMsIGZ1bmN0aW9ucywgbWF0ZXJpYWxpemVkIHZpZXdzLCBhbmQgbW9yZS4KCi5jcmVhdGUtbWVyZ2UgdGFibGUgTXlMb2dzIChMZXZlbDpzdHJpbmcsIFRpbWVzdGFtcDpkYXRldGltZSwgVXNlcklkOnN0cmluZywgVHJhY2VJZDpzdHJpbmcsIE1lc3NhZ2U6c3RyaW5nLCBQcm9jZXNzSWQ6aW50KQ==", "payloadType": "InlineBase64" }, { "path": ".platform", "payload": "ZG90UGxhdGZvcm1CYXNlNjRTdHJpbmc=", "payloadType": "InlineBase64" } ] } }
 ```
 
 On invocation, the backend:
 
 - Decodes the script
 - Executes it on the target Eventhouse/KQL Database
-- Registers the artifact into the workspace metadata catalog
-- Applies platform-level properties (e.g., caching policy)
+- Registers the aReal-Time Intelligencefact into the workspace metadata catalog
+- Applies platform-level propeReal-Time Intelligencees (e.g., caching policy)
 
 This pattern enables infrastructure-as-code style deployments without using the GUI, aligning with DevOps practices.
 
@@ -215,21 +215,21 @@ Git integration uses a pull-based sync model, operating bidirectionally:
 
 **Commit workflow (Fabric → Git):**
 
-1. Fabric detects changes to artifacts (schema, properties).
-2. Fabric exports updated artifacts into serialized files.
+1. Fabric detects changes to aReal-Time Intelligencefacts (schema, propeReal-Time Intelligencees).
+2. Fabric exports updated aReal-Time Intelligencefacts into serialized files.
 3. Commits the folder structure to the configured Git repo.
 
 **Update workflow (Git → Fabric):**
 
 1. Fabric monitors the Git repo for changes.
 2. Compares serialized files to current workspace state.
-3. On update, parses .csl schema and properties.json.
+3. On update, parses .csl schema and propeReal-Time Intelligencees.json.
 4. Executes schema in target environment.
 5. Updates platform metadata.
 
 <div class="info" data-title="info">
 
-> Fabric uses logical IDs inside platform.json to map artifact dependencies across environments:
+> Fabric uses logical IDs inside platform.json to map aReal-Time Intelligencefact dependencies across environments:
 >
 > - Enables Eventhouse ID rebinding when promoting KQL DB from Dev → Test → Prod
 > - Prevents schema referencing hard-coded IDs from other environments
@@ -238,7 +238,7 @@ Git integration uses a pull-based sync model, operating bidirectionally:
 
 <div class="warning" data-title="Technical Limitation">
 
-> Current technical limitation: database-level properties like streaming policies are not yet included in Git sync (must be manually applied or scripted).
+> Current technical limitation: database-level propeReal-Time Intelligencees like streaming policies are not yet included in Git sync (must be manually applied or scripted).
 
 </div>
 
@@ -247,7 +247,7 @@ Git integration uses a pull-based sync model, operating bidirectionally:
 Deployment pipelines in Fabric function similarly to Git integration, but without an external repository:
 
 1. Each stage (Dev, Test, Prod) corresponds to a Fabric workspace.
-2. Artifacts are promoted workspace-to-workspace, with the platform comparing serialized definitions.
+2. AReal-Time Intelligencefacts are promoted workspace-to-workspace, with the platform comparing serialized definitions.
 3. Only additive/non-destructive updates are applied.
 4. Platform uses logical ID mapping to reconnect references (e.g., KQL DB → Eventhouse binding).
 
@@ -261,7 +261,7 @@ Under the hood, Fabric reuses the same schema execution engine as the Git integr
 
 #### Capacity and Scaling Mechanics
 
-A critical technical factor for RTI deployments is understanding how Eventhouse scales and costs:
+A critical technical factor for Real-Time Intelligence deployments is understanding how Eventhouse scales and costs:
 
 - Scaling driven primarily by hot cache size, not query volume.
 - Capacity auto-scales up when hot cache utilization exceeds thresholds (e.g., ~90%), scales down under ~70%.
@@ -281,10 +281,10 @@ Without explicit settings, default policy (`hot = forever`) causes cache buildup
 
 #### Known Technical Gaps and Workarounds
 
-- **No schema-diff support:** Developers must handle schema evolution manually or by maintaining scripts external to Git sync. Fabric will not drop artifacts based on Git diffs.
+- **No schema-diff support:** Developers must handle schema evolution manually or by maintaining scripts external to Git sync. Fabric will not drop aReal-Time Intelligencefacts based on Git diffs.
 - **No per-query/per-ingestion cost attribution:** Monitoring cost impacts must rely on capacity usage (CU/s) metrics rather than query-level cost.
 - **Capacity App limitations:** Currently offers limited troubleshooting capability; advanced users must query diagnostic tables via .show cluster diagnostics and .show tables details for visibility into scaling triggers.
-- **Partial artifact sync:** Some properties (e.g., database-level streaming policy) not synced; recommend setting such properties in schema scripts or manual deployment.
+- **PaReal-Time Intelligenceal aReal-Time Intelligencefact sync:** Some propeReal-Time Intelligencees (e.g., database-level streaming policy) not synced; recommend setting such propeReal-Time Intelligencees in schema scripts or manual deployment.
 
 #### CI/CD Flow Internals
 
@@ -292,13 +292,13 @@ Putting it all together, here’s the technical flow when deploying a KQL Databa
 
 **1. Development** - Author schema via GUI or KQL scripts. - Connecting Workspace to Git Repo - Changes are automatically synced to git
 
-**2. Sync/Deployment** - Git integration or API parses serialized files. - Platform resolves logical IDs → binds artifacts. - Executes schema script → creates/updates tables, views, policies. - Updates platform properties (caching, retention).
+**2. Sync/Deployment** - Git integration or API parses serialized files. - Platform resolves logical IDs → binds aReal-Time Intelligencefacts. - Executes schema script → creates/updates tables, views, policies. - Updates platform propeReal-Time Intelligencees (caching, retention).
 
-**3. Promotion (Pipeline)** - Schema and properties synced workspace-to-workspace. - Logical IDs rebinding ensures correct dependency mapping. - No destructive changes propagated; deletions require manual intervention.
+**3. Promotion (Pipeline)** - Schema and propeReal-Time Intelligencees synced workspace-to-workspace. - Logical IDs rebinding ensures correct dependency mapping. - No destructive changes propagated; deletions require manual intervention.
 
 ### Implementations
 
-Implementing Continuous Integration and Continuous Deployment (CI/CD) in Microsoft Fabric for Real-Time Intelligence (RTI) workloads involves selecting a workflow that aligns with your team's development practices and deployment requirements. Microsoft Fabric supports multiple CI/CD strategies, each catering to different organizational needs.
+Implementing Continuous Integration and Continuous Deployment (CI/CD) in Microsoft Fabric for Real-Time Intelligence (Real-Time Intelligence) workloads involves selecting a workflow that aligns with your team's development practices and deployment requirements. Microsoft Fabric supports multiple CI/CD strategies, each catering to different organizational needs.
 
 #### Option 1: Git-Based Deployments with Multiple Branches
 
@@ -325,7 +325,7 @@ This method utilizes a single main branch, with build and release pipelines hand
 
 1. Changes are committed to the main branch.
 2. A build pipeline creates a build environment, runs tests, and adjusts configurations (e.g., data source connections) for the Development stage.
-3. A release pipeline deploys the adjusted artifacts to the Development workspace.
+3. A release pipeline deploys the adjusted aReal-Time Intelligencefacts to the Development workspace.
 4. The process repeats for Test and Production stages, with necessary configuration adjustments at each step.
 
 **Considerations:**
@@ -336,7 +336,7 @@ This method utilizes a single main branch, with build and release pipelines hand
 
 #### Option 3: Deployments Using Fabric Deployment Pipelines
 
-Fabric's built-in deployment pipelines facilitate direct promotion of artifacts between workspaces without relying solely on Git branches.
+Fabric's built-in deployment pipelines facilitate direct promotion of aReal-Time Intelligencefacts between workspaces without relying solely on Git branches.
 
 **Workflow:**
 
@@ -374,7 +374,7 @@ While Microsoft Fabric provides Git integration and deployment pipelines as firs
 
 - Fine-grained deployment orchestration across environments
 - Integrating Fabric into existing enterprise CI/CD pipelines (e.g., Azure DevOps, GitHub Actions, Jenkins)
-- Dynamic deployments where artifact definitions are generated or transformed at runtime
+- Dynamic deployments where aReal-Time Intelligencefact definitions are generated or transformed at runtime
 
 This implementation guide explains how to leverage the REST API for managing Eventhouse, KQL Databases, and Event Streams in Real-Time Intelligence workloads.
 
@@ -386,14 +386,14 @@ This implementation guide explains how to leverage the REST API for managing Eve
 
 ##### Understanding the API Model
 
-Fabric’s REST API follows a declarative artifact model:
+Fabric’s REST API follows a declarative aReal-Time Intelligencefact model:
 
 - Every deployable item (Eventhouse, KQL Database, Event Stream) is treated as an “item” in the workspace.
 
 Creation is performed by POSTing an "item definition", which includes:
 
 - platform.json metadata (type, name, logical ID)
-- properties.json configuration (caching, retention)
+- propeReal-Time Intelligencees.json configuration (caching, retention)
 - In case of a KQL Database A CSL schema script encoded in Base64 (the actual KQL schema)
 
 The REST API exposes endpoints to:
@@ -402,7 +402,7 @@ The REST API exposes endpoints to:
 - Retrieve item definitions
 - Update items
 - Delete items
-- Manage item properties
+- Manage item propeReal-Time Intelligencees
 
 ##### Deploying a KQL Database via REST API
 
@@ -445,7 +445,7 @@ Construct the JSON body:
 $body = @{
   "displayName": "MyDatabase",
   "type": "KQLDatabase",
-  "properties": {
+  "propeReal-Time Intelligencees": {
     "readOnly": false,
     "hotCachePeriod": "30d"
   },
@@ -454,7 +454,7 @@ $body = @{
         -Depth 2
 ```
 
-Adjust properties to set caching and retention.
+Adjust propeReal-Time Intelligencees to set caching and retention.
 
 **Step 4: Call the API**
 
@@ -491,8 +491,8 @@ $response = Invoke-RestMethod `
 To deploy across Dev → Test → Prod:
 
 1. Parameterize workspace IDs and environment-specific configurations in your CI/CD pipeline.
-2. Use the same API payload, adjusting displayName or properties as needed.
-3. Map logical IDs in platform.json to maintain artifact dependencies (e.g., Eventhouse binding).
+2. Use the same API payload, adjusting displayName or propeReal-Time Intelligencees as needed.
+3. Map logical IDs in platform.json to maintain aReal-Time Intelligencefact dependencies (e.g., Eventhouse binding).
 
 Implement validation after deployment by querying:
 
@@ -530,7 +530,7 @@ Implement validation after deployment by querying:
 3. Automated tests validate schema + queries in Dev.
 4. If passed, same pipeline deploys to Test → Prod via REST API.
 
-Implementing CI/CD for Fabric RTI using the REST API provides maximum flexibility and environment control. It aligns with Infrastructure-as-Code principles by deploying declarative definitions via API calls, supporting dynamic, automated deployments independent of Git integration or built-in deployment pipelines.
+Implementing CI/CD for Fabric Real-Time Intelligence using the REST API provides maximum flexibility and environment control. It aligns with Infrastructure-as-Code principles by deploying declarative definitions via API calls, suppoReal-Time Intelligenceng dynamic, automated deployments independent of Git integration or built-in deployment pipelines.
 
 **Recommended for:**
 
@@ -540,22 +540,22 @@ Implementing CI/CD for Fabric RTI using the REST API provides maximum flexibilit
 
 ### Troubleshooting
 
-Implementing CI/CD and ALM in Microsoft Fabric Real-Time Intelligence introduces new operational challenges. Troubleshooting deployment issues requires a deep understanding of how Fabric manages artifacts, schema, and deployment state across environments.
+Implementing CI/CD and ALM in Microsoft Fabric Real-Time Intelligence introduces new operational challenges. Troubleshooting deployment issues requires a deep understanding of how Fabric manages aReal-Time Intelligencefacts, schema, and deployment state across environments.
 
 This section provides actionable guidance for diagnosing and resolving common issues in Git integration, deployment pipelines, REST API deployment, and schema management.
 
 #### Git Integration Issues
 
-##### Issue: Uncommitted or Out-of-Sync Artifacts\*\*
+##### Issue: Uncommitted or Out-of-Sync AReal-Time Intelligencefacts\*\*
 
 **Symptoms:**
 
-- Artifact shows as Uncommitted or Update Required in Git integration view.
+- AReal-Time Intelligencefact shows as Uncommitted or Update Required in Git integration view.
 - Unable to sync changes from Git or push to Git.
 
 **Root Causes:**
 
-- Artifact modified directly in workspace but not committed to Git.
+- AReal-Time Intelligencefact modified directly in workspace but not committed to Git.
 - Manual edits in Git repository not reflected in Fabric workspace.
 - Branch mismatch or merge conflicts in Git.
 
@@ -568,31 +568,31 @@ This section provides actionable guidance for diagnosing and resolving common is
 
 <div class="tip" data-title="tip">
 
-> Avoid manual edits to platform.json or properties.json unless you understand schema-binding dependencies (e.g., logical IDs).
+> Avoid manual edits to platform.json or propeReal-Time Intelligencees.json unless you understand schema-binding dependencies (e.g., logical IDs).
 
 </div>
 
-##### Issue: Missing or Incomplete Artifact Definitions in Git
+##### Issue: Missing or Incomplete AReal-Time Intelligencefact Definitions in Git
 
 **Symptoms:**
 
-- Some artifacts missing in Git repo.
+- Some aReal-Time Intelligencefacts missing in Git repo.
 - Missing schema updates in database.csl.
 
 **Root Causes:**
 
-- Certain database-level properties (e.g., streaming policies) not yet supported by Git integration export.
-- Artifact created outside Git-connected workspace.
+- Certain database-level propeReal-Time Intelligencees (e.g., streaming policies) not yet supported by Git integration export.
+- AReal-Time Intelligencefact created outside Git-connected workspace.
 
 **Resolution:**
 
 - Validate schema export with .show database schema to compare definitions.
-- For unsupported properties, use post-deployment scripts via REST API or manual configuration.
-- Recreate artifact inside Git-connected workspace.
+- For unsupported propeReal-Time Intelligencees, use post-deployment scripts via REST API or manual configuration.
+- Recreate aReal-Time Intelligencefact inside Git-connected workspace.
 
 #### Deployment Pipeline Issues
 
-##### Issue: Artifact Not Deploying to Target Workspace
+##### Issue: AReal-Time Intelligencefact Not Deploying to Target Workspace
 
 **Symptoms:**
 
@@ -601,7 +601,7 @@ This section provides actionable guidance for diagnosing and resolving common is
 
 **Root Causes:**
 
-- Artifact dependencies not resolved (e.g., KQL Database missing binding to Eventhouse).
+- AReal-Time Intelligencefact dependencies not resolved (e.g., KQL Database missing binding to Eventhouse).
 - Logical ID mismatch between source and target workspace.
 - Manual changes in target workspace creating drift.
 
@@ -610,7 +610,7 @@ This section provides actionable guidance for diagnosing and resolving common is
 - Inspect logical IDs in platform.json to confirm mappings.
 - Use Fabric UI to manually bind KQL Database to correct Eventhouse if automatic rebinding fails.
 - Reset workspace state by redeploying from clean Git source.
-- Check deployment pipeline logs for skipped artifacts.
+- Check deployment pipeline logs for skipped aReal-Time Intelligencefacts.
 
 <div class="tip" data-title="tip">
 
@@ -630,8 +630,8 @@ This section provides actionable guidance for diagnosing and resolving common is
 **Root Causes:**
 
 - Invalid Base64-encoded schema string.
-- Required fields missing in payload (displayName, type, properties).
-- Artifact dependencies unresolved (e.g., Eventhouse ID missing for KQL Database).
+- Required fields missing in payload (displayName, type, propeReal-Time Intelligencees).
+- AReal-Time Intelligencefact dependencies unresolved (e.g., Eventhouse ID missing for KQL Database).
 
 **Resolution:**
 
@@ -649,8 +649,8 @@ This section provides actionable guidance for diagnosing and resolving common is
 **Root Causes:**
 
 - Schema script missing create table / create materialized-view statements.
-- Schema execution partial or skipped due to dependency errors.
-- Platform applies artifact definition without executing invalid schema.
+- Schema execution paReal-Time Intelligenceal or skipped due to dependency errors.
+- Platform applies aReal-Time Intelligencefact definition without executing invalid schema.
 
 **Resolution:**
 
@@ -730,7 +730,7 @@ Queries slow or failing after deployment.
 - Understand that Fabric’s deployment model is additive, non-destructive: drift and undeployed deletions require manual intervention.
 - Document and maintain migration scripts for schema evolution outside declarative .csl schema.
 
-This troubleshooting guidance ensures that CI/CD and ALM implementations for RTI in Microsoft Fabric remain resilient, transparent, and auditable across environments.
+This troubleshooting guidance ensures that CI/CD and ALM implementations for Real-Time Intelligence in Microsoft Fabric remain resilient, transparent, and auditable across environments.
 
 ### Hands-on lab
 

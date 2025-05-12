@@ -6,7 +6,7 @@ In the landscape of real-time analytics, the fidelity and flexibility of your da
 
 Real-time systems differ fundamentally from traditional Business Intelligence Systems. They must ingest, transform and serve analytical insights with sub-minute latency—often against massive, high-cardinality, high-granular datasets. This requires a new class of modeling techniques tailored to streaming - first architectures.
 
-This module delivers expert-level guidance on structuring data for streaming and hybrid workloads in Fabric’s KQL-based ecosystem, especially Eventhouse and KQL Database. It bridges theory and implementation through deep dives into update policies, materialized views and external tables, alongside schema strategies for performant Power BI Reports. These concepts are foundational to driving low-latency queries, minimizing compute cost and supporting downstream consumers like dashboards and alerting systems.
+This module delivers expert-level guidance on structuring data for streaming and hybrid workloads in Fabric’s KQL-based ecosystem, especially Eventhouse and KQL Database. It bridges theory and implementation through deep dives into update policies, materialized views and external tables, alongside schema strategies for performant Power BI Reports. These concepts are foundational to driving low-latency queries, minimizing compute cost and suppoReal-Time Intelligenceng downstream consumers like dashboards and aleReal-Time Intelligenceng systems.
 
 #### Business Value
 
@@ -17,15 +17,15 @@ This module is designed for architects, data engineers, and advanced BI professi
 - Building Power BI semantic models directly over streaming or near real-time KQL data sources,
 - Working with complex schema evolution, externalized data references, and time-sensitive joins.
 
-By mastering these advanced techniques, participants will avoid common pitfalls — like improper caching policies, poorly scoped materializations, or inefficient joins - that we’ve seen derail real-world RTI implementations.
+By mastering these advanced techniques, paReal-Time Intelligencecipants will avoid common pitfalls — like improper caching policies, poorly scoped materializations, or inefficient joins - that we’ve seen derail real-world Real-Time Intelligence implementations.
 
 ### Architectural deep dive
 
-Data modeling in Microsoft Fabric’s Real-Time Intelligence (RTI) must be aligned with the architecture of Eventhouse, KQL Database, and the broader Fabric ecosystem. This section provides a blueprint for how real-time models are constructed in a high-concurrency, high-throughput architecture.
+Data modeling in Microsoft Fabric’s Real-Time Intelligence (Real-Time Intelligence) must be aligned with the architecture of Eventhouse, KQL Database, and the broader Fabric ecosystem. This section provides a blueprint for how real-time models are constructed in a high-concurrency, high-throughput architecture.
 
-#### Fabric RTI Architectural Context
+#### Fabric Real-Time Intelligence Architectural Context
 
-At the core of the RTI stack lies Eventhouse, a KQL-based data service optimized for high-frequency, time-series data. Eventhouse ingestion scales elastically, and data is indexed on ingest, partitioned, and stored in compressed extents for optimal query performance.
+At the core of the Real-Time Intelligence stack lies Eventhouse, a KQL-based data service optimized for high-frequency, time-series data. Eventhouse ingestion scales elastically, and data is indexed on ingest, paReal-Time Intelligencetioned, and stored in compressed extents for optimal query performance.
 
 Data models in this environment are not just schemas — they are performance-critical assets. Modeling decisions directly affect:
 
@@ -48,13 +48,13 @@ Each layer improves data quality and readiness, and decouples concerns of ingest
 
 In Microsoft Fabric Real-Time Intelligence, KQL Databases (backed by Eventhouse) naturally support this tiered architecture, though the layering is implemented through logical constructs and processing pipelines, rather than through physical storage separation. Here's how it aligns:
 
-| Medallion Layer | Fabric RTI / KQL DB Implementation                                                                                                                                          |
+| Medallion Layer | Fabric Real-Time Intelligence / KQL DB Implementation                                                                                                                       |
 | --------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Bronze          | Raw data ingested via Eventstream, Direct Ingestion, or External Tables. Raw event tables (with update policies off) typically reside here.                                 |
 | Silver          | Implemented using Update Policies or Materialized Views that apply cleaning, deduplication, joins, and derived fields. Acts as the refined source for analytical workloads. |
 | Gold            | Optimized aggregation or business-specific shaping, via additional Materialized Views, Functions, or export to Power BI using semantic models designed for performance.     |
 
-##### Architectural Elements in RTI that Enable the Medallion Model
+##### Architectural Elements in Real-Time Intelligence that Enable the Medallion Model
 
 - **Update Policies:** Automatically transform Bronze to Silver during ingestion. Supports branching raw streams into multiple shaped outputs.
 
@@ -75,14 +75,14 @@ In Microsoft Fabric Real-Time Intelligence, KQL Databases (backed by Eventhouse)
 
 ##### 1. Datatypes
 
-Datatypes in Microsoft Fabric RTI are foundational to data modeling. They define not only how data is stored and queried in KQL-based services like Eventhouse, but also how efficiently that data is joined, filtered, compressed, and consumed downstream (e.g., in Power BI). From an architectural perspective, datatypes:
+Datatypes in Microsoft Fabric Real-Time Intelligence are foundational to data modeling. They define not only how data is stored and queried in KQL-based services like Eventhouse, but also how efficiently that data is joined, filtered, compressed, and consumed downstream (e.g., in Power BI). From an architectural perspective, datatypes:
 
 - Determine compression strategy and extent shaping, impacting storage efficiency and query scan times.
 - Affect join behavior and broadcast strategies in large distributed queries.
 - Shape the semantic layer compatibility, especially for time-based models and dynamic data.
 - Influence update policy and materialized view design, since transformations must respect and preserve type semantics.
 
-In Real-Time Intelligence solutions, incorrect or inconsistent type usage - particularly with `datetime`, `timespan`, or `dynamic` can lead to performance degradation, broken filters in Power BI, and failed ingestion operations.
+In Real-Time Intelligence solutions, incorrect or inconsistent type usage - paReal-Time Intelligencecularly with `datetime`, `timespan`, or `dynamic` can lead to performance degradation, broken filters in Power BI, and failed ingestion operations.
 
 ##### 2. Update Policies
 
@@ -144,17 +144,17 @@ External tables expose datasets that reside in external storage (ADLS, Blob, SQL
 - Supports cross-system joins (e.g., enrichment from dimension data in SQL),
 - Reduces storage cost by eliminating unnecessary ingestion.
 
-Partition pruning and pre-filtering play a critical role in maintaining performance. Effective modeling requires aligning the external table’s path structure with likely filter predicates.
+PaReal-Time Intelligencetion pruning and pre-filtering play a critical role in maintaining performance. Effective modeling requires aligning the external table’s path structure with likely filter predicates.
 
-##### 5. Partitioning Policies
+##### 5. PaReal-Time Intelligencetioning Policies
 
-Partitioning policies define how extents (immutable data shards) are organized post-ingestion to optimize query performance. From an architectural perspective, this:
+PaReal-Time Intelligencetioning policies define how extents (immutable data shards) are organized post-ingestion to optimize query performance. From an architectural perspective, this:
 
-- Enables partition pruning by datetime or high-cardinality string keys (e.g., TenantId, AccountId),
+- Enables paReal-Time Intelligencetion pruning by datetime or high-cardinality string keys (e.g., TenantId, AccountId),
 - Reduces data movement across nodes in distributed queries and joins,
 - Improves compression and caching efficiency for time-series and multi-tenant scenarios.
 
-Policies can be configured to assign partitioned extents using `ByPartition` (co-location on same node) or `Uniform` (balanced distribution). Effective modeling requires aligning the partition key with common filter patterns and join conditions.
+Policies can be configured to assign paReal-Time Intelligencetioned extents using `ByPaReal-Time Intelligencetion` (co-location on same node) or `Uniform` (balanced distribution). Effective modeling requires aligning the paReal-Time Intelligencetion key with common filter patterns and join conditions.
 
 ##### 6. Modeling for Power BI
 
@@ -170,7 +170,7 @@ Semantic models should be architected with DirectQuery for the fact tables and d
 
 ##### 7. OneLake Availibility
 
-OneLake plays a pivotal role in unifying data access across Microsoft Fabric, enabling seamless integration of streaming data with analytical and operational workloads. In the context of Real-Time Intelligence (RTI), OneLake serves not only as a persistent, queryable data layer but also as a critical component in reducing latency, cost, and complexity when managing event-driven architectures at scale.
+OneLake plays a pivotal role in unifying data access across Microsoft Fabric, enabling seamless integration of streaming data with analytical and operational workloads. In the context of Real-Time Intelligence (Real-Time Intelligence), OneLake serves not only as a persistent, queryable data layer but also as a critical component in reducing latency, cost, and complexity when managing event-driven architectures at scale.
 
 This section dissects the architectural model that enables OneLake availability from Eventhouse, ensuring that data ingested in real time is efficiently exposed to downstream consumers in both raw and optimized formats.
 
@@ -216,11 +216,11 @@ At a high level, the architecture consists of the following stages:
 
 #### 1. Datatypes
 
-Datatypes in Microsoft Real-Time Intelligence (Eventhouse/KQL Database) are more than schema constraints - they directly affect storage efficiency, query performance, and downstream integration, particularly with Power BI and external consumers.
+Datatypes in Microsoft Real-Time Intelligence (Eventhouse/KQL Database) are more than schema constraints - they directly affect storage efficiency, query performance, and downstream integration, paReal-Time Intelligencecularly with Power BI and external consumers.
 
 **Core Datatypes and Storage Behavior**
 
-Fabric RTI relies on a columnar storage engine, where each column is encoded and compressed independently. The choice of datatype influences both compression ratio and query execution plan:
+Fabric Real-Time Intelligence relies on a columnar storage engine, where each column is encoded and compressed independently. The choice of datatype influences both compression ratio and query execution plan:
 
 - `datetime`: Always stored in UTC with nanosecond precision. Used extensively for filtering, binning, and temporal joins. Internally indexed for efficient range queries.
 
@@ -356,7 +356,7 @@ Step 5: Attach the Update Policy to table `RawLogs`
 
 ##### 3. Materialized Views
 
-Materialized Views (MVs) in Microsoft Fabric RTI are a performance-critical modeling construct that allow pre-aggregation and deduplication of high-volume data streams in a cost-effective and scalable manner. Unlike traditional views or on-the-fly aggregations, materialized views are physically materialized and maintained incrementally using a delta-and-cursor-based architecture.
+Materialized Views (MVs) in Microsoft Fabric Real-Time Intelligence are a performance-critical modeling construct that allow pre-aggregation and deduplication of high-volume data streams in a cost-effective and scalable manner. Unlike traditional views or on-the-fly aggregations, materialized views are physically materialized and maintained incrementally using a delta-and-cursor-based architecture.
 
 This section explores the internal mechanics, refresh behavior, query execution path, and advanced considerations for using Materialized Views effectively in Eventhouse and KQL Database.
 
@@ -427,7 +427,7 @@ To inspect the materialization status
 - Filter early and reduce cardinality before materialization to lower cost.
 - Avoid defining more MVs than the system can refresh concurrently.
 
-Consider partitioning policies on the source table if your view has predictable slice patterns (e.g., by customer, tenant, or time).
+Consider paReal-Time Intelligencetioning policies on the source table if your view has predictable slice patterns (e.g., by customer, tenant, or time).
 
 **Use Cases**
 
@@ -438,11 +438,11 @@ Consider partitioning policies on the source table if your view has predictable 
 
 ##### 4. External Tables
 
-External tables in Microsoft Fabric Real-Time Intelligence (RTI) are user-defined schema entities that reference data stored outside the native Kusto (Eventhouse/KQL DB) database.
+External tables in Microsoft Fabric Real-Time Intelligence (Real-Time Intelligence) are user-defined schema entities that reference data stored outside the native Kusto (Eventhouse/KQL DB) database.
 
 They provide a critical architectural capability for real-time access, cross-system integration, and cost optimization without requiring ingestion into the database engine.
 
-An external table behaves similarly to a regular KQL table in that it exposes a well-defined schema, supports partitions, and is addressable via standard KQL queries. However, the backing data is remote—stored either in cloud storage systems or SQL databases.
+An external table behaves similarly to a regular KQL table in that it exposes a well-defined schema, supports paReal-Time Intelligencetions, and is addressable via standard KQL queries. However, the backing data is remote—stored either in cloud storage systems or SQL databases.
 
 **External Table Types**
 
@@ -467,11 +467,11 @@ data into Eventhouse. Instead, it issues an on-demand retrieval and
 parsing operation:
 
 - For **Storage External** Tables, file metadata is accessed first to plan
-  efficient reads (especially for partitioned datasets).
+  efficient reads (especially for paReal-Time Intelligencetioned datasets).
 - For **SQL External Tables**, queries are pushed down and executed
   against the external SQL database whenever possible (pushdown optimization).
 
-Partition pruning, format-specific readers (Parquet, Delta), and
+PaReal-Time Intelligencetion pruning, format-specific readers (Parquet, Delta), and
 optimized network retrieval are core backend mechanisms that ensure
 minimal latency and resource consumption.
 
@@ -486,17 +486,17 @@ external_table("MyExternalStorageTable")
 Behind the scenes, this pulls only the minimum required file segments
 or database rows.
 
-**Partitioning**
+**PaReal-Time Intelligencetioning**
 
-Partitions are fundamental for scaling external table performance:
+PaReal-Time Intelligencetions are fundamental for scaling external table performance:
 
-- **Storage tables** often partition by date or tenant ID in the folder
+- **Storage tables** often paReal-Time Intelligencetion by date or tenant ID in the folder
   path structure.
-- **SQL external** tables rely on database indexes for partitioning,
-  with optional KQL-side partition hints.
+- **SQL external** tables rely on database indexes for paReal-Time Intelligencetioning,
+  with optional KQL-side paReal-Time Intelligencetion hints.
 
-Effective partitioning is crucial to avoid full scans and optimize query
-latency and cost. Partition keys must match query patterns for efficient pruning.
+Effective paReal-Time Intelligencetioning is crucial to avoid full scans and optimize query
+latency and cost. PaReal-Time Intelligencetion keys must match query patterns for efficient pruning.
 
 **Authentication**
 
@@ -533,7 +533,7 @@ External tables can be used for both query and export workflows:
 **Common Pitfalls**
 
 - High-latency storage or SQL servers severely affect query times.
-- Poor partitioning leads to full scans and excessive resource usage.
+- Poor paReal-Time Intelligencetioning leads to full scans and excessive resource usage.
 - Schema mismatches between definition and actual data can cause query errors.
 - Authentication failures if tokens expire or credentials are rotated incorrectly.
 
@@ -542,117 +542,117 @@ External tables can be used for both query and export workflows:
 While external tables seem straightforward conceptually, under the hood they involve:
 
 - Distributed read scheduling
-- Partition pruning engines
+- PaReal-Time Intelligencetion pruning engines
 - Intelligent format readers
 - Secure and auditable access tracking
-- Error retries and partial query failure handling
+- Error retries and paReal-Time Intelligenceal query failure handling
 
 Fabric hides these complexities from the user but understanding them helps optimize architecture designs.
 
-##### 4. Partitioning Policies
+##### 4. PaReal-Time Intelligencetioning Policies
 
-Partitioning policies in Microsoft Fabric RTI (Real-Time Intelligence) allow database administrators and solution architects to control the physical layout of data inside tables.
+PaReal-Time Intelligencetioning policies in Microsoft Fabric Real-Time Intelligence (Real-Time Intelligence) allow database administrators and solution architects to control the physical layout of data inside tables.
 
-In a system designed for massive ingestion and low-latency querying, partitioning is critical for:
+In a system designed for massive ingestion and low-latency querying, paReal-Time Intelligencetioning is critical for:
 
 - Minimizing query scan footprint (I/O optimization)
 - Accelerating aggregation and filtering
 - Optimizing storage lifecycle management (retention policies)
 - Reducing cost (compute and storage)
 
-Partitioning is **declarative:** it is defined in advance as part of the table’s metadata, and the engine automatically applies it during ingestion and query processing.
+PaReal-Time Intelligencetioning is **declarative:** it is defined in advance as part of the table’s metadata, and the engine automatically applies it during ingestion and query processing.
 
-**How Partitioning Policies Work**
+**How PaReal-Time Intelligencetioning Policies Work**
 
-Partitioning policies logically segment the ingested data into extents based on one or more columns.
+PaReal-Time Intelligencetioning policies logically segment the ingested data into extents based on one or more columns.
 
 An extent is the core internal storage unit in Kusto (Fabric Eventhouse) — it can be thought of as a "mini-table" with up to hundreds of megabytes of data.
 
-When a partitioning policy is configured:
+When a paReal-Time Intelligencetioning policy is configured:
 
-- During ingestion, data is bucketed based on the partition key(s).
+- During ingestion, data is bucketed based on the paReal-Time Intelligencetion key(s).
 - During querying, only the relevant buckets (extents) are accessed, avoiding full table scans.
-- During retention, partition policies help the system efficiently delete or archive data.
+- During retention, paReal-Time Intelligencetion policies help the system efficiently delete or archive data.
 
-**Types of Partitioning**
+**Types of PaReal-Time Intelligencetioning**
 
-Partitioning in KQL databases is **column-based** and usually falls into two common scenarios:
+PaReal-Time Intelligencetioning in KQL databases is **column-based** and usually falls into two common scenarios:
 
-1. **Time-based Partitioning**
+1. **Time-based PaReal-Time Intelligencetioning**
 
    - Most critical for telemetry, log analytics, IoT, event data.
-   - Partition on a datetime column like Timestamp or EventTime.
+   - PaReal-Time Intelligencetion on a datetime column like Timestamp or EventTime.
    - Typically combined with `bin()` functions in queries for efficient time slicing.
 
    Example:
 
    ```kql
-   .alter-merge table Events policy partitioning
-   { "PartitionKeys": [ { "ColumnName": "Timestamp", "Kind": "UniformRange" } ] }
+   .alter-merge table Events policy paReal-Time Intelligencetioning
+   { "PaReal-Time IntelligencetionKeys": [ { "ColumnName": "Timestamp", "Kind": "UniformRange" } ] }
    ```
 
-2. **Key-based Partitioning**
+2. **Key-based PaReal-Time Intelligencetioning**
 
-   Partitioning based on business keys, such as `CustomerID`, `DeviceID`, `Region`, or `TenantID`.
+   PaReal-Time Intelligencetioning based on business keys, such as `CustomerID`, `DeviceID`, `Region`, or `TenantID`.
    Common for multitenant solutions to improve query isolation and minimize noisy neighbor effects.
 
    Example:
 
    ```kql
-   .alter-merge table Metrics policy partitioning
-   { "PartitionKeys": [ { "ColumnName": "TenantId", "Kind": "Hash" } ] }
+   .alter-merge table Metrics policy paReal-Time Intelligencetioning
+   { "PaReal-Time IntelligencetionKeys": [ { "ColumnName": "TenantId", "Kind": "Hash" } ] }
    ```
 
-**Partition Key Kinds**
-Partition keys can have different partitioning strategies (Kind)​:
+**PaReal-Time Intelligencetion Key Kinds**
+PaReal-Time Intelligencetion keys can have different paReal-Time Intelligencetioning strategies (Kind)​:
 
 - **UniformRange** — Used for datetime or numeric columns. Buckets are ranges (e.g., one-day intervals).
 - **Hash** — Used for categorical/text keys (e.g., `CustomerId`). Buckets are based on hash values.
-- **None** — No partitioning.
+- **None** — No paReal-Time Intelligencetioning.
 
 Choosing the wrong kind (e.g., hashing timestamps) can severely degrade performance.
 
-**How Partitioning Affects Queries**
+**How PaReal-Time Intelligencetioning Affects Queries**
 
 During query compilation:
 
-- The query engine applies partition pruning: only relevant extents are scanned based on filter predicates.
-- Example: A query filtered on `Timestamp > ago(1d)` automatically limits the scan to recent partitions.
+- The query engine applies paReal-Time Intelligencetion pruning: only relevant extents are scanned based on filter predicates.
+- Example: A query filtered on `Timestamp > ago(1d)` automatically limits the scan to recent paReal-Time Intelligencetions.
 
-Without a filter on the partition key(s), full table scan occurs - leading to worse performance than expected.
+Without a filter on the paReal-Time Intelligencetion key(s), full table scan occurs - leading to worse performance than expected.
 
 <div class="warning" data-title="Critical Tip">
 
-> **Always filter on partition keys wherever possible for performance-sensitive queries.**
+> **Always filter on paReal-Time Intelligencetion keys wherever possible for performance-sensitive queries.**
 
 </div>
 
-**Best Practices for Defining Partitioning Policies**
+**Best Practices for Defining PaReal-Time Intelligencetioning Policies**
 
-- **Time-based data:** Always partition on a datetime column (e.g., event timestamp).
-- **High cardinality dimensions:** Partition on fields like `DeviceId` or `CustomerId` if you query by them.
-- **Low cardinality caution:** Avoid partitioning on fields with very few unique values (e.g., Status = Active/Inactive) — it provides no benefit.
-- **Multiple keys:** You can define multiple partition keys, but be mindful of complexity and diminishing returns.
-- **Retention and Cost:** Align partitioning keys with your retention policies for efficient aging-out of data.
+- **Time-based data:** Always paReal-Time Intelligencetion on a datetime column (e.g., event timestamp).
+- **High cardinality dimensions:** PaReal-Time Intelligencetion on fields like `DeviceId` or `CustomerId` if you query by them.
+- **Low cardinality caution:** Avoid paReal-Time Intelligencetioning on fields with very few unique values (e.g., Status = Active/Inactive) — it provides no benefit.
+- **Multiple keys:** You can define multiple paReal-Time Intelligencetion keys, but be mindful of complexity and diminishing returns.
+- **Retention and Cost:** Align paReal-Time Intelligencetioning keys with your retention policies for efficient aging-out of data.
 
 **Common Mistakes**
 
-- Partitioning on non-filtered columns: Leads to no pruning benefit.
-- Over-partitioning: Too many partitions (e.g., by `UserId`) can create operational overhead and metadata bloat.
-- Wrong partition key type: Hash when uniform range would be better (especially for time series).
+- PaReal-Time Intelligencetioning on non-filtered columns: Leads to no pruning benefit.
+- Over-paReal-Time Intelligencetioning: Too many paReal-Time Intelligencetions (e.g., by `UserId`) can create operational overhead and metadata bloat.
+- Wrong paReal-Time Intelligencetion key type: Hash when uniform range would be better (especially for time series).
 
 **Hidden Complexity**
 Internally, the Fabric Eventhouse engine:
 
-- Tracks partitions via extent metadata.
-- Automatically merges small extents and splits large ones during background optimization cycles (Compaction, Repartitioning).
-- Dynamically updates partition pruning hints during query plan optimization.
+- Tracks paReal-Time Intelligencetions via extent metadata.
+- Automatically merges small extents and splits large ones during background optimization cycles (Compaction, RepaReal-Time Intelligencetioning).
+- Dynamically updates paReal-Time Intelligencetion pruning hints during query plan optimization.
 
-Users **do not** manually manage partitions once policy is set - it's a fully managed, auto-optimized system.
+Users **do not** manually manage paReal-Time Intelligencetions once policy is set - it's a fully managed, auto-optimized system.
 
 ##### 5. Modeling for Power BI
 
-When building real-time analytics solutions in Fabric RTI, modeling data properly for Power BI is essential to achieve:
+When building real-time analytics solutions in Fabric Real-Time Intelligence, modeling data properly for Power BI is essential to achieve:
 
 - Fast and scalable reports
 - Correct aggregations and slicing
@@ -692,7 +692,7 @@ A star schema remains best practice for Power BI models even when sourcing from 
 
 **Storage Mode Strategy**
 
-Real-world guidance for fabric RTI to Power BI modeling:
+Real-world guidance for fabric Real-Time Intelligence to Power BI modeling:
 
 | Table Type                       | Recommended Storage Mode | Reason                                   |
 | -------------------------------- | ------------------------ | ---------------------------------------- |
@@ -739,7 +739,7 @@ Model complex transformations as Kusto Functions inside Fabric and reference the
 
 **Monitoring Power BI Query Performance**
 
-In large RTI solutions:
+In large Real-Time Intelligence solutions:
 
 - Use Performance Analyzer in Power BI Desktop.
 - Watch for slow DirectQuery requests.
@@ -769,7 +769,7 @@ Behind the scenes:
 
 ### Implementations
 
-Implementing effective data modeling practices in Fabric RTI is critical to ensuring performance, scalability, and maintainability of real-time analytics solutions.
+Implementing effective data modeling practices in Fabric Real-Time Intelligence is critical to ensuring performance, scalability, and maintainability of real-time analytics solutions.
 This section details how to implement key modeling elements, provides deep walkthroughs of functionality, and highlights critical design choices to be aware of.
 
 #### Update Policied Implementation
@@ -850,9 +850,9 @@ Export policies allow continuous streaming of ingested data to external systems�
 
 - Align schema compatibility between source and export destination.
 - Export costs are separate from query costs.
-- Be mindful of storage transactions when exporting at high frequency.
+- Be mindful of storage transactions when expoReal-Time Intelligenceng at high frequency.
 
-#### Joins in Fabric RTI
+#### Joins in Fabric Real-Time Intelligence
 
 Efficient joins are critical in KQL modeling, especially in real-time environments.
 
@@ -906,7 +906,7 @@ External tables enable querying remote storage or SQL sources without ingestion�
 
 1. Define an external table with connection parameters and schema mapping.
 2. Reference external storage (e.g., ADLS, OneLake) or SQL sources.
-3. Implement partition pruning strategies for high-performance external queries.
+3. Implement paReal-Time Intelligencetion pruning strategies for high-performance external queries.
 
 Example (Storage External Table):
 
@@ -922,31 +922,31 @@ with (location="https://<storageaccount>.dfs.core.windows.net/container/events/"
 
 **Key Implementation Considerations:**
 
-- Partition the data appropriately on storage side for query efficiency.
+- PaReal-Time Intelligencetion the data appropriately on storage side for query efficiency.
 - Be mindful of authentication (Managed Identity or Service Principal).
 - Storage transaction costs can be significant on large-scale external queries.
 
 ### Troubleshooting
 
-Troubleshooting in the Data Modeling domain for Fabric RTI focuses on diagnosing issues across:
+Troubleshooting in the Data Modeling domain for Fabric Real-Time Intelligence focuses on diagnosing issues across:
 
 - Update policies
 - Materialized views
 - External tables
 - Power BI modeling
-- Partitioning and join performance
+- PaReal-Time Intelligencetioning and join performance
 
 In high-scale, real-time architectures, small misconfigurations can cause large performance and cost penalties.
 This section describes how to identify, diagnose, and resolve common issues with clear, production-grade practices.
 
 #### Troubleshooting Update Policies
 
-| Symptom                             | Possible Causes                                                | Resolution                                                                          |
-| ----------------------------------- | -------------------------------------------------------------- | ----------------------------------------------------------------------------------- |
-| Update policy failures at ingestion | Syntax errors, missing columns, schema mismatch.               | Validate update query manually outside policy. Ensure all referenced columns exist. |
-| Unexpected data duplication         | Update policy is not idempotent.                               | Redesign update query to be idempotent (e.g., using `arg_max()` patterns).          |
-| High ingestion cost or slowness     | Update queries are too heavy (joins, complex transformations). | Simplify update logic; offload enrichment to post-ingestion ETL if necessary.       |
-| Partial updates or skipped batches  | Source ingestion is faster than policy execution.              | Scale out ingestion cluster if necessary or redesign update flow to batch mode.     |
+| Symptom                                               | Possible Causes                                                | Resolution                                                                          |
+| ----------------------------------------------------- | -------------------------------------------------------------- | ----------------------------------------------------------------------------------- |
+| Update policy failures at ingestion                   | Syntax errors, missing columns, schema mismatch.               | Validate update query manually outside policy. Ensure all referenced columns exist. |
+| Unexpected data duplication                           | Update policy is not idempotent.                               | Redesign update query to be idempotent (e.g., using `arg_max()` patterns).          |
+| High ingestion cost or slowness                       | Update queries are too heavy (joins, complex transformations). | Simplify update logic; offload enrichment to post-ingestion ETL if necessary.       |
+| PaReal-Time Intelligenceal updates or skipped batches | Source ingestion is faster than policy execution.              | Scale out ingestion cluster if necessary or redesign update flow to batch mode.     |
 
 **Diagnostics Tools:**
 
@@ -968,11 +968,11 @@ This section describes how to identify, diagnose, and resolve common issues with
 
 #### Troubleshooting External Tables
 
-| Symptom                         | Possible Causes                                                          | Resolution                                                                  |
-| ------------------------------- | ------------------------------------------------------------------------ | --------------------------------------------------------------------------- |
-| Query failure on external table | Authentication error, invalid path, corrupted file.                      | Verify connection strings, storage permissions, and file format compliance. |
-| Slow query performance          | No partition pruning, inefficient file format (e.g., CSV).               | Partition external data; prefer Parquet/Delta over text formats.            |
-| Partial data returned           | Misaligned schema between external source and external table definition. | Explicitly map all columns and validate format before query.                |
+| Symptom                                  | Possible Causes                                                               | Resolution                                                                          |
+| ---------------------------------------- | ----------------------------------------------------------------------------- | ----------------------------------------------------------------------------------- |
+| Query failure on external table          | Authentication error, invalid path, corrupted file.                           | Verify connection strings, storage permissions, and file format compliance.         |
+| Slow query performance                   | No paReal-Time Intelligencetion pruning, inefficient file format (e.g., CSV). | PaReal-Time Intelligencetion external data; prefer Parquet/Delta over text formats. |
+| PaReal-Time Intelligenceal data returned | Misaligned schema between external source and external table definition.      | Explicitly map all columns and validate format before query.                        |
 
 **Diagnostics Tools:**
 
@@ -993,20 +993,20 @@ This section describes how to identify, diagnose, and resolve common issues with
 - Power BI Performance Analyzer.
 - Fabric Diagnostic Queries (`.show queries` with `client_request_id` filtering).
 
-#### Troubleshooting Partitioning and Joins
+#### Troubleshooting PaReal-Time Intelligencetioning and Joins
 
-| Symptom                                           | Possible Causes                                                 | Resolution                                                          |
-| ------------------------------------------------- | --------------------------------------------------------------- | ------------------------------------------------------------------- |
-| Full table scans despite filters                  | Partition key mismatch in query.                                | Ensure where clause filters on partition keys exactly.              |
-| Slow joins causing throttling                     | Hash join not used when needed, or broadcast join not feasible. | Apply `hint.strategy=hash manually`; pre-filter both sides of join. |
-| Extent management issues (too many small extents) | Improper partitioning during ingestion.                         | Review and adjust ingestion batching and partitioning policies.     |
+| Symptom                                           | Possible Causes                                                 | Resolution                                                                         |
+| ------------------------------------------------- | --------------------------------------------------------------- | ---------------------------------------------------------------------------------- |
+| Full table scans despite filters                  | PaReal-Time Intelligencetion key mismatch in query.             | Ensure where clause filters on paReal-Time Intelligencetion keys exactly.          |
+| Slow joins causing throttling                     | Hash join not used when needed, or broadcast join not feasible. | Apply `hint.strategy=hash manually`; pre-filter both sides of join.                |
+| Extent management issues (too many small extents) | Improper paReal-Time Intelligencetioning during ingestion.      | Review and adjust ingestion batching and paReal-Time Intelligencetioning policies. |
 
 **Diagnostics Tools:**
 
 - `.show table extents` to inspect extent distribution.
 - `.show ingestion failures` and ingestion batching configuration review.
 
-#### General Diagnostic Commands in Fabric RTI
+#### General Diagnostic Commands in Fabric Real-Time Intelligence
 
 Useful Kusto commands for general modeling troubleshooting:
 
@@ -1026,7 +1026,7 @@ Useful monitoring areas:
 
 #### Best Practices for Troubleshooting
 
-- Always start troubleshooting at the source (ingestion) before looking at downstream artifacts.
+- Always start troubleshooting at the source (ingestion) before looking at downstream aReal-Time Intelligencefacts.
 - Use `.show queries` extensively to understand real query bottlenecks.
 - Test policies and materializations manually before automating them.
 - Monitor and alert on ingestion failures and materialization lag.
@@ -1034,7 +1034,7 @@ Useful monitoring areas:
 
 ### Orchestration and optimization
 
-In Fabric RTI, Data Modeling orchestration ensures that ingestion, transformation, materialization, and serving processes happen in a coordinated, reliable, and scalable manner.
+In Fabric Real-Time Intelligence, Data Modeling orchestration ensures that ingestion, transformation, materialization, and serving processes happen in a coordinated, reliable, and scalable manner.
 Optimization ensures these processes run with minimal latency, controlled cost, and maximum throughput, maintaining real-time performance under production conditions.
 
 This section describes how to effectively orchestrate and optimize core data modeling components, including update policies, materialized views, external tables, joins, and Power BI semantic models.
@@ -1095,7 +1095,7 @@ Automate deployment of Querysets and semantic models via Fabric Deployment Pipel
 
 - Simplify queries: Minimize projections and calculations.
 - Avoid joins inside update policies unless necessary.
-- Partition input tables to reduce processing overhead during ingestion.
+- PaReal-Time Intelligencetion input tables to reduce processing overhead during ingestion.
 
 **Materialized Views Optimization**
 
@@ -1103,10 +1103,10 @@ Automate deployment of Querysets and semantic models via Fabric Deployment Pipel
 - Tune lookback settings: Ensure materialization covers late-arriving data efficiently.
 - Align retention and materialization: Drop extents efficiently when both policies work together.
 
-**Partitioning Optimization**
+**PaReal-Time Intelligencetioning Optimization**
 
-- Partition fact tables on datetime or major filtering columns (e.g., Timestamp, TenantId).
-- Avoid over-partitioning (e.g., per second granularity unless absolutely required).
+- PaReal-Time Intelligencetion fact tables on datetime or major filtering columns (e.g., Timestamp, TenantId).
+- Avoid over-paReal-Time Intelligencetioning (e.g., per second granularity unless absolutely required).
 - Monitor extent sizes: Target ~200–500MB extents for balance between query efficiency and metadata load.
 
 **Joins and Query Optimization**
@@ -1117,9 +1117,9 @@ Automate deployment of Querysets and semantic models via Fabric Deployment Pipel
 
 **External Tables Optimization**
 
-- Partition storage paths (e.g., /year=/month=/day=/).
+- PaReal-Time Intelligencetion storage paths (e.g., /year=/month=/day=/).
 - Use efficient file formats: Parquet or Delta preferred over CSV or JSON.
-- Query pruning: Ensure your KQL queries filter partition keys early.
+- Query pruning: Ensure your KQL queries filter paReal-Time Intelligencetion keys early.
 
 **Power BI Semantic Model Optimization**
 
@@ -1132,19 +1132,19 @@ Automate deployment of Querysets and semantic models via Fabric Deployment Pipel
 
 **Cost and Performance Optimization**
 
-| Area           | Optimization Techniques                                                                    |
-| -------------- | ------------------------------------------------------------------------------------------ |
-| Ingestion Cost | Filter and transform early with update policies.                                           |
-| Storage Cost   | Retain only necessary history; archive older data.                                         |
-| Query Cost     | Partition tables correctly; use materialized views to accelerate queries.                  |
-| Power BI Cost  | Minimize DirectQuery operations by optimizing storage modes and reducing result set sizes. |
+| Area           | Optimization Techniques                                                                      |
+| -------------- | -------------------------------------------------------------------------------------------- |
+| Ingestion Cost | Filter and transform early with update policies.                                             |
+| Storage Cost   | Retain only necessary history; archive older data.                                           |
+| Query Cost     | PaReal-Time Intelligencetion tables correctly; use materialized views to accelerate queries. |
+| Power BI Cost  | Minimize DirectQuery operations by optimizing storage modes and reducing result set sizes.   |
 
 **Common Pitfalls and Remediation**
 
 | Pitfall                 | Cause                                                                | Remediation                                                      |
 | ----------------------- | -------------------------------------------------------------------- | ---------------------------------------------------------------- |
 | Materialized view lag   | High ingestion rate without tuned lookback window                    | Adjust view parameters and ingestion batching.                   |
-| Full table scans        | Missing partition filters                                            | Ensure query filters match partitioning keys.                    |
+| Full table scans        | Missing paReal-Time Intelligencetion filters                         | Ensure query filters match paReal-Time Intelligencetioning keys. |
 | Power BI query slowness | Poor star schema design, heavy DirectQuery over facts and dimensions | Model dimensions properly, use Dual mode, pre-aggregate.         |
 | Export overload         | Continuous export interval too aggressive                            | Tune export frequency to match system load and avoid contention. |
 
@@ -1185,9 +1185,9 @@ In real-time architectures powered by Microsoft Fabric's Eventhouse and KQL Data
   - Materialized Views pre-aggregate data and significantly reduce query load at runtime​​.
   - During query execution, new deltas are combined with the materialized part, maintaining near real-time freshness with optimized resource usage.
 
-- **Partitioning and Sharding**
-  - Manual partitioning policies on large tables (e.g., by datetime bins) help control throughput and improve performance under concurrent query pressure​.
-  - Always monitor shard counts to avoid overhead caused by excessive micro-partitions.
+- **PaReal-Time Intelligencetioning and Sharding**
+  - Manual paReal-Time Intelligencetioning policies on large tables (e.g., by datetime bins) help control throughput and improve performance under concurrent query pressure​.
+  - Always monitor shard counts to avoid overhead caused by excessive micro-paReal-Time Intelligencetions.
 
 #### Best Practices
 
@@ -1230,12 +1230,12 @@ Monitoring performance and controlling costs are critical when deploying real-ti
 
 - **External Tables Query Performance**
   - External tables incur latency depending on storage type (Azure Blob, ADLS, SQL, etc.)​.
-  - Monitor query times, retries, and data sizes particularly when using OneLake shortcuts​.
+  - Monitor query times, retries, and data sizes paReal-Time Intelligencecularly when using OneLake shortcuts​.
 
 **Tools and Integrations**
 
 - **Fabric Monitoring**
-  Fabric provides integrated monitoring across Eventhouse, Real-Time Analytics, and Lakehouse artifacts.
+  Fabric provides integrated monitoring across Eventhouse, Real-Time Analytics, and Lakehouse aReal-Time Intelligencefacts.
 
   - Use Fabric’s built-in Monitoring Hub to visualize resource utilization.
   - Set up Metrics Alerts on critical ingestion latencies, query execution times, or cost thresholds.
@@ -1283,7 +1283,7 @@ Monitoring performance and controlling costs are critical when deploying real-ti
 - **Optimize External Table Queries** When querying external tables:
 
   - Prefer Parquet or Delta formats for efficiency.
-  - Leverage partitioned data structures to minimize scanned data​.
+  - Leverage paReal-Time Intelligencetioned data structures to minimize scanned data​.
 
 - **Use DirectQuery + Dual Models** in Power BI
   Push as much filtering to KQL queries as possible to avoid large data pulls and reduce Fabric compute charges​​.

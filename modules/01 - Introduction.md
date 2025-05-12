@@ -1,32 +1,32 @@
-## Module 1 - Introduction to RTI
+## Module 1 - Introduction to Real-Time Intelligence
 
 ### Introduction
 
-Real-Time Intelligence (RTI) in Microsoft Fabric is a fully managed, end-to-end platform for ingesting,
+Real-Time Intelligence in Microsoft Fabric is a fully managed, end-to-end platform for ingesting,
 processing, analyzing, and acting on streaming data — all in near real time.
 
 It enables organizations to:
 
 - **Capture live data** from sources like IoT devices, logs, files, APIs, and more using Eventstream.
 - **Enrich and transform** that data in motion with KQL, Eventstreams, or low-code tools.
-- **Detect patterns, anomalies, and threshold conditions** using intelligent Reflex rules and Activator.
+- **Detect patterns, anomalies, and threshold conditions** using intelligent Activator rules and Activator.
 - **Trigger automated actions** across systems (e.g., Power Automate, pipelines, APIs) the moment a business-critical event occurs.
 
-RTI is deeply integrated with the broader Fabric platform — allowing seamless connectivity with OneLake, Notebooks, Pipelines,
+Real-Time Intelligence is deeply integrated with the broader Fabric platform — allowing seamless connectivity with OneLake, Notebooks, Pipelines,
 Power BI, and security infrastructure. This gives enterprises a unified foundation for real-time operational
-analytics, anomaly detection, alerting, and automated decisioning.
+analytics, anomaly detection, aleReal-Time Intelligenceng, and automated decisioning.
 
-In short: RTI empowers you to go from data-in-motion to action-in-motion.
+In short: Real-Time Intelligence empowers you to go from data-in-motion to action-in-motion.
 
 ### Architectural deep dive
 
-Real-Time Intelligence (RTI) is not a siloed service—it is a tightly integrated layer within the broader
+Real-Time Intelligence (Real-Time Intelligence) is not a siloed service—it is a tightly integrated layer within the broader
 Microsoft Fabric unified data platform, designed to support continuous intelligence pipelines across
 structured and unstructured data streams.
 
-![alt](./assets/images/rtiLabArchitecture.png)
+![alt](./assets/images/Real-Time IntelligenceLabArchitecture.png)
 
-At the architectural level, RTI is composed of several interlocking components:
+At the architectural level, Real-Time Intelligence is composed of several interlocking components:
 
 #### 1. Data Sources (Streaming & Batch)
 
@@ -69,13 +69,13 @@ The platform supports training and real-time scoring of ML models:
 
 Activator is the execution engine for real-time actions:
 
-- Listens for triggers from Reflex detection rules or Eventstream patterns
+- Listens for triggers from Activator detection rules or Eventstream patterns
 - Executes downstream actions: Power Automate flows, REST API calls, email, Teams alerts, and more
 - Supports composable rules, stateful evaluation, and alert suppression strategies
 
 #### 7. Foundational Platform Integration
 
-All RTI components are built on core Fabric foundations:
+All Real-Time Intelligence components are built on core Fabric foundations:
 
 - OneLake for unified data storage across batch and streaming workloads
 - Real-Time Hub as a logical fabric-wide orchestration layer
@@ -89,7 +89,7 @@ All RTI components are built on core Fabric foundations:
 - **Streaming-to-Action:** Built for low-latency, high-value automated responses
 - **End-to-End Observability:** Real-time dashboards and ML scoring close the loop from raw data to business decision
 
-RTI workloads are capacity-based, ensuring predictable performance and cost control across tenant- or
+Real-Time Intelligence workloads are capacity-based, ensuring predictable performance and cost control across tenant- or
 workspace-scoped environments. It supports multi-tenant, cross-workspace, and multi-sink streaming
 architectures, making it a good fit for enterprise-wide observability, monitoring, and automation solutions.
 
@@ -102,13 +102,13 @@ These topics are covered in the different Modules more in depth
 
 **Core Focus:** Buffering, parallelization, schema evolution, and latency management
 
-- Ingested data from streaming sources is processed via partitioned pipelines, often aligned to source partitions (e.g., Kafka topics).
+- Ingested data from streaming sources is processed via paReal-Time Intelligencetioned pipelines, often aligned to source paReal-Time Intelligencetions (e.g., Kafka topics).
 
 - Eventstream introduces a controlled buffer delay (typically ~10 seconds) to enable multi-sink routing and enrichment.
 
 - Supports schema inference and evolution, allowing downstream systems to adapt to changes in the payload shape.
 
-- Event delivery is parallelized but respects ordering guarantees per partition.
+- Event delivery is parallelized but respects ordering guarantees per paReal-Time Intelligencetion.
 
 **Implication:** Changes in source schemas, burst traffic, or improperly filtered data can delay or disrupt downstream pipelines.
 
@@ -126,7 +126,7 @@ These topics are covered in the different Modules more in depth
 
 **Core Focus:** Trigger resolution, delay models, retries, and action targeting
 
-- Activator receives event context from Reflex including all rule-evaluated fields and metadata.
+- Activator receives event context from Activator including all rule-evaluated fields and metadata.
 - Internally, Activator applies:
 
   - Suppression logic (e.g., “no more than one alert per 60s”)
@@ -135,15 +135,15 @@ These topics are covered in the different Modules more in depth
 
 - Supports multiple action targets, including notebooks, pipelines, Power Automate, and webhooks.
 
-**Implication:** Misconfigured rules or actions can overload endpoints or cause noisy alerting without proper debounce logic.
+**Implication:** Misconfigured rules or actions can overload endpoints or cause noisy aleReal-Time Intelligenceng without proper debounce logic.
 
-#### State Handling in Reflex
+#### State Handling in Activator
 
 **Core Focus:** Stateless vs. stateful evaluation, cooldowns, suppression
 
 - Stateless rules match raw values (e.g., value > 100) — evaluated on every event.
 - Stateful rules track transitions (e.g., value DECREASES, EXIT RANGE, or absence over time).
-- Reflex maintains in-memory state per tracked entity, e.g., per device_id or bikepoint_id.
+- Activator maintains in-memory state per tracked entity, e.g., per device_id or bikepoint_id.
 - Cooldown timers and alert thresholds reduce false positives and spamming.
 
 **Implication:** Understanding how state is maintained and when it resets is crucial to correct and efficient pattern detection.
@@ -169,14 +169,14 @@ These topics are covered in the different Modules more in depth
   - Buffer sizes
   - Output frequency
   - Filtering complexity
-- Reflex rules can include alert frequency controls and aggregation windows
+- Activator rules can include alert frequency controls and aggregation windows
 - Activator supports deduplication, throttling windows, and max concurrency settings
 
 **Implication:** Understanding these levers helps reduce noise, optimize cost, and improve SLAs.
 
 #### Capacity Impact
 
-Core Focus: RTI’s consumption of Fabric Capacity Units (FCUs)
+Core Focus: Real-Time Intelligence’s consumption of Fabric Capacity Units (FCUs)
 
 - Each component consumes compute based on:
 - Data volume and frequency
@@ -185,21 +185,21 @@ Core Focus: RTI’s consumption of Fabric Capacity Units (FCUs)
 
 Eventstream and Activator scale with event velocity, while Eventhouse depends on query concurrency and storage tiering.
 
-**Implication:** RTI capacity must be planned with sustained and peak loads in mind — especially for high-volume streaming applications.
+**Implication:** Real-Time Intelligence capacity must be planned with sustained and peak loads in mind — especially for high-volume streaming applications.
 
 ### Implementations
 
-Microsoft Fabric Real-Time Intelligence (RTI) is engineered for enterprise-grade data streaming, event detection, and low-latency action pipelines. But design elegance on paper doesn’t guarantee operational success. Implementations in the real world surface challenges that are not immediately visible from documentation or demos.
+Microsoft Fabric Real-Time Intelligence (Real-Time Intelligence) is engineered for enterprise-grade data streaming, event detection, and low-latency action pipelines. But design elegance on paper doesn’t guarantee operational success. Implementations in the real world surface challenges that are not immediately visible from documentation or demos.
 
 This course places special emphasis on implementations—not just how the services work, but how they behave under scale, complex orchestration, and production constraints.
 
-#### What "Implementation" Means in RTI
+#### What "Implementation" Means in Real-Time Intelligence
 
 - Designing event ingestion pipelines that handle bursty, high-volume, and diverse data reliably
 - Authoring rules and detections that avoid false positives and alert spamming
 - Managing state, schema evolution, and windowing in streaming logic
 - Triggering actions (notebooks, pipelines, alerts) in a controlled, idempotent, and performant manner
-- Embedding RTI into broader data estate orchestration (Synapse, Power BI, Microsoft Purview, etc.)
+- Embedding Real-Time Intelligence into broader data estate orchestration (Synapse, Power BI, Microsoft Purview, etc.)
 
 #### Why It Matters
 
@@ -209,14 +209,14 @@ In current partner engagements, we’ve observed that incorrect or naïve implem
 - Delayed detection due to improper windowing or federation configuration
 - Unnecessary costs from unfiltered ingestion or redundant triggers
 
-Getting implementation right is not a bonus—it’s foundational to making RTI reliable, scalable, and cost-effective.
+Getting implementation right is not a bonus—it’s foundational to making Real-Time Intelligence reliable, scalable, and cost-effective.
 
 #### What to Expect in This Course
 
 You’ll learn not only how to configure services, but also:
 
 - When to use them—and when not to
-- How to structure stateful logic for durable alerting
+- How to structure stateful logic for durable aleReal-Time Intelligenceng
 - How to monitor behavior in-flight and post-execution
 - Where common pitfalls lie, and how to avoid or mitigate them
 
@@ -228,17 +228,17 @@ We’ll provide implementation blueprints and walkthroughs drawn from real custo
 
 In real-time architectures, failures don’t always come with clear error messages. Instead, they manifest as **missing events**, **delayed detections**, **duplicate triggers**, or **silent breakdowns in orchestration**.
 
-Microsoft Fabric Real-Time Intelligence (RTI) is a powerful suite—but also a distributed, low-latency system where:
+Microsoft Fabric Real-Time Intelligence (Real-Time Intelligence) is a powerful suite—but also a distributed, low-latency system where:
 
 - Data flows continuously across services (Eventstream → Eventhouse → Activator/Visualisation)
 - Latency thresholds are tight
 - Observability requires intentional design
 
-Because of this, troubleshooting in RTI is not an isolated phase—it’s an architectural concern that must be addressed from the outset.
+Because of this, troubleshooting in Real-Time Intelligence is not an isolated phase—it’s an architectural concern that must be addressed from the outset.
 
 #### Why Troubleshooting is Foundational
 
-This course integrates troubleshooting as a core skillset throughout every module. For senior architects and data engineers, success with RTI doesn’t just mean getting pipelines running - it means keeping them stable, traceable, and observable in production.
+This course integrates troubleshooting as a core skillset throughout every module. For senior architects and data engineers, success with Real-Time Intelligence doesn’t just mean getting pipelines running - it means keeping them stable, traceable, and observable in production.
 
 You’ll explore:
 
@@ -251,7 +251,7 @@ You’ll explore:
 
 In real-world deployments, we’ve seen:
 
-- Pipelines silently stall because stream partitions were dropped upstream
+- Pipelines silently stall because stream paReal-Time Intelligencetions were dropped upstream
 - Rules misfire due to misunderstood time windows or null handling
 - BI dashboards display stale data because of overlooked ingestion lag
 - Support escalations take days due to lack of trace-level observability
@@ -262,12 +262,12 @@ This course gives you the tools and mindset to design for debuggability from day
 
 By the end of the course, you’ll be able to:
 
-- Design RTI architectures that are traceable end-to-end
+- Design Real-Time Intelligence architectures that are traceable end-to-end
 - Build monitoring into every component—from Eventstreams to KQL DBs to actions
 - Use built-in and external tools (e.g., Log Analytics, Monitor, Diagnostic Logs) to detect and resolve failures
 - Provide clear signals and telemetry when engaging with Microsoft support or operations teams
 
-The best RTI systems are not just fast—they’re also introspectable, resilient, and transparent when things go wrong.
+The best Real-Time Intelligence systems are not just fast—they’re also introspectable, resilient, and transparent when things go wrong.
 
 ### Orchestration and optimization
 
@@ -277,9 +277,9 @@ In Real-Time Intelligence, services like Eventstream, KQL DB, Real-Time Hub and 
 
 This course emphasizes not just how to configure components, but how to architect and optimize them holistically - so that data moves with purpose, triggers fire with precision, and costs stay predictable at scale.
 
-#### The RTI Orchestration Model
+#### The Real-Time Intelligence Orchestration Model
 
-Microsoft Fabric RTI enables event-driven workflows, but orchestration must be explicitly designed to ensure:
+Microsoft Fabric Real-Time Intelligence enables event-driven workflows, but orchestration must be explicitly designed to ensure:
 
 - Data arrives at the right processing layer (e.g., KQL DB vs. pipeline vs. alert rule)
 - Actions execute only when preconditions are satisfied
@@ -288,7 +288,7 @@ Microsoft Fabric RTI enables event-driven workflows, but orchestration must be e
 
 You’ll learn how to use tools like:
 
-- Eventstream filters and partitions to direct traffic efficiently
+- Eventstream filters and paReal-Time Intelligencetions to direct traffic efficiently
 - KQL queries with temporal windows and joins to correlate real-time data
 - Rule federation and grouping to reduce trigger noise
 - Power Automate and Notebooks to create precise, governed actions
@@ -302,7 +302,7 @@ Real-time systems operate under tight latency budgets and throughput ceilings. P
 - Overloaded KQL DBs due to unbatched inserts or joins across high-velocity streams
 - Stream starvation or backpressure, causing missed detections
 
-Optimization in RTI isn’t a one-time tuning—it’s a continuous design mindset. You’ll explore:
+Optimization in Real-Time Intelligence isn’t a one-time tuning—it’s a continuous design mindset. You’ll explore:
 
 - How to model throughput across ingestion and federation
 - How to structure queries and pipelines for sub-second latency
@@ -313,24 +313,24 @@ Optimization in RTI isn’t a one-time tuning—it’s a continuous design minds
 
 Throughout the course, you will develop a deep understanding of how to:
 
-- Design end-to-end orchestrated pipelines across RTI components
+- Design end-to-end orchestrated pipelines across Real-Time Intelligence components
 - Minimize latency, contention, and false positives through query and rule optimization
 - Structure workloads for observability, testability, and reliability
 - Estimate and control resource consumption and cost
 
-In RTI, performance is not a luxury - it’s a design requirement. And orchestration is where performance becomes architecture.
+In Real-Time Intelligence, performance is not a luxury - it’s a design requirement. And orchestration is where performance becomes architecture.
 
 ### Schemas and throughput
 
-#### The Overlooked Foundations of RTI Architecture
+#### The Overlooked Foundations of Real-Time Intelligence Architecture
 
-In Real-Time Intelligence (RTI), much of the architectural complexity lies not in configuration, but in understanding how data structure (schemas) and data velocity (throughput) impact the system’s behavior from ingestion to action.
+In Real-Time Intelligence (Real-Time Intelligence), much of the architectural complexity lies not in configuration, but in understanding how data structure (schemas) and data velocity (throughput) impact the system’s behavior from ingestion to action.
 
-Poor assumptions about these two dimensions are a leading cause of production issues in real-world RTI deployments. This course tackles both topics as core architectural considerations—not as side effects of upstream decisions.
+Poor assumptions about these two dimensions are a leading cause of production issues in real-world Real-Time Intelligence deployments. This course tackles both topics as core architectural considerations—not as side effects of upstream decisions.
 
 #### Why Schemas Matter in Real Time
 
-RTI services - Eventstream, Eventhouse, Activator, Real-Time Hub - depend on explicit schema understanding to parse, correlate, and act on data. But in modern streaming systems, schemas are rarely fixed:
+Real-Time Intelligence services - Eventstream, Eventhouse, Activator, Real-Time Hub - depend on explicit schema understanding to parse, correlate, and act on data. But in modern streaming systems, schemas are rarely fixed:
 
 - JSON payloads evolve
 - Fields become nullable or disappear
@@ -349,9 +349,9 @@ Schema is not just a developer concern—it’s a first-order operational depend
 
 #### Throughput: The Invisible Limit
 
-Fabric RTI is built for speed, but every component - Eventstream, KQL DB, Pipelines, Notebooks - has practical throughput boundaries. Many implementations fail to model:
+Fabric Real-Time Intelligence is built for speed, but every component - Eventstream, KQL DB, Pipelines, Notebooks - has practical throughput boundaries. Many implementations fail to model:
 
-- Ingest rate per partition
+- Ingest rate per paReal-Time Intelligencetion
 - Rule evaluation cost under event spikes
 - Memory pressure in downstream aggregations
 
@@ -371,7 +371,7 @@ Real-time success isn't about speed alone—it’s about sustained, observable, 
 Throughout this course, you’ll develop the skills to:
 
 - Architect for schema evolution while maintaining system stability
-- Design for throughput-aware processing across Fabric RTI components
+- Design for throughput-aware processing across Fabric Real-Time Intelligence components
 - Choose formats (CSV, JSON, Avro) based on latency and fidelity trade-offs
 - Prevent schema mismatches and stream overloads through early validation and instrumentation
 
@@ -383,14 +383,14 @@ Schema defines what data is. Throughput defines how much and how fast. Together,
 
 In Real-Time Intelligence, what you can’t observe, you can’t control—and what you can’t control, you can’t trust in production.
 
-Microsoft Fabric RTI enables sophisticated low-latency pipelines, but with that power comes the need for rigorous **monitoring** and **cost governance**. This course treats both as non-negotiable pillars of a production-grade design.
+Microsoft Fabric Real-Time Intelligence enables sophisticated low-latency pipelines, but with that power comes the need for rigorous **monitoring** and **cost governance**. This course treats both as non-negotiable pillars of a production-grade design.
 
 #### Monitoring: Observability is Architecture
 
-Monitoring in RTI is not just about uptime - it’s about:
+Monitoring in Real-Time Intelligence is not just about uptime - it’s about:
 
 - Latency detection across ingestion, evaluation, and action layers
-- Event gaps (e.g., heartbeat failures, missing partitions)
+- Event gaps (e.g., heartbeat failures, missing paReal-Time Intelligencetions)
 - Trigger audits (what fired, when, with what payload)
 - Data quality diagnostics (nulls, schema errors, outliers)
 
@@ -404,37 +404,37 @@ You’ll learn how to:
 
 - Leverage built-in diagnostics in Eventstream, Activator, and Real-Time Hub
 - Use Azure Monitor, Log Analytics, and diagnostic logs for telemetry aggregation
-- Build live dashboards in Power BI for RTI health monitoring
-- Trace a single event across the full RTI pipeline using correlation IDs and logging hooks
+- Build live dashboards in Power BI for Real-Time Intelligence health monitoring
+- Trace a single event across the full Real-Time Intelligence pipeline using correlation IDs and logging hooks
 
 Monitoring is not a dashboard—it’s a design mindset that enables production trust.
 
 #### Pricing: Real-Time Costs Are Continuous
 
-RTI workloads are event-driven, continuous, and potentially high-volume. Without cost awareness, teams risk:
+Real-Time Intelligence workloads are event-driven, continuous, and potentially high-volume. Without cost awareness, teams risk:
 
 - Unexpected consumption spikes (e.g., unfiltered streams, over-triggered actions)
-- Wasteful rule evaluation on irrelevant partitions
+- Wasteful rule evaluation on irrelevant paReal-Time Intelligencetions
 - Over-provisioning of capacity in pipelines and KQL DBs
 
 This course trains you to design with cost efficiency in mind from the start:
 
 - Estimate per-event cost across ingestion, federation, and action
-- Understand how capacity SKUs, RTI item types, and rule frequency affect pricing
+- Understand how capacity SKUs, Real-Time Intelligence item types, and rule frequency affect pricing
 - Use cost telemetry and Fabric billing APIs to monitor spend in near-real-time
 - Apply cost optimization patterns (e.g., preview mode testing, selective rule targeting, action throttling)
 
-RTI cost is not just a budget item - it’s a feedback loop for architectural efficiency.
+Real-Time Intelligence cost is not just a budget item - it’s a feedback loop for architectural efficiency.
 
 #### What You’ll Learn
 
 By the end of the course, you will be able to:
 
-- Build fully observable RTI pipelines with end-to-end diagnostics
+- Build fully observable Real-Time Intelligence pipelines with end-to-end diagnostics
 - Detect anomalies and degradations before they affect downstream systems
 - Predict and monitor event-driven cost behavior at scale
 - Make design trade-offs that balance latency, fidelity, and financial impact
 
-In production-grade RTI systems, what gets monitored gets trusted—and what gets priced gets optimized.
+In production-grade Real-Time Intelligence systems, what gets monitored gets trusted—and what gets priced gets optimized.
 
 ---
