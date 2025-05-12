@@ -162,6 +162,8 @@ Stored procedure name: *stored procedure name will be provided*
 Create the connection to the SQL server in such a way that it can be used to live query data and joined in a KQL query for further processing.
 Use the live connection to create a query which uses the newly created connection in a KQL statement. The statement can be made in your own liking, as long as it uses both data from the SQL server and the existing KQL database.
 
+**Brian to add reference to materials and content**
+
 #### Read data from JSON file to Eventhouse
 
 In this task, you will build a ingestion process directly in the KQL database. So no use of Evenstrem, shortcuts or other "built-in" connectors.
@@ -179,6 +181,6 @@ Your task is:
 3. For all other columns, the JSON payload must be loaded to the KQL database in the same table.
 4. Every new key-value pair from the JSON must also be accepted in the connection and be stored in the destination table
 
-*Add json file and connection to the file*
+**Add json file and connection to the file**
 
 ---
