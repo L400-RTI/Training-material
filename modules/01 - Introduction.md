@@ -14,7 +14,7 @@ It enables organizations to:
 
 Real-Time Intelligence is deeply integrated with the broader Fabric platform — allowing seamless connectivity with OneLake, Notebooks, Pipelines,
 Power BI, and security infrastructure. This gives enterprises a unified foundation for real-time operational
-analytics, anomaly detection, aleReal-Time Intelligenceng, and automated decisioning.
+analytics, anomaly detection, alerting, and automated decisioning.
 
 In short: Real-Time Intelligence empowers you to go from data-in-motion to action-in-motion.
 
@@ -102,13 +102,13 @@ These topics are covered in the different Modules more in depth
 
 **Core Focus:** Buffering, parallelization, schema evolution, and latency management
 
-- Ingested data from streaming sources is processed via paReal-Time Intelligencetioned pipelines, often aligned to source paReal-Time Intelligencetions (e.g., Kafka topics).
+- Ingested data from streaming sources is processed via partitioned pipelines, often aligned to source partitions (e.g., Kafka topics).
 
 - Eventstream introduces a controlled buffer delay (typically ~10 seconds) to enable multi-sink routing and enrichment.
 
 - Supports schema inference and evolution, allowing downstream systems to adapt to changes in the payload shape.
 
-- Event delivery is parallelized but respects ordering guarantees per paReal-Time Intelligencetion.
+- Event delivery is parallelized but respects ordering guarantees per partition.
 
 **Implication:** Changes in source schemas, burst traffic, or improperly filtered data can delay or disrupt downstream pipelines.
 
@@ -135,7 +135,7 @@ These topics are covered in the different Modules more in depth
 
 - Supports multiple action targets, including notebooks, pipelines, Power Automate, and webhooks.
 
-**Implication:** Misconfigured rules or actions can overload endpoints or cause noisy aleReal-Time Intelligenceng without proper debounce logic.
+**Implication:** Misconfigured rules or actions can overload endpoints or cause noisy alerting without proper debounce logic.
 
 #### State Handling in Reflex
 
@@ -216,7 +216,7 @@ Getting implementation right is not a bonus—it’s foundational to making Real
 You’ll learn not only how to configure services, but also:
 
 - When to use them—and when not to
-- How to structure stateful logic for durable aleReal-Time Intelligenceng
+- How to structure stateful logic for durable alerting
 - How to monitor behavior in-flight and post-execution
 - Where common pitfalls lie, and how to avoid or mitigate them
 
@@ -251,7 +251,7 @@ You’ll explore:
 
 In real-world deployments, we’ve seen:
 
-- Pipelines silently stall because stream paReal-Time Intelligencetions were dropped upstream
+- Pipelines silently stall because stream partitions were dropped upstream
 - Rules misfire due to misunderstood time windows or null handling
 - BI dashboards display stale data because of overlooked ingestion lag
 - Support escalations take days due to lack of trace-level observability
@@ -288,7 +288,7 @@ Microsoft Fabric Real-Time Intelligence enables event-driven workflows, but orch
 
 You’ll learn how to use tools like:
 
-- Eventstream filters and paReal-Time Intelligencetions to direct traffic efficiently
+- Eventstream filters and partitions to direct traffic efficiently
 - KQL queries with temporal windows and joins to correlate real-time data
 - Rule federation and grouping to reduce trigger noise
 - Power Automate and Notebooks to create precise, governed actions
@@ -351,7 +351,7 @@ Schema is not just a developer concern—it’s a first-order operational depend
 
 Fabric Real-Time Intelligence is built for speed, but every component - Eventstream, KQL DB, Pipelines, Notebooks - has practical throughput boundaries. Many implementations fail to model:
 
-- Ingest rate per paReal-Time Intelligencetion
+- Ingest rate per partition
 - Rule evaluation cost under event spikes
 - Memory pressure in downstream aggregations
 
@@ -390,7 +390,7 @@ Microsoft Fabric Real-Time Intelligence enables sophisticated low-latency pipeli
 Monitoring in Real-Time Intelligence is not just about uptime - it’s about:
 
 - Latency detection across ingestion, evaluation, and action layers
-- Event gaps (e.g., heartbeat failures, missing paReal-Time Intelligencetions)
+- Event gaps (e.g., heartbeat failures, missing partitions)
 - Trigger audits (what fired, when, with what payload)
 - Data quality diagnostics (nulls, schema errors, outliers)
 
@@ -414,7 +414,7 @@ Monitoring is not a dashboard—it’s a design mindset that enables production 
 Real-Time Intelligence workloads are event-driven, continuous, and potentially high-volume. Without cost awareness, teams risk:
 
 - Unexpected consumption spikes (e.g., unfiltered streams, over-triggered actions)
-- Wasteful rule evaluation on irrelevant paReal-Time Intelligencetions
+- Wasteful rule evaluation on irrelevant partitions
 - Over-provisioning of capacity in pipelines and KQL DBs
 
 This course trains you to design with cost efficiency in mind from the start:
