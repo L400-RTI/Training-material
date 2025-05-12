@@ -3,13 +3,14 @@
 ### Introduction
 
 Real-Time Intelligence in Microsoft Fabric is a fully managed, end-to-end platform for ingesting,
+Real-Time Intelligence in Microsoft Fabric is a fully managed, end-to-end platform for ingesting,
 processing, analyzing, and acting on streaming data — all in near real time.
 
 It enables organizations to:
 
 - **Capture live data** from sources like IoT devices, logs, files, APIs, and more using Eventstream.
 - **Enrich and transform** that data in motion with KQL, Eventstreams, or low-code tools.
-- **Detect patterns, anomalies, and threshold conditions** using intelligent Activator rules and Activator.
+- **Detect patterns, anomalies, and threshold conditions** using rules in Activator.
 - **Trigger automated actions** across systems (e.g., Power Automate, pipelines, APIs) the moment a business-critical event occurs.
 
 Real-Time Intelligence is deeply integrated with the broader Fabric platform — allowing seamless connectivity with OneLake, Notebooks, Pipelines,
@@ -20,7 +21,7 @@ In short: Real-Time Intelligence empowers you to go from data-in-motion to actio
 
 ### Architectural deep dive
 
-Real-Time Intelligence (Real-Time Intelligence) is not a siloed service—it is a tightly integrated layer within the broader
+Real-Time Intelligence is not a siloed service—it is a tightly integrated layer within the broader
 Microsoft Fabric unified data platform, designed to support continuous intelligence pipelines across
 structured and unstructured data streams.
 
