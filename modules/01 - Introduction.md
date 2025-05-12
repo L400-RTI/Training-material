@@ -24,7 +24,7 @@ Real-Time Intelligence is not a siloed service—it is a tightly integrated laye
 Microsoft Fabric unified data platform, designed to support continuous intelligence pipelines across
 structured and unstructured data streams.
 
-![alt](./assets/images/Real-Time IntelligenceLabArchitecture.png)
+![alt](./assets/images/rtiLabArchitecture.png)
 
 At the architectural level, Real-Time Intelligence is composed of several interlocking components:
 
