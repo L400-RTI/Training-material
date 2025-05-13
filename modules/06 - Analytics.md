@@ -36,9 +36,66 @@ As you see from above statement the _geo_info_from_ip_address_ is just as you wo
 
 We can't list all the capabitlities in this module, so we have chosen a list of functions and will walk you through each of them:
 
+- Multivariate anomoly detection
+- Scan operator
 - Geospacial analytics
 - Anomoly detection and forecasting
 - JSON and XML parsing
+
+#### Multivariate anomoly detection
+
+Multivariate anomaly detection in Microsoft Fabric Real-Time Intelligence leverages advanced machine learning models to monitor and analyze data streams with multiple interrelated variables. Unlike univariate methods that track anomalies in a single metric, this technique detects patterns across correlated variables to identify subtle, complex anomalies that might otherwise go unnoticed. It continuously learns the normal behavior of these variables in real-time and flags deviations that are statistically or behaviorally abnormal, offering deeper insights into operational, business, or IT systems.
+
+You can enable the built-in multivariate anomaly detection model by specifying a set of correlated metrics and a training window, after which Fabric automatically trains and applies the model. Configuration typically involves selecting key dimensions, defining a historical window for learning baseline behavior, and optionally tuning sensitivity thresholds. The system then produces an anomaly score or tag per time window, which can be visualized or acted upon through real-time dashboards, alerts, or downstream workflows.
+
+When using this feature, it's crucial to ensure that the selected metrics are indeed correlated; feeding unrelated signals can degrade the accuracy of anomaly detection. Data quality is another critical factor—missing values, outliers, or inconsistent time stamps can distort the learning process. Additionally, model sensitivity should be carefully calibrated to avoid false positives or missed anomalies, especially in high-volume data environments. Monitoring model drift and periodically retraining with updated data can help maintain detection accuracy as system behaviors evolve over time.
+
+Example usage of the multivariate anomoly detection can be found [here](https://learn.microsoft.com/en-us/fabric/real-time-intelligence/multivariate-anomaly-detection)
+
+##### Key capabilities
+
+- Real-Time Processing
+  - Detect anomalies on streaming data in real time, enabling instant insights and rapid response to unusual system or business behaviors.
+
+- Multivariate Correlation Analysis
+  - Analyzes multiple interrelated metrics simultaneously, allowing detection of complex anomalies that univariate methods might miss.
+
+- No-Code Configuration
+  - Integrates seamlessly with the Fabric Real-Time Analytics pipeline with minimal setup—ideal for users without deep data science expertise.
+
+- Anomaly Scoring and Tagging
+  - Outputs structured anomaly scores and tags, enabling easy integration into alerting systems, dashboards, or downstream automation.
+
+- Customizable Sensitivity and Detection Windows
+  - Allows tuning of detection sensitivity, historical training windows, and data granularity to optimize performance for different scenarios.
+
+- Visual Anomaly Exploration
+  - Enables visualization of detected anomalies across metrics and time windows using Microsoft Fabric dashboards and Power BI integration.
+
+#### Scan operator
+
+The Scan operator in Microsoft Fabric Real-Time Intelligence is a powerful construct used in Real-Time Analytics pipelines to perform stateful operations across streaming data. It processes each incoming event in sequence while maintaining contextual memory (state) across events, enabling users to compute running aggregates, detect patterns, or flag anomalies over time. Unlike stateless transformations, the Scan operator allows for evaluating each event in the context of prior events—making it ideal for use cases like session tracking, cumulative computations, and real-time monitoring scenarios where temporal or sequential logic is required.
+
+To implement the Scan operator, users define a custom KQL-based expression within a streaming pipeline in Fabric. This expression typically includes a state declaration, initialization, update logic, and an optional output condition. When the pipeline runs, the Scan operator evaluates incoming events against the state logic in a user-defined, windowed, or continuous context. Developers can control how and when to emit results (e.g., only when a condition is met or on every event). The implementation is declarative and runs fully managed in Fabric, without requiring external compute resources or manual orchestration.
+
+When using the Scan operator, attention must be paid to state management—improper or unbounded state can lead to performance issues or memory overhead. Also, because Scan operates on event order, ensure that the input stream is time-ordered or logically grouped to avoid inconsistent outputs. Careful design of initialization and update logic is critical to avoid incorrect accumulation or event leakage. Additionally, watch for edge cases such as null values or out-of-order events, and always test the operator with representative data to validate its real-time behavior before deploying to production.
+
+##### Key capabilities
+
+- Stateful Event Processing
+  - Maintains and updates custom state across streaming events, enabling powerful context-aware logic.
+
+- Windowed and Continuous Mode Support
+  - Supports both fixed windows (time or event count) and continuous scanning, adaptable to various use cases.
+
+- Event-Level Granularity
+  - Operates on each individual event in real time, supporting high-frequency and low-latency data processing.
+
+- Flexible Output Conditions
+  - Emit results conditionally or on every event, supporting both event detection and continuous metric tracking.
+
+- Support for Complex Event Processing
+  - Useful for detecting sequences, computing rolling statistics, or implementing sessionization logic.
 
 #### Geospacial analytics
 
