@@ -82,7 +82,7 @@ Datatypes in Microsoft Fabric Real-Time Intelligence are foundational to data mo
 - Shape the semantic layer compatibility, especially for time-based models and dynamic data.
 - Influence update policy and materialized view design, since transformations must respect and preserve type semantics.
 
-In Real-Time Intelligence solutions, incorrect or inconsistent type usage - paReal-Time Intelligencecularly with `datetime`, `timespan`, or `dynamic` can lead to performance degradation, broken filters in Power BI, and failed ingestion operations.
+In Real-Time Intelligence solutions, incorrect or inconsistent type usage - particularly with `datetime`, `timespan`, or `dynamic` can lead to performance degradation, broken filters in Power BI, and failed ingestion operations.
 
 ##### 2. Update Policies
 
@@ -216,7 +216,7 @@ At a high level, the architecture consists of the following stages:
 
 #### 1. Datatypes
 
-Datatypes in Microsoft Real-Time Intelligence (Eventhouse/KQL Database) are more than schema constraints - they directly affect storage efficiency, query performance, and downstream integration, paReal-Time Intelligencecularly with Power BI and external consumers.
+Datatypes in Microsoft Real-Time Intelligence (Eventhouse/KQL Database) are more than schema constraints - they directly affect storage efficiency, query performance, and downstream integration, particularly with Power BI and external consumers.
 
 **Core Datatypes and Storage Behavior**
 
@@ -1230,7 +1230,7 @@ Monitoring performance and controlling costs are critical when deploying real-ti
 
 - **External Tables Query Performance**
   - External tables incur latency depending on storage type (Azure Blob, ADLS, SQL, etc.)​.
-  - Monitor query times, retries, and data sizes paReal-Time Intelligencecularly when using OneLake shortcuts​.
+  - Monitor query times, retries, and data sizes particularly when using OneLake shortcuts​.
 
 **Tools and Integrations**
 
