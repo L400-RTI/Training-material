@@ -25,7 +25,7 @@ Real-Time Intelligence is not a siloed service—it is a tightly integrated laye
 Microsoft Fabric unified data platform, designed to support continuous intelligence pipelines across
 structured and unstructured data streams.
 
-![alt](./assets/images/Real-Time IntelligenceLabArchitecture.png)
+![alt](.\assets\images\rtiLabArchitecture.png)
 
 At the architectural level, Real-Time Intelligence is composed of several interlocking components:
 
@@ -33,8 +33,8 @@ At the architectural level, Real-Time Intelligence is composed of several interl
 
 The architecture supports a wide range of streaming and batch data sources:
 
-- Streaming: Kafka, MQTT, Azure Event Hubs, IoT Hub, Azure Data Explorer, PostgreSQL, Cosmos DB, and others.
-- Batch: Ingested and orchestrated via Data Factory, which feeds both Lakehouse and Eventhouse layers.
+- Streaming: Kafka, MQTT, Azure Event Hubs, IoT Hub, Google Pub/sub, AWS Kinesis, CDC from SQL Server, PostgreSQL, Cosmos DB, and more.
+- Batch: Ingested and orchestrated via Data Factory or Spark or SDKs, which feeds both Lakehouse and Eventhouse layers.
 
 #### 2. Eventstream – The Streaming Ingestion Gateway
 
@@ -42,7 +42,7 @@ Eventstream acts as the unified real-time ingestion layer:
 
 - Connects to live data sources with low latency
 - Filters, parses, and enriches data in motion
-- Routes data simultaneously to destinations such as Eventhouse, Real-time Dashboards, and Activator
+- Routes data simultaneously to destinations such as Eventhouse, Lakehouse, and Activator
 
 #### 3. Eventhouse – Layered Storage & Processing
 
@@ -55,7 +55,7 @@ With Eventhouse you can build:
 
 #### 4. Machine Learning Integration
 
-The platform supports training and real-time scoring of ML models:
+The platform supports real-time scoring of ML models:
 
 - Models consume streaming or batch data
 - Real-time inference is embedded directly into the processing pipeline via Eventhouse
@@ -71,7 +71,7 @@ The platform supports training and real-time scoring of ML models:
 Activator is the execution engine for real-time actions:
 
 - Listens for triggers from Activator detection rules or Eventstream patterns
-- Executes downstream actions: Power Automate flows, REST API calls, email, Teams alerts, and more
+- Executes downstream actions: Power Automate flows, email, Teams alerts, and more
 - Supports composable rules, stateful evaluation, and alert suppression strategies
 
 #### 7. Foundational Platform Integration
@@ -104,8 +104,6 @@ These topics are covered in the different Modules more in depth
 **Core Focus:** Buffering, parallelization, schema evolution, and latency management
 
 - Ingested data from streaming sources is processed via partioned topics, often aligned to source partitions (e.g., Kafka topics).
-
-- Eventstream introduces a controlled buffer delay (typically ~10 seconds) to enable multi-sink routing and enrichment.
 
 - Supports schema inference and evolution, allowing downstream systems to adapt to changes in the payload shape.
 
@@ -170,6 +168,7 @@ These topics are covered in the different Modules more in depth
   - Buffer sizes
   - Output frequency
   - Filtering complexity
+- Eventhouse supports minumum consumption, query optimization and data management policies
 - Activator rules can include alert frequency controls and aggregation windows
 - Activator supports deduplication, throttling windows, and max concurrency settings
 

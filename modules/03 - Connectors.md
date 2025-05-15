@@ -16,13 +16,13 @@ The way the services in Eventstream is build, is based on a general approach to 
 - Azure EventGrid: This service is the role of listening to events happening (Storage Account Event, Workspace Events etc.) and send the messages and event details onwards to the EventHub for futher processing.
 - Azure Streaming Analytics: This service can be utilized in the Eventstream, if you are implementing any transformations to the data flowing through the service. If you are not transforming the data, this service will not be used. Even though it is always provisioned, it might not actually be used.
 
-These three services are the backbone of the Eventstream service and are provisioned every time you create an Eventstream. A detailed rundown of the Eventstream service will also be made later in Module 4 - Ingestion.
+These three services are the backbone of the Eventstream service and are provisioned based on streaming or event based sources. A detailed rundown of the Eventstream service will also be made later in Module 4 - Ingestion.
 
 When selecting to create connectors, you have 3 options for each of the connector endpoints between Eventstream and Eventhouse. They are:
 
 1. Custom endpoint
 2. Streaming services
-3. CDC (For Eventstream) / External table and plugins (for Eventhouse)
+3. CDC (For Eventstream) / plugins (for Eventhouse)
 
 As illustration it can look something like this:
 
@@ -32,7 +32,7 @@ As illustration it can look something like this:
 
 When connection to a custom endpoint is made the internal EventHub is exposed and you get the connection information to use in the custom code to send data to the EventHub for Eventstream processing or directly to the Eventhouse for direct storage.
 
-This connection is a PUSH connector - the connector accepts all incoming data and passes it on to the Eventstream/Eventhouse
+This connection is a PUSH connector - the connector accepts all incoming data and passes it on to the Eventstream
 
 #### Streaming services
 
@@ -42,15 +42,15 @@ This connection is a PULL connector - the Eventstream/Eventhouse is (on a clock 
 
 #### CDC (Eventstream only)
 
-Implementing Change Data Capture (CDC) involves integrating real-time data streams from various sources into the platform for continuous processing and analysis. Eventhouse facilitates this by enabling the ingestion of data from multiple sources, such as Azure SQL Database, PostgreSQL, MySQL, and Azure Cosmos DB, through the Eventstream feature. These sources can be configured to capture and monitor row-level changes, ensuring that only new or modified data is ingested, thereby optimizing performance and storage
+Implementing Change Data Capture (CDC) involves integrating real-time data streams from various sources into the platform for continuous processing and analysis. Eventstream facilitates this by enabling the ingestion of data from multiple databases, such as Azure SQL Database, PostgreSQL, MySQL, and Azure Cosmos DB. These sources can be configured to capture and monitor row-level changes, ensuring that only new or modified data is ingested, thereby optimizing performance and storage
 
-When a connection to a CDC source is created (like SQL CDC, Cosmos DB CDC, etc.) the connector is actively handling the data stream based on the watermark from the CDC source.
+Except Cosmos DB, other CDC connectors like SQL Server, PostgreSQL, MySQL are based on Debezium framework for capturing change data. Debezium based connectors can pull both historical snapshot from database and new CDC in Eventstream.
 
 This connection is a PULL connector - the Eventstream is (on a clock frequense) reading data from the source.
 
-#### External table and plugin (Eventhouse only)
+#### External table and plugin (Eventhouse only) 
 
-External tables and plugins provide a powerful mechanism for querying data stored outside the database, such as in Azure Blob Storage, Azure Data Lake Storage, or even external databases. The implementation of external tables involves defining a schema and a connection to the external data source using external data connections and data formats like CSV, Parquet, or JSON. These tables act as metadata pointers and do not ingest data into ADX but allow on-demand querying via the external_table() or externaldata() functions. Plugins, such as the SQL, CosmosDB, or Event Hub plugins, extend ADX’s querying capabilities by enabling live access to these external systems. Under the hood, ADX uses connector services and scalable compute resources to fetch and parse data in real-time, applying query optimization and caching where possible to ensure performance and efficiency.
+External tables and plugins provide a powerful mechanism for querying data stored outside the database, such as in Azure Blob Storage, Azure Data Lake Storage, or even external databases. The implementation of external tables involves defining a schema and a connection to the external data source using external data connections and data formats like CSV, Parquet, or JSON. These tables act as metadata pointers and do not ingest data into Eventhouse but allow on-demand querying via the external_table() or externaldata() functions. Plugins, such as the SQL, CosmosDB, or Event Hub plugins, extend Eventhouse's querying capabilities by enabling live access to these external systems. Under the hood, Eventhouse uses connector services and scalable compute resources to fetch and parse data in real-time, applying query optimization and caching where possible to ensure performance and efficiency.
 
 This connection is a PULL connector - the Eventhouse is (on a clock frequense) reading data from the source.
 
@@ -148,7 +148,7 @@ In this lab you will have the task to read data from a SQL server in Azure and b
 
 ##### Situation
 
-You are the Real-Time Intelligence developer of Fabricam and the infrastructure is built to have a Master Data services application in a SQL server. The KQL data is ingesting live and the business have the following requirements:
+You are the Real-Time Intelligence developer of Fabricam and the infrastructure is built to have a Master Data services application in a SQL server. The SQL data is ingesting live and the business have the following requirements:
 
 1. The Master Data from the SQL server must be read live
 2. The SQL server has a table named Production.Product which must be used.
