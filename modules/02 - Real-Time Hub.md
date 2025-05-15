@@ -165,8 +165,8 @@ Additionally:
 Real-Time Hub supports data ingestion from a variety of sources:
 
 - **Change Data Capture (CDC) Ingestion**
-- **Streaming Data Sources** 
-- **System Event Ingestion (Fabric and Azure Events)** 
+- **Streaming Data Sources**
+- **System Event Ingestion (Fabric and Azure Events)**
 - **File-Based Ingestion (Embedded in Eventhouse)**
 - **Pre-Built Sources and Sample Data**
 
@@ -318,18 +318,18 @@ This section outlines recurring misconfigurations and architectural missteps enc
 
 ### Common Issues and Solutions
 
-| **Problem**                    | **Cause**                          | **Recommended Resolution** |
-|-------------------------------|------------------------------------|----------------------------|
-| **Missing schema inference**  | CSV files with nested headers, inconsistent column counts, or type ambiguity | Define schema manually in the Get Data wizard using KQL mapping. Avoid relying on auto-inference for multi-line headers or semi-structured data. |
+| **Problem**                    | **Cause**                                                                                         | **Recommended Resolution**                                                                                                                           |
+| ------------------------------ | ------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Missing schema inference**   | CSV files with nested headers, inconsistent column counts, or type ambiguity                      | Define schema manually in the Get Data wizard using KQL mapping. Avoid relying on auto-inference for multi-line headers or semi-structured data.     |
 | **High latency in dashboards** | Eventstream is performing filtering or transformation on high-frequency streams (e.g., telemetry) | Ingest raw events directly into Eventhouse. Apply transformation logic using KQL update policies, which are optimized for batch evaluation at scale. |
-| **Excess alerts in Activator** | Alert logic uses continuous comparisons like `value > threshold`, which re-trigger on every input | Use `changes()` to detect state transitions instead of level comparisons. Add cooldown logic to avoid repeat alerts during static violations. |
-
+| **Excess alerts in Activator** | Alert logic uses continuous comparisons like `value > threshold`, which re-trigger on every input | Use `changes()` to detect state transitions instead of level comparisons. Add cooldown logic to avoid repeat alerts during static violations.        |
 
 ### Deeper Guidance
 
 #### Schema Inference Failures
 
 Real-Time Hub supports schema inference primarily for flat, single-header CSV files. It struggles with:
+
 - Multiple header rows
 - Irregular or malformed data rows
 - Fields with inconsistent types (e.g., string vs. numeric)
@@ -341,6 +341,7 @@ Real-Time Hub supports schema inference primarily for flat, single-header CSV fi
 Eventstream is optimized for routing and minor enrichment—not for complex filtering of high-cardinality or high-throughput streams. Applying filters directly in Eventstream can introduce substantial latency, especially for continuous telemetry sources.
 
 **Recommended Pattern**:
+
 - Route unfiltered data through Eventstream into Eventhouse.
 - Perform filtering and transformation via KQL update policies post-ingestion.
 - Leverage Eventhouse’s native performance and scaling model.
@@ -426,7 +427,7 @@ As real-time pipelines move from prototype to production, schema management must
 Using `create table` in KQL allows teams to precisely control:
 
 - Column names and data types
-- Table paReal-Time Intelligencetioning and retention policies
+- Table Partitioning and retention policies
 - Governance over changes (e.g., schema versioning)
 
 ```kusto
@@ -479,7 +480,7 @@ Once the schema is locked down and mappings are defined, the next focus is perfo
 **Use cases include:**
 
 - Uploading large CSVs or JSON blobs
-- Parallel ingest from many Event Hubs or Kafka paReal-Time Intelligencetions
+- Parallel ingest from many Event Hubs or Kafka partitions
 - Reducing contention on high-throughput KQL tables
 
 ---
@@ -488,7 +489,7 @@ Once the schema is locked down and mappings are defined, the next focus is perfo
 
 Fabric Real-Time Intelligence supports **parallel ingestion pipelines** at both ingestion and query layers:
 
-- Use multiple ingestion sources (e.g., Event Hub paReal-Time Intelligencetions)
+- Use multiple ingestion sources (e.g., Event Hub partitions)
 - Batch multiple files or blobs
 - Distribute ingestion using update policies and mappings
 
