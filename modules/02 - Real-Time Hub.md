@@ -549,6 +549,4 @@ Designing high-throughput, real-time ingestion pipelines in Microsoft Fabric Rea
 4. Implement KQL update policies in Eventhouse to separate and enrich data by event type (e.g., truck movement vs. delivery status updates).
 5. Configure Activator to alert when a parcel status changes to `delayed` or `failed`. Integrate with Power Automate to notify the logistics team.
 
-
-
 ---
