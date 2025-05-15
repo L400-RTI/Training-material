@@ -38,10 +38,6 @@ The push method is the only method available when doing any transformations to t
 
 When manipulating data in the Eventstream service, we have the tranformations part of the Eventstream processor.
 
-> [NOTE]
-> * This section is a bit hard to parse.
-> * Can you be more specific about "fast" - quantify what's the difference?
-
 #### Shortcuts
 
 To enhance the performance of queries over external data, Microsoft Fabric offers a feature known as query acceleration for OneLake shortcuts. This feature allows users to define a policy specifying the number of days to cache data from external delta tables, thereby improving query performance and reducing latency. It applies to data from various sources, including Azure Data Lake Store Gen1, Amazon S3, Google Cloud Services, and Azure Blob Storage.
@@ -49,9 +45,6 @@ To enhance the performance of queries over external data, Microsoft Fabric offer
 #### Direct ingestion
 
 When speaking of direct ingestion, we have a source, for which it is possible to connect directly from the Eventhouse and read the data. These sources are, but not limited to, SQL Server, EventHub, EventGrid etc.
-
-> [NOTE]
-> I don't think SQL server and EventGrid are supported. You can get from Azure Storage, Amazon S3, Event hubs, local file, OneLake
 
 ### Technical deep dive
 
@@ -88,10 +81,7 @@ Schema registry in Microsoft Fabric’s Real-Time Intelligence plays a critical 
 
 Technically, schema validation is implemented using a combination of schema definitions and runtime checks embedded in the ingestion method. Users can define strict or relaxed validation rules, depending on the use case, with options to enable automatic schema evolution or enforce rigid typing.
 
-Schema validation supports JSON schema validation and may extend to support formats like Avro or Parquet as needed. A key consideration during implementation is to ensure that schema changes in upstream systems are coordinated with the Eventstream pipeline; otherwise, even minor alterations like renaming a field or changing a data type can break the pipeline. Additionally, high-throughput environments must be optimized to handle validation errors at scale without introducing latency.
-
-> [NOTE]
-> What do you mean may extend? under what circumstances?
+Schema validation supports JSON schema validation. A key consideration during implementation is to ensure that schema changes in upstream systems are coordinated with the Eventstream pipeline; otherwise, even minor alterations like renaming a field or changing a data type can break the pipeline. Additionally, high-throughput environments must be optimized to handle validation errors at scale without introducing latency.
 
 To maintain reliability, it’s recommended to use schema registries or maintain a versioned schema strategy, especially in enterprise-grade solutions.
 
@@ -207,9 +197,6 @@ Below example show the creation of a reusable mapping and the use of that mappin
           ingestionMappingReference="RawEventMapping"
         )
 ```
-
-> [!NOTE]
-> What about create table based on? Or show schema so you can use the mapping frome one place to another?
 
 It’s important to monitor mapping consistency during schema changes in upstream sources; mismatches can lead to ingestion failures or silent data loss. Additionally, for high-throughput pipelines, efficient mapping practices—such as avoiding deeply nested structures and minimizing real-time transformations—help reduce latency and resource usage.
 
