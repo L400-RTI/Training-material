@@ -135,7 +135,7 @@ In this Data Management cluster, the engine keeps all your configurations for in
 Other than that, the direct ingestion is pretty straight forward. Use KQL scripting language to define your ingestion and execute it.
 You can also see a simple example of direct ingestion when you executed the startup script rom the introdutcion module.
 
-#### Ingestion mapping
+#### Ingestion mapping (Eventhouse only)
 
 Ingestion mapping in Microsoft Fabric Real-Time Intelligence is a vital mechanism that defines how incoming streaming data is transformed and structured as it's ingested into destination stores like KQL Database (Eventhouse), Lakehouse, or Data Warehouse. When data flows through Eventstream, ingestion mappings specify how source fields from raw event payloads (often in formats like JSON, Avro, or CSV) are extracted and assigned to columns in the destination schema.
 
@@ -203,7 +203,7 @@ It’s important to monitor mapping consistency during schema changes in upstrea
 
 A good practice is to regularly test ingestion mappings against live data samples and maintain versioned configurations to support rollback and debugging in dynamic environments.
 
-#### Mapping transformations
+#### Mapping transformations (Eventhouse only)
 
 Mapping transformations in Microsoft Fabric Real-Time Intelligence allow users to reshape, enrich, and filter streaming data before it is routed to a destination such as a KQL Database (Eventhouse) or Lakehouse.
 These transformations are part of the Eventstream pipeline and are typically applied in a no-code or low-code environment using the Eventstream visual editor. It can also be applied in the direct ingestion methods described above in this module.
