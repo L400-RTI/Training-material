@@ -7,7 +7,7 @@
 - **Focus Areas:**
   - Vectors in Eventhouse
   - Embedding storage and retrieval
-  - AI plugins: `ai_embed_text`, `ai_chat_completion_prompt`
+  - AI plugins: `ai_embeddings`, `ai_chat_completion_prompt`
   - OneLake mirroring and semantic search scenarios
 
 ---
@@ -43,7 +43,7 @@ The mirrored data can then be accessed in real-time by other Fabric components�
 
 To accommodate advanced AI workloads, the Eventhouse schema layer includes **support for dynamic columns**, allowing ingestion of semi-structured or high-dimensional vector data. This is essential for storing AI embeddings, which often vary in dimension and source structure. Combined with Eventhouse’s ability to scale partitioned storage, these dynamic fields become the backbone of semantic search and retrieval-augmented generation (RAG) solutions.
 
-Finally, this architecture is enriched by **plugin extensibility**. Plugins like `ai_embed_text` and `ai_chat_completion_prompt` enable Eventhouse to interact directly with Azure OpenAI endpoints, facilitating embedded LLM reasoning and text-to-vector transformations inline. This architectural choice positions Eventhouse not just as a data store, but as a first-class AI execution platform for streaming intelligence.
+Finally, this architecture is enriched by **plugin extensibility**. Plugins like `ai_embeddings` and `ai_chat_completion_prompt` enable Eventhouse to interact directly with Azure OpenAI endpoints, facilitating embedded LLM reasoning and text-to-vector transformations inline. This architectural choice positions Eventhouse not just as a data store, but as a first-class AI execution platform for streaming intelligence.
 
 ---
 
@@ -51,7 +51,7 @@ Finally, this architecture is enriched by **plugin extensibility**. Plugins like
 
 ### Vectors and Embeddings
 
-- Embedding generation using `ai_embed_text` plugin
+- Embedding generation using `ai_embeddings` plugin
 - Supports OpenAI embeddings (`text-embedding-ada-002`)
 - KQL support for storing and querying high-dimensional vectors
 
@@ -63,14 +63,14 @@ Finally, this architecture is enriched by **plugin extensibility**. Plugins like
 
 ### Plugin Deep Dive
 
-- `ai_embed_text`: Generates vector embeddings from text
+- `ai_embeddings`: Generates vector embeddings from text
 - `ai_chat_completion_prompt`: Contextual response generation from structured/unstructured logs
 
 ## Technical Deep Dive – Vectors, Embeddings, and Semantic Querying in Eventhouse
 
 As enterprises race to implement AI-first architectures, the demand for real-time vector storage and semantic search has surged. Eventhouse addresses this head-on with native support for high-dimensional vector embeddings and fast approximate similarity search—all accessible via Kusto Query Language (KQL).
 
-At a foundational level, Eventhouse supports embeddings through its **dynamic column type**, allowing storage of arbitrary-length vectors per record. These embeddings—often generated from models like OpenAI’s `text-embedding-ada-002`—can represent anything from customer support transcripts to log anomaly descriptions. Using the `ai_embed_text` plugin, users can invoke Azure OpenAI or another configured model to convert unstructured text into vector embeddings directly within a KQL expression.
+At a foundational level, Eventhouse supports embeddings through its **dynamic column type**, allowing storage of arbitrary-length vectors per record. These embeddings—often generated from models like OpenAI’s `text-embedding-ada-002`—can represent anything from customer support transcripts to log anomaly descriptions. Using the `ai_embeddings` plugin, users can invoke Azure OpenAI or another configured model to convert unstructured text into vector embeddings directly within a KQL expression.
 
 These embeddings are then stored as JSON arrays in the dynamic column and can be indexed and queried using new **vector-aware functions**. Eventhouse introduces `vector_cosine_distance()` and related functions to compare an input vector to those stored in the table. This enables **top-K similarity search** using cosine similarity, a standard metric in vector search engines. The queries support filter predicates, allowing efficient hybrid search where text filters narrow the candidate set before similarity ranking is applied.
 
@@ -125,7 +125,7 @@ Effectively implementing vector storage and semantic search in Microsoft Fabric 
 
 ### Pre-check Model Encoding Settings
 
-Before generating or storing any embeddings in Eventhouse, it's essential to align encoding settings with the embedding model in use—particularly when using the `ai_embed_text` plugin. The plugin supports Azure OpenAI models such as `text-embedding-ada-002`, which output fixed-length vector arrays. If schema mismatches occur (e.g., storing a 1536-dimensional vector in a column expecting 1024 dimensions), it can result in ingestion failures or silent truncation—both of which are difficult to debug at scale.
+Before generating or storing any embeddings in Eventhouse, it's essential to align encoding settings with the embedding model in use—particularly when using the `ai_embeddings` plugin. The plugin supports Azure OpenAI models such as `text-embedding-ada-002`, which output fixed-length vector arrays. If schema mismatches occur (e.g., storing a 1536-dimensional vector in a column expecting 1024 dimensions), it can result in ingestion failures or silent truncation—both of which are difficult to debug at scale.
 
 To mitigate this, establish a pre-ingestion verification scheme as part of your ingestion. This can be implemented as a schema validation function in KQL. When working across multiple vector sources or switching between OpenAI models, always re-confirm that dimensionality and data types match your Eventhouse table schema—especially when using `dynamic` columns, which can obscure errors at the metadata level.
 
@@ -289,14 +289,14 @@ Load a structured dataset of delivery incident logs from trucks. Example log ent
 
 Ingest the data into an Eventhouse table named `truck_logs`.
 
-### 2. Generate Embeddings Using `ai_embed_text`
+### 2. Generate Embeddings Using `ai_embeddings`
 
-Use the `ai_embed_text` plugin to convert the `incident_description` column into vector embeddings:
+Use the `ai_embeddings` plugin to convert the `incident_description` column into vector embeddings:
 
 ```kql
 set async_execution = true;
 truck_logs
-| extend incident_vector = ai_embed_text("azure_openai_deployment_url", incident_description)
+| extend incident_vector = ai_embeddings("azure_openai_deployment_url", incident_description)
 ```
 
 ### 3. Store Vectors Using a `dynamic` Column
@@ -316,7 +316,7 @@ Use `vector_cosine_distance()` to find records similar to a new incident:
 
 ```kql
 let new_incident = "Road closed due to snowstorm";
-let new_vector = ai_embed_text("azure_openai_deployment_url", new_incident);
+let new_vector = ai_embeddings("azure_openai_deployment_url", new_incident);
 truck_logs
 | extend similarity = vector_cosine_distance(incident_vector, new_vector)
 | top 5 by similarity desc

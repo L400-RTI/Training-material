@@ -2,7 +2,7 @@
 
 ## 1. Introduction
 
-This module provides a comprehensive deep dive into securing Microsoft Fabric Real-Time Intelligence components, including Eventhouse, OneLake, Eventstream, and more. It covers existing capabilities, upcoming improvements, and actionable best practices for enterprise scenarios.
+This module provides a comprehensive deep dive into securing Microsoft Fabric Real-Time Intelligence components, including Eventhouse, OneLake, Eventstream, and more. It covers existing capabilities and actionable best practices for enterprise scenarios.
 
 It is important to note that this content only covers the security capabilities of the product as of Microsoft Build 2025. In addition, during the creation of this training material, it was repeatedly noted and discussed that much of the work to secure real-time intelligence components relies on overall Fabric platform security so it remains integrated with the rest of the platform. As Fabric security evolves and improves, the ability to secure the real-time intelligence components will evolve and improve as well.
 
@@ -72,10 +72,10 @@ There are still some limitations under the current implementation. For instance,
 
 ### Secure Implementation Pattern
 
-1. Secure Fabric workspaces
-2. Attach Eventhouse to scoped endpoints
-3. Apply OneSecurity predicates
-4. Query via KQL under enforced policies
+- Secure Fabric workspaces
+- Attach Eventhouse to scoped endpoints
+- Apply OneSecurity predicates
+- Query via KQL under enforced policies
 
 ---
 
