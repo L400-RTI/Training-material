@@ -148,23 +148,25 @@ In this lab you will have the task to read data from a SQL server in Azure and b
 
 ##### Situation
 
-You are the Real-Time Intelligence developer of Fabricam and the infrastructure is built to have a Master Data serbvices application in a SQL server. The KQL data is ingesting live and the business have the following requirements:
+You are the Real-Time Intelligence developer of Fabricam and the infrastructure is built to have a Master Data services application in a SQL server. The KQL data is ingesting live and the business have the following requirements:
 
 1. The Master Data from the SQL server must be read live
-2. The SQL server has a stored procedure which must be used. This stored procedure has already implemented business logic.
+2. The SQL server has a table named Production.Product which must be used.
 3. The KQL query must have a join with the Master Data to create the needed insights in a Real-Time Dashboard
 
 Your task is to create a connection to the SQL server directly from the KQL engine (not using an Eventstream or one-time ingestion).
 
 The information you have are the following:
 
-SQL Server connection string: TBA
-SQL server username: TBA
-SQL server password: TBA
+SQL Server: pragmaticworkspublic.database.windows.net
+Database: Adventureworks
+SQL server username: PWStudent
+SQL server password: PW5tud3nt
 
-Stored procedure name: _stored procedure name will be provided_
+Stored procedure name: Production.Product
 
 Create the connection to the SQL server in such a way that it can be used to live query data and joined in a KQL query for further processing.
+
 Use the live connection to create a query which uses the newly created connection in a KQL statement. The statement can be made in your own liking, as long as it uses both data from the SQL server and the existing KQL database.
 
 **Brian to add reference to materials and content**
