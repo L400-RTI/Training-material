@@ -213,7 +213,7 @@ This pattern ensures real-time dashboards are **scalable**, **modular**, and **r
 
 ## 9. Example Hands-On Lab: Drone Fleet Dashboard
 
-**Objective:** Build and optimize a real-time dashboard for delivery drone telemetry.
+**Objective:** Build and optimize a real-time dashboard for delivery vehicle telemetry.
 
 ### Tasks:
 1. Ingest telemetry via Kafka connector into Eventhouse.
@@ -221,8 +221,8 @@ This pattern ensures real-time dashboards are **scalable**, **modular**, and **r
 3. Use update policies to filter `status changed` events.
 4. Build dashboard:
    - Page 1: Fleet summary, 60s refresh.
-   - Page 2: Drillthrough per drone, 15s refresh.
-   - Parameters: drone_id, region.
+   - Page 2: Drillthrough per vehicle, 15s refresh.
+   - Parameters: vehicle_id, region.
 5. Use metrics tab to evaluate tile load.
 6. Integrate with Activator to visualize alerts.
 

@@ -269,26 +269,84 @@ Additionally, by separating concerns, you can apply differing retention policies
 
 ---
 
-## Hands-On Lab Example
+# Hands-On Lab Example: Semantic Analysis and Reasoning on Delivery Truck Logs
 
-### Lab Title: Semantic Search on Product Reviews
+## Objectives
 
-#### Objectives:
+- Embed textual delivery incident logs, store vectors, and perform semantic similarity search
+- Augment real-time data with AI reasoning for operational insights
 
-- Embed text, store vectors, and perform similarity search
-- Augment with AI reasoning using OpenAI
+## Lab Steps
 
-#### Steps:
+### 1. Ingest Delivery Logs Dataset into Eventhouse
 
-1. Ingest product review dataset into Eventhouse
-2. Use `ai_embed_text` to generate embeddings
-3. Store vectors using `dynamic` column
-4. Query using `vector_cosine_distance()` for semantic similarity
-5. Use `ai_chat_completion_prompt` to generate review summaries
+Load a structured dataset of delivery incident logs from trucks. Example log entries might include:
 
-#### Bonus:
+- "Delayed due to weather"
+- "Route blocked"
+- "Package not found"
+- "Mechanical issue on vehicle"
 
-- Add Activator trigger for negative sentiment alerts
-- Export embeddings to OneLake for ML training
+Ingest the data into an Eventhouse table named `truck_logs`.
+
+### 2. Generate Embeddings Using `ai_embed_text`
+
+Use the `ai_embed_text` plugin to convert the `incident_description` column into vector embeddings:
+
+```kql
+set async_execution = true;
+truck_logs
+| extend incident_vector = ai_embed_text("azure_openai_deployment_url", incident_description)
+```
+
+### 3. Store Vectors Using a `dynamic` Column
+
+Ensure `incident_vector` is defined as a `dynamic` column in your table schema. This allows efficient storage and querying within Eventhouse.
+
+Example KQL snippet to confirm or cast the column:
+
+```kql
+truck_logs
+| extend incident_vector = todynamic(incident_vector)
+```
+
+### 4. Perform Semantic Similarity Search
+
+Use `vector_cosine_distance()` to find records similar to a new incident:
+
+```kql
+let new_incident = "Road closed due to snowstorm";
+let new_vector = ai_embed_text("azure_openai_deployment_url", new_incident);
+truck_logs
+| extend similarity = vector_cosine_distance(incident_vector, new_vector)
+| top 5 by similarity desc
+```
+
+### 5. Summarize with `ai_chat_completion_prompt`
+
+Use `ai_chat_completion_prompt` to generate a summary for dispatchers:
+
+```kql
+truck_logs
+| where TimeStamp > ago(30m)
+| summarize logs=make_list(incident_description, 10)
+| extend summary = ai_chat_completion_prompt("azure_openai_chat_url", "Summarize these recent delivery incidents for a dispatcher: " + strcat_array(logs, "; "))
+```
+
+### Bonus Tasks
+
+#### Add Activator Trigger for High-Severity Incidents
+Configure an Activator rule to trigger on critical phrases (e.g., "theft", "breakdown") or based on AI-generated summaries.
+
+#### Export Embeddings to OneLake for ML Training
+Use `.export` or Continuous Export to write embeddings to OneLake in Delta Parquet format for use in ML model training pipelines.
+
+```kql
+.export async to delta (h@"https://<your_onelake_url>/deliveries/embeddings") <|
+truck_logs
+| project TimeStamp, incident_description, incident_vector
+```
+
+> **Note**: Replace `azure_openai_deployment_url` and `azure_openai_chat_url` with your actual Azure OpenAI endpoint URLs.
 
 ---
