@@ -4,6 +4,29 @@
 
 One of the huge benefits of the Kusto engine is the power to do complex analytics with a more simple approach than compared to other database engines.
 
+This module can quiclky become huge if we are to dive into all aspects of the analytical capabilites in the KQL world.
+
+We also do expect you to be proofecient in the KQL language, as you have already passed the DP-600 and DP-700 exams and passed the Applied Skils for Real-Time Intelligence.
+Profeciencny to be able to work deeply with this level 400 training material is to know how to write KQL queries to handle:
+
+- Time series
+- Windowing functions
+- Rendering
+- Basic aggregration, manipulation and joins
+- Entry level performance tuning
+
+With that also to understand the Kusto engine, how it works and hwo the data is structured inside the engine. This is also dived into in module 5 for Data Modelling.
+
+If you need to get up to speed, then here are some links for you to use:
+
+- [Kusto Query Language (KQL) from Scratch - Pluralsight](https://www.pluralsight.com/courses/kusto-query-language-kql-from-scratch)
+- [Data analysis with Kusto Query Language - Microsoft Learn](https://learn.microsoft.com/en-us/training/paths/kusto-query-language/)
+- [Rod Trent's Must Learn KQL course](https://github.com/rod-trent/MustLearnKQL)
+- [Kusto Detecive agency](https://detective.kusto.io/)
+- [KQL common operators - Microsoft Learn](https://learn.microsoft.com/en-us/kusto/query/tutorials/learn-common-operators?view=azure-data-explorer&preserve-view=true)
+- [KQL aggregations - Microsoft Learn](https://learn.microsoft.com/en-us/kusto/query/tutorials/use-aggregation-functions?view=azure-data-explorer&preserve-view=true)
+- [KQL Geospacial visualizations - Microsoft Learn](https://learn.microsoft.com/en-us/kusto/query/tutorials/create-geospatial-visualizations?view=azure-data-explorer&preserve-view=true)
+
 The KQL language leverages built-in functionalities like geospacial analytics, distance between two (or more) points, anomoly detection and forecasting, parsing data and handling JSON structures and much much more. All wohte implemented with one single line of code.
 
 This capabilty is key to handle and master when working with the timeseries data and this module will dive deep into the possiblities and jump pass the basic knowledge like filters, row based calculations etc.
