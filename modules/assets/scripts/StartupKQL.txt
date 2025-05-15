@@ -1,0 +1,56 @@
+
+// startup script for all labs to get data and be ready for the tasks
+.execute database script <|
+.drop table SalesOrderDetail ifexists 
+.drop table SalesOrderHeader ifexists 
+.create table SalesOrderDetail (
+    SalesOrderID:int,
+	SalesOrderDetailID:int,
+	CarrierTrackingNumber:string,
+	OrderQty:int,
+	ProductID:int,
+	SpecialOfferID:int,
+	UnitPrice:decimal,
+	UnitPriceDiscount:decimal,
+	LineTotal:decimal, 
+	rowguid:string,
+	ModifiedDate:datetime 
+)
+.create table SalesOrderHeader (
+	SalesOrderID:int,
+	RevisionNumber:int,
+	OrderDate:datetime,
+	DueDate:datetime,
+	ShipDate:datetime,
+	Status:int,
+	OnlineOrderFlag:int,
+	SalesOrderNumber:string,
+	PurchaseOrderNumber:string,
+	AccountNumber:string,
+	CustomerID:int,
+	SalesPersonID:int,
+	TerritoryID:int,
+	BillToAddressID:int,
+	ShipToAddressID:int,
+	ShipMethodID:int,
+	CreditCardID:int,
+	CreditCardApprovalCode:string,
+	CurrencyRateID:int,
+	SubTotal:decimal,
+	TaxAmt:decimal,
+	Freight:decimal,
+	TotalDue:int,
+	Comment:string,
+	rowguid:string,
+	ModifiedDate:datetime
+)    
+.ingest into table SalesOrderHeader (@'https://raw.githubusercontent.com/microsoft/fabric-samples/refs/heads/main/community-samples/Real-Time-Intelligence-L400/SalesOrderHeader.csv')
+with (
+	format = "csv"
+	,ignoreFirstRecord = true
+)
+.ingest into table SalesOrderDetail (@'https://raw.githubusercontent.com/microsoft/fabric-samples/refs/heads/main/community-samples/Real-Time-Intelligence-L400/SalesOrderDetail.csv')
+with (
+	format = "csv"
+	,ignoreFirstRecord = true
+)

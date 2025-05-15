@@ -438,4 +438,10 @@ By the end of the course, you will be able to:
 
 In production-grade Real-Time Intelligence systems, what gets monitored gets trusted—and what gets priced gets optimized.
 
+#### Startup script
+
+To get started with all the labs in this training, you need to execute [this KQL script](/modules/assets/scripts/StartupKQL.txt) in a local Eventhouse in your workspace.
+
+We expect you to be proficient in creating an Eventhouse and how to execute the provided script.
+
 ---

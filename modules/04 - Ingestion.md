@@ -77,13 +77,13 @@ The throughput does not in itself boost the overall throughput of ingestion in t
 
 So when configuring the throughput of the Eventstream, also remember to think of the other two areas of the total throughput configuration for a better and overall technical implementation.
 
-##### Schema validation in Eventstream
+#### Schema registry
 
-Schema validation in Microsoft Fabric’s Eventstream plays a critical role in ensuring that incoming streaming data adheres to a predefined structure before it's processed or routed to downstream systems. When data is ingested from streaming sources such as Azure Event Hubs, IoT Hub, or Kafka, Eventstream attempts to infer the schema based on sample events or allows users to manually define it. This schema typically includes field names, data types, and expected structures. Once the schema is set, Eventstream continuously validates incoming events against it in real-time. If incoming events deviate—such as missing required fields, having unexpected types, or containing structural inconsistencies, they can be flagged, rejected, or optionally rerouted to a dead-letter destination for debugging and remediation. This mechanism helps maintain data quality and protects downstream systems like Eventhouse and Lakehouse from ingesting malformed data.
+Schema registry in Microsoft Fabric’s Real-Time Intelligence plays a critical role in ensuring that incoming streaming data adheres to a predefined structure before it's processed or routed to downstream systems. When data is ingested from streaming sources such as Azure Event Hubs, IoT Hub, or Kafka, the schema registry attempts to infer the schema based on sample events or allows users to manually define it. This schema typically includes field names, data types, and expected structures. Once the schema is set, Eventstream continuously validates incoming events against it in real-time. If incoming events deviate—such as missing required fields, having unexpected types, or containing structural inconsistencies, they can be flagged, rejected, or optionally rerouted to a dead-letter destination for debugging and remediation. This mechanism helps maintain data quality and protects downstream systems like Eventhouse and Lakehouse from ingesting malformed data.
 
-Technically, schema validation is implemented using a combination of schema definitions and runtime checks embedded in the Eventstream pipeline. Users can define strict or relaxed validation rules, depending on the use case, with options to enable automatic schema evolution or enforce rigid typing. 
+Technically, schema validation is implemented using a combination of schema definitions and runtime checks embedded in the ingestion method. Users can define strict or relaxed validation rules, depending on the use case, with options to enable automatic schema evolution or enforce rigid typing.
 
-Eventstream supports JSON schema validation and may extend to support formats like Avro or Parquet as needed. A key consideration during implementation is to ensure that schema changes in upstream systems are coordinated with the Eventstream pipeline; otherwise, even minor alterations like renaming a field or changing a data type can break the pipeline. Additionally, high-throughput environments must be optimized to handle validation errors at scale without introducing latency.
+Schema validation supports JSON schema validation and may extend to support formats like Avro or Parquet as needed. A key consideration during implementation is to ensure that schema changes in upstream systems are coordinated with the Eventstream pipeline; otherwise, even minor alterations like renaming a field or changing a data type can break the pipeline. Additionally, high-throughput environments must be optimized to handle validation errors at scale without introducing latency.
 
 To maintain reliability, it’s recommended to use schema registries or maintain a versioned schema strategy, especially in enterprise-grade solutions.
 
@@ -123,9 +123,18 @@ To get a status of this process, you can execute the following command:
 When ingesting data using the direct ingestion mode, you are configuring the database to read the data from the source directly, basicly using a KQL query.
 
 At normal situtations any KQL query will only run for 4 mins by default which can be overwritten to max 10 mins - whereas the ingestion queries are running on a different node in the cluster and will not have this limit of the 10 minute exetution time.
-**Brians waits for slides from Devang to rewrite the above paragraph**
 
-Other than that, the direct ingestion is pretty straight forward.
+As an overview the architecture looks like this:
+
+![Ingestion Node](/modules/assets/images/IngestionNode.png)
+
+Azure Data Explorer and the Eventhouse/KQL database in Microsoft Fabric is built the same way as above image shows.
+In all clusters, you have a Data Management node which takes care of connections, batching, ingestion and management commands and overview (like all the .(dot)-commands you already know.)
+
+In this Data Management node, the engine keeps all your configurations for ingestion, batching etc. to handle the load of data. It is this special node, which allows you to execute ingestion commands which does NOT automatically end at the 10 min mark.
+
+Other than that, the direct ingestion is pretty straight forward. Use KQL scripting language to define your ingestion and execute it.
+You can also see a simple example of direct ingestion when you executed the startup script rom the introdutcion module.
 
 #### Ingestion mapping
 
