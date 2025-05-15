@@ -5,7 +5,8 @@
 When ingesting data to the Real-Time Intelligence solution, you have several options.
 
 - Using an Eventstream to get data
-- Direct ingest to the Eventhouse
+- Direct ingest to the Eventhouse (**VP**:  here I assume you mean *direct ingest* as a `.ingest` command passed to the engine directly ; that isn't recommended in production scenarios)
+- Queued ingest against the ingestion endpoint of the Eventhouse (e.g. with Kusto.Data SDK)
 - Shortcuts from outside the Eventhouse*
 
 <div class="info" data-title="Note on shortcuts">
@@ -30,6 +31,8 @@ When ingesting data to the Eventhouse using the Eventstream service, the connect
 
 The only way to manipulate data at ingestion time is through the Eventstream. The other two methods is a 1:1 copy from source to destination.
 
+(**VP**:  What about Update Policy?  That's the most common data manipulation at ingestion time)
+
 The Eventstream has two methods of handing over data to the destination. Either through a **pull** method or through a **push** method.
 
 The pull method is also the fastest method, as it is the destination table which pulls the data from the Eventstream. The underlying Eventhub is used for this method, where the data is stored in temporary storage and the Eventhouse service polls the endpoint and received the data from the Eventhub.
@@ -37,6 +40,8 @@ The pull method is also the fastest method, as it is the destination table which
 The push method is the only method available when doing any transformations to the incoming data. The transformations are, under the covers, handled by an Azure Streaming Analytics job and that job then pushes the data to the destionation.
 
 When manipulating data in the Eventstream service, we have the tranformations part of the Eventstream processor.
+
+(VP:  I don't know if you want to mention that has cost implication since you pay for the underlying ASA job.)
 
 #### Shortcuts
 
@@ -56,6 +61,8 @@ The throughput can be configured from Low, through Medium to High.
 - Low gives you 4 partitions on the Eventhub
 - Medium gives you 16 partitions in the Eventhub
 - High gives you 32 partitions in the Eventhub
+
+(**VP**:  you might want to mention that Eventhub is the "underlying" Event hub of the Eventstream)
 
 When changing the throughput of the Eventstream it will have an impact on the cost of the Eventstream. This due to the underlying compute for each partition in the Eventhub and from this the number of messages the Eventstream is processing.
 
@@ -118,9 +125,13 @@ To get a status of this process, you can execute the following command:
 
 #### Direct ingestion
 
+(VP:  here you used *direct ingestion*, above you used *pull method* ; pull mode is an internal engineering term, you might want to standardize on direct ingestion)
+
 When ingesting data using the direct ingestion mode, you are configuring the database to read the data from the source directly, basicly using a KQL query.
 
 At normal situtations any KQL query will only run for 4 mins by default which can be overwritten to max 10 mins - whereas the ingestion queries are running on a different node in the cluster and will not have this limit of the 10 minute exetution time.
+
+(**VP**:  max timeout is actually 60 mins)
 
 As an overview the architecture looks like this:
 
@@ -129,10 +140,17 @@ As an overview the architecture looks like this:
 Azure Data Explorer and the Eventhouse/KQL database in Microsoft Fabric is built the same way as above image shows.
 In all clusters, you have a Data Management node which takes care of connections, batching, ingestion and management commands and overview (like all the .(dot)-commands you already know.)
 
+(VP:  not sure what you mean by "overview" above the dot commands)
+
 In this Data Management node, the engine keeps all your configurations for ingestion, batching etc. to handle the load of data. It is this special node, which allows you to execute ingestion commands which does NOT automatically end at the 10 min mark.
+
+(VP:  The DM isn't a node, it's an entire cluster, typically a small one, e.g. 2xD1 ; you can mention the *DM service* in the text)
+(VP:  Again this 10 minutes is not true.  The DM service implements retry and capacity management, which is a plus value, but it runs commands like any ingestor user)
 
 Other than that, the direct ingestion is pretty straight forward. Use KQL scripting language to define your ingestion and execute it.
 You can also see a simple example of direct ingestion when you executed the startup script rom the introdutcion module.
+
+(VP:  Not sure what you mean by "KQL scripting language to define your ingestion and execute it" ; do you mean different policies?)
 
 #### Ingestion mapping
 
@@ -145,6 +163,8 @@ From an implementation standpoint, ingestion mappings are configured either thro
 Users define column-to-field relationships, specify data formats, and apply validation rules. These mappings are then associated with a specific output destination, ensuring consistent data transformation for all events routed through that stream.
 
 Supported file formats for ingetsion mappings can be found in [Microsoft Learn](https://learn.microsoft.com/en-us/kusto/management/mappings?view=microsoft-fabric).
+
+(VP:  here you quote a Kusto reference while above you talked about ingestion to Lakehouse & Datawarehouse ; ingestion mapping in Kusto are only for data ingested in Eventhouse)
 
 You can create ingestion mappings directly when creating the ingestion or create the mapping as a reusable mapping and then reference it in the ingtesion.
 
@@ -212,6 +232,8 @@ Users can define rules to rename fields, extract nested JSON attributes, change 
 From a technical standpoint, mapping transformations are implemented within the Eventstream canvas as configurable blocks or as defined code in the definition of the mapping in the Eventhouse.
 
 Each transformation is applied sequentially to events as they pass through the stream. Users define transformations such as “rename column,” “convert to datetime,” or “parse JSON path,” and these are stored as part of the Eventstream and Eventhouse ingestion configuration.
+
+(VP:  That sounds like https://learn.microsoft.com/en-us/kusto/management/mappings?view=azure-data-explorer#mapping-transformations ; again that is only for Eventhouse and not for Lakehouse as mentioned at the beginning of the section)
 
 ##### Example usages
 
