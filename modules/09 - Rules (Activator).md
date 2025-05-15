@@ -195,7 +195,7 @@ Trigger:
 - Data pipelines to transform or ingest data downstream
 - Notebooks for scoring models or enrichment
 - Power Automate flows for notifications, tickets, or system updates
-- Microsoft Teams for aleReal-Time Intelligenceng or collaboration (via Flow Builder or future Web API)
+- Microsoft Teams for alerting or collaboration (via Flow Builder or future Web API)
 
 - **Preview and test**
   Validate the expected behavior before activation. Activator allows rule preview and event replay, showing how often a rule would have fired on recent data.
@@ -229,7 +229,7 @@ Trigger:
   As seen in the bikepoint example, Activator can be used to track real-time bike availability at docking stations and send alerts when inventory falls or rises unexpectedly.
 
 - **Security & Compliance**
-  Future support for sensitivity labels (e.g., from Activator) will allow context-aware triggers, such as aleReal-Time Intelligenceng on files labeled as “Confidential” being moved or accessed.
+  Future support for sensitivity labels (e.g., from Activator) will allow context-aware triggers, such as alerting on files labeled as “Confidential” being moved or accessed.
 
 #### Reusability and Maintainability
 
@@ -405,7 +405,7 @@ Key characteristics:
 
   - If a field is missing in an event but referenced in a rule, the condition may evaluate as false or not at all.
 
-  - Design rules to be resilient to paReal-Time Intelligenceal records where appropriate (e.g., via fallback conditions or default values downstream in the pipeline).
+  - Design rules to be resilient to partial records where appropriate (e.g., via fallback conditions or default values downstream in the pipeline).
 
 #### Structured vs. Semi-Structured Input
 

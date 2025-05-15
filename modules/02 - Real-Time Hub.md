@@ -48,7 +48,7 @@ The Kusto Engine is optimized for time-series and event data and is responsible 
 
 - **Ingestion Mapping**: The engine uses ingestion mapping definitions—JSON-based or KQL-declared—to correlate raw data fields to structured table schemas. This ensures both consistency and flexibility across ingestion pipelines.
 
-- **Update Policies Execution**: For scenarios that require transformation or paReal-Time Intelligencetioning (e.g., splitting telemetry into multiple tables), the Kusto Engine executes update policies in near real time. This allows for lightweight, declarative stream processing without the need for additional compute layers.
+- **Update Policies Execution**: For scenarios that require transformation or Partitioning (e.g., splitting telemetry into multiple tables), the Kusto Engine executes update policies in near real time. This allows for lightweight, declarative stream processing without the need for additional compute layers.
 
 - **Query Execution**: After ingestion, the same engine supports ultra-fast query performance across vast amounts of streaming and historical data. This dual-purpose design—serving both ingestion and analytical querying—eliminates latency layers between processing and insight.
 
@@ -125,7 +125,7 @@ The Real-time Hub in Microsoft Fabric Real-time Intelligence (Real-Time Intellig
 
 ## Embedded Schema Inference Engine
 
-One of the most powerful and often underappreciated components of Real-time Hub is its **schema inference engine**, embedded within the data onboarding workflows. At a high level, schema inference refers to the automatic deduction of a table’s structure—columns, types, and relationships—based on a sample of incoming data. In the context of Microsoft Fabric, this capability is built directly into the ingestion path, paReal-Time Intelligencecularly when using tools like the Get Data Wizard or Real-time Hub-integrated workflows.
+One of the most powerful and often underappreciated components of Real-time Hub is its **schema inference engine**, embedded within the data onboarding workflows. At a high level, schema inference refers to the automatic deduction of a table’s structure—columns, types, and relationships—based on a sample of incoming data. In the context of Microsoft Fabric, this capability is built directly into the ingestion path, particulary when using tools like the Get Data Wizard or Real-time Hub-integrated workflows.
 
 ### How It Works
 
@@ -141,7 +141,7 @@ If multiple files are uploaded at once, the engine allows the user to select a _
 ### Benefits
 
 - **Speed**: Users can go from file to live ingestion in minutes without manually writing table definitions.
-- **Reduced friction**: Schema inference enables non-expert users (e.g., data analysts) to paReal-Time Intelligencecipate in ingestion workflows.
+- **Reduced friction**: Schema inference enables non-expert users (e.g., data analysts) to participate in ingestion workflows.
 - **Consistency**: Inferred schemas can be reused and promoted to shared ingestion pipelines.
 
 ### Considerations for Advanced Users
@@ -266,7 +266,7 @@ For real-time data, this streamlines routing telemetry or events from Eventstrea
 ## 6. Orchestration and Optimization
 
 - Use Eventhouse update policies to reduce processing load.
-- Route mission-critical events through Activator for stateful aleReal-Time Intelligenceng.
+- Route mission-critical events through Activator for stateful alerting.
 - Apply selective ingestion using routing filters in Real-time Hub.
 - Consolidate mappings to avoid ingestion redundancy.
 
@@ -322,7 +322,7 @@ As real-time pipelines move from prototype to production, schema management must
 Using `create table` in KQL allows teams to precisely control:
 
 - Column names and data types
-- Table paReal-Time Intelligencetioning and retention policies
+- Table Partitioning and retention policies
 - Governance over changes (e.g., schema versioning)
 
 ```kusto
@@ -375,7 +375,7 @@ Once the schema is locked down and mappings are defined, the next focus is perfo
 **Use cases include:**
 
 - Uploading large CSVs or JSON blobs
-- Parallel ingest from many Event Hubs or Kafka paReal-Time Intelligencetions
+- Parallel ingest from many Event Hubs or Kafka partitions
 - Reducing contention on high-throughput KQL tables
 
 ---
@@ -384,7 +384,7 @@ Once the schema is locked down and mappings are defined, the next focus is perfo
 
 Fabric Real-Time Intelligence supports **parallel ingestion pipelines** at both ingestion and query layers:
 
-- Use multiple ingestion sources (e.g., Event Hub paReal-Time Intelligencetions)
+- Use multiple ingestion sources (e.g., Event Hub partitions)
 - Batch multiple files or blobs
 - Distribute ingestion using update policies and mappings
 
