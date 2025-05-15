@@ -38,6 +38,10 @@ The push method is the only method available when doing any transformations to t
 
 When manipulating data in the Eventstream service, we have the tranformations part of the Eventstream processor.
 
+> [NOTE]
+> * This section is a bit hard to parse.
+> * Can you be more specific about "fast" - quantify what's the difference?
+
 #### Shortcuts
 
 To enhance the performance of queries over external data, Microsoft Fabric offers a feature known as query acceleration for OneLake shortcuts. This feature allows users to define a policy specifying the number of days to cache data from external delta tables, thereby improving query performance and reducing latency. It applies to data from various sources, including Azure Data Lake Store Gen1, Amazon S3, Google Cloud Services, and Azure Blob Storage.
@@ -45,6 +49,9 @@ To enhance the performance of queries over external data, Microsoft Fabric offer
 #### Direct ingestion
 
 When speaking of direct ingestion, we have a source, for which it is possible to connect directly from the Eventhouse and read the data. These sources are, but not limited to, SQL Server, EventHub, EventGrid etc.
+
+> [NOTE]
+> I don't think SQL server and EventGrid are supported. You can get from Azure Storage, Amazon S3, Event hubs, local file, OneLake
 
 ### Technical deep dive
 
@@ -83,13 +90,16 @@ Technically, schema validation is implemented using a combination of schema defi
 
 Schema validation supports JSON schema validation and may extend to support formats like Avro or Parquet as needed. A key consideration during implementation is to ensure that schema changes in upstream systems are coordinated with the Eventstream pipeline; otherwise, even minor alterations like renaming a field or changing a data type can break the pipeline. Additionally, high-throughput environments must be optimized to handle validation errors at scale without introducing latency.
 
+> [NOTE]
+> What do you mean may extend? under what circumstances?
+
 To maintain reliability, it’s recommended to use schema registries or maintain a versioned schema strategy, especially in enterprise-grade solutions.
 
 #### Shortcuts
 
 ![Shortcuts 1](./assets/images/shortcuts1.png)
 
-The accelerated shortcuts works by reading the data from the source to a storage inside the Eventhouse (in the KQL database level) as shards and gives the enduser and application the speed of the KQL database.
+The accelerated shortcuts works by reading the data from the source to a storage inside the Eventhouse (in the KQL database level) as shards and gives the end user and application the speed of the KQL database.
 This apporach demands the engine to read data from the source as a direct ingestion to the KQL database. This process will also consume CUs from the Fabric capacity and will, behind the scenes, autoscale the cluster to have a fast ingestion for the initial load.
 Updates to the data in the shortcut, from the source, is automatically handled by the engine and the processing of data resumes for reading the new data.
 
@@ -144,9 +154,9 @@ From an implementation standpoint, ingestion mappings are configured either thro
 
 Users define column-to-field relationships, specify data formats, and apply validation rules. These mappings are then associated with a specific output destination, ensuring consistent data transformation for all events routed through that stream.
 
-Supported file formats for ingetsion mappings can be found in [Microsoft Learn](https://learn.microsoft.com/en-us/kusto/management/mappings?view=microsoft-fabric)
+Supported file formats for ingetsion mappings can be found in [Microsoft Learn](https://learn.microsoft.com/en-us/kusto/management/mappings?view=microsoft-fabric).
 
-You can create ingestion mappings directly when creating the ingestion or create the mapping as a reusable mapping and then referenc it in the ingtesion.
+You can create ingestion mappings directly when creating the ingestion or create the mapping as a reusable mapping and then reference it in the ingtesion.
 
 ##### Mapping in ingestion
 
@@ -197,6 +207,9 @@ Below example show the creation of a reusable mapping and the use of that mappin
           ingestionMappingReference="RawEventMapping"
         )
 ```
+
+> [!NOTE]
+> What about create table based on? Or show schema so you can use the mapping frome one place to another?
 
 It’s important to monitor mapping consistency during schema changes in upstream sources; mismatches can lead to ingestion failures or silent data loss. Additionally, for high-throughput pipelines, efficient mapping practices—such as avoiding deeply nested structures and minimizing real-time transformations—help reduce latency and resource usage.
 
