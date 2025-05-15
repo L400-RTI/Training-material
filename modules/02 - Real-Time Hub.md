@@ -1,6 +1,6 @@
-# Module 2 - Microsoft Fabric Real-time Hub in Microsoft Fabric Real-Time Intelligence
+# Module 2 - Microsoft Fabric Real-time hub in Microsoft Fabric Real-Time Intelligence
 
-> This module provides a comprehensive module on the architecture, advanced configuration, and optimization of Real-time Hub in Microsoft Fabric Real-Time Intelligence.
+> This module provides a comprehensive module on the architecture, advanced configuration, and optimization of Real-time hub in Microsoft Fabric Real-Time Intelligence.
 
 ---
 
@@ -20,7 +20,7 @@
 
 ## 1. Introduction to the Module
 
-Real-time Hub acts as the central surface for discovering, configuring, and routing real-time data across Microsoft Fabric Real-time Intelligence. This module sets the stage for understanding its integration points, performance implications, and usage patterns.
+Real-time hub acts as the central surface for discovering, configuring, and routing real-time data across Microsoft Fabric Real-time Intelligence. This module sets the stage for understanding its integration points, performance implications, and usage patterns.
 
 ---
 
@@ -388,15 +388,15 @@ A common anti-pattern in Activator usage is level-based evaluation (`value > thr
 
 ### Schemas and Throughput Deep Dive
 
-# Schemas and Throughput Optimization in Real-time Hub
+# Schemas and Throughput Optimization in Real-time hub
 
-Ingesting real-time data at enterprise scale requires more than just configuring connections and tables—it demands an intentional strategy around **schema management**, **data routing**, and **throughput optimization**. Real-time Hub in Microsoft Fabric Real-Time Intelligence provides flexible schema tools and ingestion primitives that support both fast onboarding and high-performance stream processing. This section explores how advanced practitioners can leverage inferred schemas for agility, define ingestion mappings for robustness, and apply architectural techniques like sharding, parallelism, and staging uploads to maximize ingestion throughput.
+Ingesting real-time data at enterprise scale requires more than just configuring connections and tables—it demands an intentional strategy around **schema management**, **data routing**, and **throughput optimization**. Real-time hub in Microsoft Fabric Real-Time Intelligence provides flexible schema tools and ingestion primitives that support both fast onboarding and high-performance stream processing. This section explores how advanced practitioners can leverage inferred schemas for agility, define ingestion mappings for robustness, and apply architectural techniques like sharding, parallelism, and staging uploads to maximize ingestion throughput.
 
 ---
 
 ## Leverage Inferred Schema for Rapid Onboarding
 
-The fastest way to begin ingesting data in Real-time Hub is through **schema inference**, which automatically detects column structure and data types from sample input files. This capability is built directly into the **Get Data Wizard**, allowing users to upload CSV, JSON, or Parquet files and have the engine generate a corresponding table schema without manual intervention.
+The fastest way to begin ingesting data in Real-time hub is through **schema inference**, which automatically detects column structure and data types from sample input files. This capability is built directly into the **Get Data Wizard**, allowing users to upload CSV, JSON, or Parquet files and have the engine generate a corresponding table schema without manual intervention.
 
 ### Why It Matters
 
@@ -469,7 +469,7 @@ Mappings ensure ingestion consistency and act as a contract between source syste
 
 ## Optimize Ingestion Throughput
 
-Once the schema is locked down and mappings are defined, the next focus is performance—ensuring Real-time Hub can ingest and process data at scale. Fabric’s ingestion engine (powered by the Kusto engine and the DM service) supports several strategies to maximize throughput and resilience:
+Once the schema is locked down and mappings are defined, the next focus is performance—ensuring Real-time hub can ingest and process data at scale. Fabric’s ingestion engine (powered by the Kusto engine and the DM service) supports several strategies to maximize throughput and resilience:
 
 ---
 
