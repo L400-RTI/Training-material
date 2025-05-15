@@ -103,15 +103,15 @@ These topics are covered in the different Modules more in depth
 
 **Core Focus:** Buffering, parallelization, schema evolution, and latency management
 
-- Ingested data from streaming sources is processed via paReal-Time Intelligencetioned pipelines, often aligned to source paReal-Time Intelligencetions (e.g., Kafka topics).
+- Ingested data from streaming sources is processed via partioned topics, often aligned to source partitions (e.g., Kafka topics).
 
 - Eventstream introduces a controlled buffer delay (typically ~10 seconds) to enable multi-sink routing and enrichment.
 
 - Supports schema inference and evolution, allowing downstream systems to adapt to changes in the payload shape.
 
-- Event delivery is parallelized but respects ordering guarantees per paReal-Time Intelligencetion.
+- Event delivery is parallelized but respects ordering guarantees per partition.
 
-**Implication:** Changes in source schemas, burst traffic, or improperly filtered data can delay or disrupt downstream pipelines.
+**Implication:** Changes in source schemas, burst traffic, or improperly filtered data can delay or disrupt downstream processing.
 
 #### Eventhouse Mechanics
 
@@ -282,7 +282,7 @@ This course emphasizes not just how to configure components, but how to architec
 
 Microsoft Fabric Real-Time Intelligence enables event-driven workflows, but orchestration must be explicitly designed to ensure:
 
-- Data arrives at the right processing layer (e.g., KQL DB vs. pipeline vs. alert rule)
+- Data arrives at the right processing layer (e.g., KQL DB vs. eventstreams vs. alert rule)
 - Actions execute only when preconditions are satisfied
 - State transitions are respected, especially in temporal logic
 - Downstream systems (Power BI, Synapse, Teams) are triggered with the right payload, at the right time

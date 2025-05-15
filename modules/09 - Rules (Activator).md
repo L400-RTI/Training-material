@@ -33,7 +33,7 @@ It fits into a reactive, event-driven architecture where data flows continuously
 ![picture is from here: https://learn.microsoft.com/en-us/fabric/real-time-intelligence/data-activator/activator-introduction](./assets/images/activator.png)
 
 - **Event Sources (Eventstream)**
-  Activator connects directly to Eventstreams, which ingest data from various producers (e.g., Azure Event Hubs, IoT devices, custom APIs). These streams serve as the source of events, and Activator can subscribe to one or more eventstreams to observe data changes.
+  Activator connects directly to Eventstreams, which ingest data from various producers (e.g., Azure Event Hubs, IoT devices, custom APIs). These streams serve as the source of events, and Activator can subscribe to one or more eventstreams to observe data changes. Other Event Sources could be Fabric events or an Activator listening to a Power BI report or a Real-Time Dashboard.
 
 - **Events and Objects**
   Events are individual records (e.g., a telemetry signal or file drop) received via Eventstream. These are grouped into objects based on a shared identifier (e.g., bikepoint_id, device_id, etc.). Rules are then evaluated per object, allowing fine-grained detection (e.g., per sensor or per asset).
@@ -67,13 +67,15 @@ Activator instances are deployed per workspace and bound to specific data source
 
 #### Integration Points within Fabric Real-Time Intelligence
 
-| Component      | Interaction with Activator                                                              |
-| -------------- | --------------------------------------------------------------------------------------- |
-| Eventstream    | Supplies federated data to Activator via low-latency stream ingestion.                  |
-| Activator      | Can generate events (e.g., enriched entities or inferred labels) that trigger Activator |
-| Pipeline       | Target of Activator’s rule triggers—automates downstream processing                     |
-| Power BI       | Consumes the result of triggered pipelines or notebooks for real-time visualizations    |
-| Power Automate | Allows event-driven ops via templated or custom actions                                 |
+| Component      | Interaction with Activator                                                                                     |
+| -------------- | -------------------------------------------------------------------------------------------------------------- |
+| Eventstream    | Supplies federated data to Activator via low-latency stream ingestion.                                         |
+| Activator      | Can generate events (e.g., enriched entities or inferred labels) that trigger Activator                        |
+| Pipeline       | Target of Activator’s rule triggers—automates downstream processing                                            |
+| Power BI       | Consumes the result of triggered pipelines or notebooks for real-time visualizations                           |
+| Power Automate | Allows event-driven ops via templated or custom actions                                                        |
+| Fabric Events  | Supplies Events that are happening within Fabric like refreshing of a semantic model or failing of a pipeline​ |
+| Notebooks      | Notebook execution can be triggered by an Activator                                                            |
 
 ### Technical deep dive
 
@@ -81,7 +83,13 @@ Microsoft Fabric Activator operates as a high-performance, state-aware rules eng
 
 #### Event Ingestion and Object Binding
 
-Events ingested into Activator originate from Eventstream, which supports multiple upstream sources (e.g., Azure Event Hubs, IoT Hub, Blob Storage triggers). Each event contains:
+Events ingested into Activator originate from
+
+- Eventstream, which supports multiple upstream sources (e.g., Azure Event Hubs, IoT Hub, Blob Storage triggers).
+- Fabric Events
+- Azure Events
+
+Each event contains:
 
 - A timestamp
 - A payload (structured or semi-structured data)
