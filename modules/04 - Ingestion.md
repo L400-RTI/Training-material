@@ -12,10 +12,8 @@ When ingesting data to the Real-Time Intelligence solution, you have several opt
 
 > Shortcuts in themselfes can be discussed if they are an ingestion. From a technical point of view shortcuts are only pointers to data and not actual ingestion. Not even the accelerated shortcuts, as they are cached on disk outside of the Eventhouse.
 
-</div>
-
 **Move shortcuts as a seperate section as they are not ingestion and double click on the scenarios. Highlight that we have more than one destionation - also OneLake and Lakehouse. Add ingestion mapping and mapping transformations**
-
+</div>
 This module dives into the details of each method and will give you insights to the technical implementation and give you and understanding on how and when to choose what method.
 
 The lab will challenge you in the ingestion methods, and help you understand the throughput and details of each method through hands on experience.
