@@ -123,9 +123,18 @@ To get a status of this process, you can execute the following command:
 When ingesting data using the direct ingestion mode, you are configuring the database to read the data from the source directly, basicly using a KQL query.
 
 At normal situtations any KQL query will only run for 4 mins by default which can be overwritten to max 10 mins - whereas the ingestion queries are running on a different node in the cluster and will not have this limit of the 10 minute exetution time.
-**Brians waits for slides from Devang to rewrite the above paragraph**
 
-Other than that, the direct ingestion is pretty straight forward.
+As an overview the architecture looks like this:
+
+![Ingestion Node](/modules/assets/images/IngestionNode.png)
+
+Azure Data Explorer and the Eventhouse/KQL database in Microsoft Fabric is built the same way as above image shows.
+In all clusters, you have a Data Management node which takes care of connections, batching, ingestion and management commands and overview (like all the .(dot)-commands you already know.)
+
+In this Data Management node, the engine keeps all your configurations for ingestion, batching etc. to handle the load of data. It is this special node, which allows you to execute ingestion commands which does NOT automatically end at the 10 min mark.
+
+Other than that, the direct ingestion is pretty straight forward. Use KQL scripting language to define your ingestion and execute it.
+You can also see a simple example of direct ingestion when you executed the startup script rom the introdutcion module.
 
 #### Ingestion mapping
 
