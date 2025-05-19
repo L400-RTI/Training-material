@@ -26,7 +26,7 @@ Real-time hub acts as the central surface for discovering, configuring, and rout
 
 ## 2. Architectural Deep Dive
 
-Real-Time Hub operates as the ingestion control plane within Microsoft Fabric’s real-time data architecture. It supports:
+Real-time hub operates as the ingestion control plane within Microsoft Fabric’s real-time data architecture. It supports:
 
 - Connecting to **CDC-enabled sources** like Azure SQL DB and SQL Server through Event Hubs or Kafka.
 - Bridging ingestion from **source systems** to **real-time consumers** like Eventstream and Eventhouse.
@@ -34,13 +34,13 @@ Real-Time Hub operates as the ingestion control plane within Microsoft Fabric’
 
 ### Connecting to **CDC-enabled sources** like Azure SQL DB and SQL Server through Event Hubs or Kafka
 
-One of the most powerful and enterprise-relevant use cases for Microsoft Fabric Real-Time Hub is its ability to facilitate low-latency ingestion from change data capture (CDC) enabled databases such as Azure SQL Database and SQL Server. In scenarios where data changes must be reflected in near real-time across analytics, alerting, or operational pipelines, Real-Time Hub acts as a central integration layer to connect these source systems to downstream analytics platforms like Eventhouse.
+One of the most powerful and enterprise-relevant use cases for Microsoft Fabric Real-time hub is its ability to facilitate low-latency ingestion from change data capture (CDC) enabled databases such as Azure SQL Database and SQL Server. In scenarios where data changes must be reflected in near real-time across analytics, alerting, or operational pipelines, Real-time hub acts as a central integration layer to connect these source systems to downstream analytics platforms like Eventhouse.
 
 #### Why CDC?
 
 Change Data Capture allows systems to track and publish changes—insertions, updates, deletions—in the source database without polling the entire data set. This is critical for reducing load on transactional systems while enabling timely analytics, alerting, or replication.
 
-Real-Time Hub itself does not extract changes directly from databases. Instead, it integrates seamlessly with modern CDC infrastructure patterns—typically involving connectors like **Debezium**, **Azure Data Factory (ADF)**, or **SQL Server Change Tracking**—and ingests CDC data via **Azure Event Hubs** or **Apache Kafka**, both of which are natively supported.
+Real-time hub itself does not extract changes directly from databases. Instead, it integrates seamlessly with modern CDC infrastructure patterns—typically involving connectors like **Debezium**, **Azure Data Factory (ADF)**, or **SQL Server Change Data Capture**—and ingests CDC data via **Azure Event Hubs** or **Apache Kafka**, both of which are natively supported.
 
 #### CDC via Azure Event Hubs
 
@@ -52,7 +52,7 @@ For cloud-first architectures or Microsoft-centric deployments, Azure Event Hubs
    - Before/after snapshots of the data
    - Timestamps and source metadata (database, schema, table)
 3. **Streaming to Event Hub**: These CDC events are published to an Azure Event Hub, partitioned by table or primary key for parallelism.
-4. **Ingestion by Real-Time Hub**: Real-Time Hub connects to the Event Hub as a streaming source and makes the CDC stream available to downstream consumers like Eventstream or directly to Eventhouse.
+4. **Ingestion by Real-time hub**: Real-time hub connects to the Event Hub as a streaming source and makes the CDC stream available to downstream consumers like Eventstream or directly to Eventhouse.
 
 This architecture offers high durability, cloud-native scalability, and easy observability via Azure Monitor and Event Hub diagnostics.
 
@@ -60,31 +60,31 @@ This architecture offers high durability, cloud-native scalability, and easy obs
 
 In hybrid or open-source environments, Apache Kafka is the preferred event backbone. Debezium, originally built for Kafka Connect, is often deployed to stream CDC data from SQL Server, PostgreSQL, MySQL, Oracle, and other systems into Kafka topics.
 
-The architecture with Real-Time Hub follows a similar pattern:
+The architecture with Real-time hub follows a similar pattern:
 
 1. **Debezium in Kafka Connect**: Change data is captured from the source database and published to specific Kafka topics (e.g., `dbserver.inventory.customers`).
-2. **Real-Time Hub Kafka Connector**: Real-Time Hub connects to the Kafka cluster and subscribes to selected topics, enabling real-time discovery and ingestion.
+2. **Real-time hub Kafka Connector**: Real-time hub connects to the Kafka cluster and subscribes to selected topics, enabling real-time discovery and ingestion.
 3. **Downstream Routing**: The messages are routed to Eventstream for transformation/filtering or forwarded directly to Eventhouse for querying and storage.
 
 Kafka offers low-latency, high-throughput capabilities, and guarantees exactly-once semantics when correctly configured, making it ideal for mission-critical ingestion pipelines.
 
 #### Integration Considerations
 
-- **Schema Handling**: CDC streams contain both metadata and payload. Real-Time Hub supports ingestion of these structured JSON payloads. In Eventhouse, the schema must match the payload’s shape—often requiring the use of KQL update policies to normalize, flatten, or filter fields such as `before`, `after`, and operation metadata (`__op`).
-- **Latency**: The combination of Kafka/Event Hubs and Real-Time Hub enables sub-second end-to-end latency, assuming minimal transformation in Eventstream.
-- **Resilience and Replay**: Both Event Hubs and Kafka provide checkpointing and offset-based replays, which Real-Time Hub respects through its connectors. This ensures that ingestion can resume from the correct position after failure without data loss.
-- **Partitioning and Scale-Out**: Real-Time Hub supports parallel ingestion from multiple Event Hub partitions or Kafka topic partitions. When combined with sharded Eventhouse tables, this enables high-scale ingestion architectures.
-- **Security**: Real-Time Hub supports secure access to Event Hubs and Kafka using managed identities, SAS tokens, or OAuth-based authentication depending on the source configuration.
+- **Schema Handling**: CDC streams contain both metadata and payload. Real-time hub supports ingestion of these structured JSON payloads. In Eventhouse, the schema must match the payload’s shape—often requiring the use of KQL update policies to normalize, flatten, or filter fields such as `before`, `after`, and operation metadata (`__op`).
+- **Latency**: The combination of Kafka/Event Hubs and Real-time hub enables sub-second end-to-end latency, assuming minimal transformation in Eventstream.
+- **Resilience and Replay**: Both Event Hubs and Kafka provide checkpointing and offset-based replays, which Real-time hub respects through its connectors. This ensures that ingestion can resume from the correct position after failure without data loss.
+- **Partitioning and Scale-Out**: Real-time hub supports parallel ingestion from multiple Event Hub partitions or Kafka topic partitions. When combined with sharded Eventhouse tables, this enables high-scale ingestion architectures.
+- **Security**: Real-time hub supports secure access to Event Hubs and Kafka using managed identities, SAS tokens, or OAuth-based authentication depending on the source configuration.
 
 #### Real-World Example
 
-A logistics company uses Azure SQL Database to manage real-time parcel tracking. Debezium captures status updates (e.g., package picked up, in transit, delivered) and streams them to Azure Event Hubs. Real-Time Hub ingests these events and routes them to Eventhouse. KQL update policies extract and normalize key metrics like delivery time deltas. A Power BI dashboard (or a real-time dashboard) displays this in near real-time, allowing the operations team to monitor performance and trigger interventions.
+A logistics company uses Azure SQL Database to manage real-time parcel tracking. Debezium captures status updates (e.g., package picked up, in transit, delivered) and streams them to Azure Event Hubs. Real-time hub ingests these events and routes them to Eventhouse. KQL update policies extract and normalize key metrics like delivery time deltas. A Power BI dashboard (or a real-time dashboard) displays this in near real-time, allowing the operations team to monitor performance and trigger interventions.
 
 ### Working in Conjunction with **Azure Event Grid** for Ingesting Fabric and Azure System Events
 
-Real-Time Hub in Microsoft Fabric offers a strategic capability for ingesting system-level events emitted by both Fabric and Azure services. These are not telemetry from user-defined applications but platform-generated events that signal state changes, health conditions, operational triggers, or resource lifecycles. This system event ingestion is built on top of **Azure Event Grid**, a fully managed event routing service that enables reactive, event-driven patterns across distributed systems.
+Real-time hub in Microsoft Fabric offers a strategic capability for ingesting system-level events emitted by both Fabric and Azure services. These are not telemetry from user-defined applications but platform-generated events that signal state changes, health conditions, operational triggers, or resource lifecycles. This system event ingestion is built on top of **Azure Event Grid**, a fully managed event routing service that enables reactive, event-driven patterns across distributed systems.
 
-In this context, Real-Time Hub provides a powerful interface that surfaces relevant system events for discovery and routing, while Event Grid acts as the under-the-hood backbone delivering those events from their source to consumers like Eventstream, Eventhouse, or Activator.
+In this context, Real-time hub provides a powerful interface that surfaces relevant system events for discovery and routing, while Event Grid acts as the under-the-hood backbone delivering those events from their source to consumers like Eventstream, Eventhouse, or Activator.
 
 #### What Are Fabric and Azure System Events?
 
@@ -109,11 +109,11 @@ Azure Event Grid is the native transport layer for system events in Fabric and A
 - **Push-based architecture**—no need for polling
 - **Built-in retry, dead-lettering, and diagnostics**
 
-Internally, Fabric uses Event Grid to publish these events into a routing layer. Real-Time Hub integrates directly with that layer to expose these events to the user and make them available for real-time consumption.
+Internally, Fabric uses Event Grid to publish these events into a routing layer. Real-time hub integrates directly with that layer to expose these events to the user and make them available for real-time consumption.
 
-#### Real-Time Hub as the Ingestion and Control Plane
+#### Real-time hub as the Ingestion and Control Plane
 
-When users open Real-Time Hub in Microsoft Fabric, they are presented with a curated interface that includes a category called **Fabric Events** and another called **Azure Events**. These are automatically populated with all the system events that Real-Time Hub can currently discover and ingest via Event Grid.
+When users open Real-time hub in Microsoft Fabric, they are presented with a curated interface that includes a category called **Fabric Events** and another called **Azure Events**. These are automatically populated with all the system events that Real-time hub can currently discover and ingest via Event Grid.
 
 From here, users can:
 
@@ -121,36 +121,36 @@ From here, users can:
 - **Enable routing** of selected events to Eventstream for transformation or aggregation
 - **Trigger rules** using Activator to invoke actions (e.g., sending Teams alerts, starting pipelines) in response to specific events
 
-This simplifies what has historically been a complex event subscription process. Instead of manually wiring up Event Grid topics, endpoints, and event handlers, users can simply “opt in” to the event categories exposed by Real-Time Hub and configure routing with a few clicks.
+This simplifies what has historically been a complex event subscription process. Instead of manually wiring up Event Grid topics, endpoints, and event handlers, users can simply “opt in” to the event categories exposed by Real-time hub and configure routing with a few clicks.
 
 #### Routing Options and Architecture
 
-Once an event source is selected in Real-Time Hub, it can be routed to:
+Once an event source is selected in Real-time hub, it can be routed to:
 
 - **Eventstream**: For transformation, filtering, enrichment, or fan-out to multiple targets
 - **Eventhouse (KQL Database)**: For real-time analytics, dashboarding, or historical event tracking
 - **Activator**: For rules-based actions such as sending emails, webhooks, or invoking Azure Functions
 
-Each event passes through Real-Time Hub, which acts as a governance and orchestration layer, ensuring observability, reliability, and decoupled consumption.
+Each event passes through Real-time hub, which acts as a governance and orchestration layer, ensuring observability, reliability, and decoupled consumption.
 
 Example: A Power BI dataset refresh event might trigger the following:
 
 1. **Event Grid** detects the completion of the refresh.
-2. **Real-Time Hub** ingests the event and forwards it to Eventstream.
+2. **Real-time hub** ingests the event and forwards it to Eventstream.
 3. **Eventstream** filters only the datasets relevant to a department.
 4. The filtered event is routed to **Activator**, which then triggers a webhook to notify a reporting system.
 
 #### Current Limitations and Considerations
 
-As of today, the Real-Time Hub supports a curated set of system events from Fabric and Azure. Not all services are covered, and the granularity of event types may vary.
+As of today, the Real-time hub supports a curated set of system events from Fabric and Azure. Not all services are covered, and the granularity of event types may vary.
 
 Additionally:
 
 - Event payloads may require flattening or transformation before ingestion into Eventhouse.
 - Consumers must be built to tolerate occasional duplication or delays due to Event Grid retry policies.
-- While the Real-Time Hub abstracts away the Event Grid subscription layer, understanding how Event Grid operates is still beneficial for troubleshooting and optimization.
+- While the Real-time hub abstracts away the Event Grid subscription layer, understanding how Event Grid operates is still beneficial for troubleshooting and optimization.
 
-#### Practical Use Cases in Real-Time Hub
+#### Practical Use Cases in Real-time hub
 
 - **Governance Automation**: Ingest workspace creation events and log them to Eventhouse for auditing.
 - **Operational Monitoring**: Track capacity utilization events and generate proactive alerts via Activator.
@@ -160,9 +160,9 @@ Additionally:
 
 ## 3. Technical Deep Dive
 
-### Ingesting Data with Real-Time Hub: Sources and Patterns
+### Ingesting Data with Real-time hub: Sources and Patterns
 
-Real-Time Hub supports data ingestion from a variety of sources:
+Real-time hub supports data ingestion from a variety of sources:
 
 - **Change Data Capture (CDC) Ingestion**
 - **Streaming Data Sources**
@@ -172,52 +172,52 @@ Real-Time Hub supports data ingestion from a variety of sources:
 
 ### 1. **Change Data Capture (CDC) Ingestion**
 
-One of the most enterprise-critical capabilities of Real-Time Hub is its ability to integrate with CDC-enabled databases such as Azure SQL Database, SQL Server, PostgreSQL, and MySQL. While Real-Time Hub does not perform CDC extraction directly, it serves as the ingestion and routing layer for CDC streams that have been externalized using tools like:
+One of the most enterprise-critical capabilities of Real-time hub is its ability to integrate with CDC-enabled databases such as Azure SQL Database, SQL Server, PostgreSQL, and MySQL. While Real-time hub does not perform CDC extraction directly, it serves as the ingestion and routing layer for CDC streams that have been externalized using tools like:
 
 - **Debezium** (running on Kafka Connect or Azure Container Apps)
-- **Azure Data Factory** or **Synapse Pipelines**
+- **Azure Data Factory**
 - **Custom applications writing to Event Hub or Kafka**
 
-These tools monitor transaction logs in source systems and emit change events as structured JSON records. Real-Time Hub can then ingest these events via supported connectors such as:
+These tools monitor transaction logs in source systems and emit change events as structured JSON records. Real-time hub can then ingest these events via supported connectors such as:
 
 - **Azure Event Hubs**
 - **Apache Kafka**
 
-Once connected, Real-Time Hub surfaces these CDC streams and enables routing to downstream consumers like Eventstream or directly to Eventhouse. From there, update policies written in KQL can be applied to manage transformations, filter on operations (insert/update/delete), and flatten nested structures typical of CDC payloads.
+Once connected, Real-time hub surfaces these CDC streams and enables routing to downstream consumers like Eventstream or directly to Eventhouse. From there, update policies written in KQL can be applied to manage transformations, filter on operations (insert/update/delete), and flatten nested structures typical of CDC payloads.
 
-**Use case:** A logistics platform streams package status changes from Azure SQL to Real-Time Hub using Debezium and Event Hubs. Real-Time Hub forwards the data to Eventhouse, where analysts monitor delivery performance using KQL dashboards.
+**Use case:** A logistics platform streams package status changes from Azure SQL to Real-time hub using Debezium and Event Hubs. Real-time hub forwards the data to Eventhouse, where analysts monitor delivery performance using KQL dashboards.
 
 ### 2. **Streaming Data Sources**
 
-Real-Time Hub provides native support for streaming data ingestion from industry-standard event brokers. This includes:
+Real-time hub provides native support for streaming data ingestion from industry-standard event brokers. This includes:
 
 - **Azure Event Hubs**: A fully managed, scalable event ingestion service. Event Hubs is ideal for telemetry, IoT, CDC, and microservices eventing.
-- **Apache Kafka**: A widely used open-source distributed event streaming platform. Real-Time Hub can connect to Kafka topics using built-in connectors, providing seamless integration for hybrid or on-premise workloads.
+- **Apache Kafka**: A widely used open-source distributed event streaming platform. Real-time hub can connect to Kafka topics using built-in connectors, providing seamless integration for hybrid or on-premise workloads.
 - **MQTT**: Lightweight publish-subscribe protocol commonly used in IoT scenarios.
-- **Custom HTTP Sources**: Custom applications or services that stream data via HTTP endpoints and are registered in Real-Time Hub as data sources.
+- **Custom HTTP Sources**: Custom applications or services that stream data via HTTP endpoints and are registered in Real-time hub as data sources.
 
-These streaming sources allow for ingestion of high-throughput, low-latency event data. Real-Time Hub ensures observability and governance over these sources, enabling operations teams to monitor ingestion rates, validate formats, and control downstream flow behavior.
+These streaming sources allow for ingestion of high-throughput, low-latency event data. Real-time hub ensures observability and governance over these sources, enabling operations teams to monitor ingestion rates, validate formats, and control downstream flow behavior.
 
-**Use case:** A smart factory uses MQTT to stream sensor data (temperature, vibration, power usage) to Real-Time Hub. From there, Eventstream applies filters and forwards critical anomalies to Eventhouse for analytics and to Activator for triggering alerts.
+**Use case:** A smart factory uses MQTT to stream sensor data (temperature, vibration, power usage) to Real-time hub. From there, Eventstream applies filters and forwards critical anomalies to Eventhouse for analytics and to Activator for triggering alerts.
 
 ### 3. **System Event Ingestion (Fabric and Azure Events)**
 
-Beyond external data streams, Real-Time Hub supports ingestion of **system-level events** emitted by Fabric and Azure services. These include:
+Beyond external data streams, Real-time hub supports ingestion of **system-level events** emitted by Fabric and Azure services. These include:
 
 - Power BI dataset refresh events
 - Workspace lifecycle events
 - Capacity usage events
 - Eventstream deployment or failure notifications
 
-These events are routed into Real-Time Hub using **Azure Event Grid** behind the scenes. From the user’s perspective, Real-Time Hub surfaces categories like **Fabric Events** and **Azure Events**, allowing simple configuration to route these system events to Eventstream, Activator, or Eventhouse.
+These events are routed into Real-time hub using **Azure Event Grid** behind the scenes. From the user’s perspective, Real-time hub surfaces categories like **Fabric Events** and **Azure Events**, allowing simple configuration to route these system events to Eventstream, Activator, or Eventhouse.
 
 This type of ingestion supports automation, observability, and governance without any custom instrumentation.
 
-**Use case:** A data platform team uses Real-Time Hub to ingest Power BI dataset refresh events and trigger follow-on data quality checks using Activator when refreshes complete.
+**Use case:** A data platform team uses Real-time hub to ingest Power BI dataset refresh events and trigger follow-on data quality checks using Activator when refreshes complete.
 
 ### 4. **File-Based Ingestion (Embedded in Eventhouse)**
 
-Real-Time Hub is also embedded into other Fabric surfaces—most notably the **Get Data** wizard in Eventhouse (KQL databases). Here, Real-Time Hub enables real-time and semi-real-time ingestion from:
+Real-time hub is also embedded into other Fabric surfaces—most notably the **Get Data** wizard in Eventhouse (KQL databases). Here, Real-time hub enables real-time and semi-real-time ingestion from:
 
 - **Local file uploads (CSV, TSV, JSON)**
 - **Azure Storage (Blob Containers)**
@@ -226,17 +226,17 @@ Real-Time Hub is also embedded into other Fabric surfaces—most notably the **G
 - **Eventstream** (as a source)
 - **Pipelines/Dataflows** shortcuts
 
-The embedded Real-Time Hub wizard allows users to infer schema, configure mapping policies, and preview data before ingestion. Files are uploaded to a temporary staging area, and Real-Time Hub coordinates ingestion into the KQL table using the engine’s native ingestion APIs.
+The embedded Real-time hub wizard allows users to infer schema, configure mapping policies, and preview data before ingestion. Files are uploaded to a temporary staging area, and Real-time hub coordinates ingestion into the KQL table using the engine’s native ingestion APIs.
 
 This pattern is particularly useful for developers and analysts who want to perform one-time loads or semi-structured ingestion without configuring a pipeline.
 
-**Use case:** A financial analyst uploads a CSV file with daily transactions into a KQL database via Eventhouse’s Get Data UI, which uses Real-Time Hub behind the scenes to perform the ingestion.
+**Use case:** A financial analyst uploads a CSV file with daily transactions into a KQL database via Eventhouse’s Get Data UI, which uses Real-time hub behind the scenes to perform the ingestion.
 
 ---
 
 ### 5. **Pre-Built Sources and Sample Data**
 
-To accelerate adoption, Real-Time Hub also exposes pre-configured and sample data streams. These streams can be connected with a single click and routed through Eventstream and Eventhouse. This is especially useful in training or POC environments where teams want to validate ingestion logic or test alerting and analytics scenarios before integrating production data.
+To accelerate adoption, Real-time hub also exposes pre-configured and sample data streams. These streams can be connected with a single click and routed through Eventstream and Eventhouse. This is especially useful in training or POC environments where teams want to validate ingestion logic or test alerting and analytics scenarios before integrating production data.
 
 **Use case:** During a workshop, developers use the package delivery sample stream to build dashboards, define rules in Activator, and practice using KQL on simulated parcel delivery data.
 
@@ -254,9 +254,9 @@ To accelerate adoption, Real-Time Hub also exposes pre-configured and sample dat
 - Filtering in Eventstream for high-frequency events → use Eventhouse instead.
 - Misuse of `greater than` in Activator → causes alert spamming.
 
-## Latency vs. Efficiency in Real-Time Hub: Balancing Act
+## Latency vs. Efficiency in Real-time hub: Balancing Act
 
-When architecting solutions with Microsoft Fabric Real-Time Hub, one of the most critical engineering balances to strike is between **latency** and **efficiency**. These two performance dimensions are often in tension, and misjudging the trade-off can lead to failed expectations, bloated workloads, or user dissatisfaction. The Real-Time Hub, Eventstream, Eventhouse, and Activator collectively provide the building blocks of responsive data infrastructure—but the responsibility of choosing the right tool at the right point in the pipeline remains with the architect.
+When architecting solutions with Microsoft Fabric Real-time hub, one of the most critical engineering balances to strike is between **latency** and **efficiency**. These two performance dimensions are often in tension, and misjudging the trade-off can lead to failed expectations, bloated workloads, or user dissatisfaction. The Real-time hub, Eventstream, Eventhouse, and Activator collectively provide the building blocks of responsive data infrastructure—but the responsibility of choosing the right tool at the right point in the pipeline remains with the architect.
 
 The platform is evolving toward a future with stronger schema enforcement, validation logic, and dead-letter handling. However, today’s architecture remains highly flexible, offering both power and risk. Misusing that flexibility—especially when it comes to latency-sensitive ingestion or high-frequency alerting—can derail even well-intended implementations.
 
@@ -266,7 +266,7 @@ Let’s explore this through the lens of two working implementations and two fre
 
 ### Scenario 1: Telemetry Ingestion with Eventhouse Update Policies
 
-Consider a use case where high-volume telemetry is streamed from industrial equipment into Eventhouse via Real-Time Hub. These events contain detailed metrics—temperatures, voltages, gear states—emitted multiple times per second per device. If the goal is to generate alerts or derive summaries based on these metrics, efficiency becomes paramount. The telemetry is consistent and voluminous, so routing through Eventstream for filtering could seem intuitive. But this is a misstep if latency is not the primary concern.
+Consider a use case where high-volume telemetry is streamed from industrial equipment into Eventhouse via Real-time hub. These events contain detailed metrics—temperatures, voltages, gear states—emitted multiple times per second per device. If the goal is to generate alerts or derive summaries based on these metrics, efficiency becomes paramount. The telemetry is consistent and voluminous, so routing through Eventstream for filtering could seem intuitive. But this is a misstep if latency is not the primary concern.
 
 Instead, the correct approach is to ingest the raw stream directly into Eventhouse and apply **KQL update policies** for filtering, transformation, and projection. These policies are applied post-ingestion, ensuring that data arrives quickly and transformations are handled with the optimized performance of the Kusto engine.
 
@@ -306,15 +306,15 @@ Using `changes()` is not just syntactically correct; it is architecturally align
 
 ### Conclusion
 
-Fabric Real-Time Hub gives you powerful primitives. But latency and efficiency are not features—they are design outcomes. Filtering in the wrong place or alerting on the wrong condition undermines system performance and user trust. As the platform matures, schema-first design and more prescriptive pipelines will support better defaults. Until then, thoughtful architecture—respecting the right stages for each operation—is how successful real-time systems are built.
+Latency and efficiency are not features—they are design outcomes. Filtering in the wrong place or alerting on the wrong condition undermines system performance and user trust. As the platform matures, schema-first design and more prescriptive pipelines will support better defaults. Until then, thoughtful architecture—respecting the right stages for each operation—is how successful real-time systems are built.
 
-In this module, you've seen the difference between filtering too early versus transforming at scale, and the impact of getting edge-triggering right in Activator. These insights are not just performance optimizations—they’re critical to delivering RTI solutions that are fast, scalable, and maintainable.
+In this module, you've seen the difference between filtering too early versus transforming at scale, and the impact of getting edge-triggering right in Activator. These insights are not just performance optimizations—they’re critical to delivering Real-time Intelligence solutions that are fast, scalable, and maintainable.
 
 ---
 
 ## 5. Troubleshooting
 
-This section outlines recurring misconfigurations and architectural missteps encountered in Real-Time Hub implementations. These issues often arise from incorrect assumptions about where logic should live in the pipeline—especially under performance constraints.
+This section outlines recurring misconfigurations and architectural missteps encountered in Real-time hub implementations. These issues often arise from incorrect assumptions about where logic should live in the pipeline—especially under performance constraints.
 
 ### Common Issues and Solutions
 
@@ -328,7 +328,7 @@ This section outlines recurring misconfigurations and architectural missteps enc
 
 #### Schema Inference Failures
 
-Real-Time Hub supports schema inference primarily for flat, single-header CSV files. It struggles with:
+Real-time hub supports schema inference primarily for flat, single-header CSV files. It struggles with:
 
 - Multiple header rows
 - Irregular or malformed data rows
@@ -356,16 +356,16 @@ A common anti-pattern in Activator usage is level-based evaluation (`value > thr
 
 ### Monitoring + Triage
 
-- Use **Real-Time Hub’s ingestion diagnostics** to track data volume, event lag, and connector health.
+- Use **Real-time hub’s ingestion diagnostics** to track data volume, event lag, and connector health.
 - Analyze **Eventstream metrics** to identify performance degradation from rule overload or skewed partitions.
 - Review **Activator evaluation logs** to diagnose rule churn, alert frequency, and state transitions.
-- Use **Azure Monitor** and **Log Analytics** to aggregate telemetry from Real-Time Hub, Eventstream, and Eventhouse for end-to-end observability.
+- Use **Azure Monitor** and **Log Analytics** to aggregate telemetry from Real-time hub, Eventstream, and Eventhouse for end-to-end observability.
 
 ---
 
 ## 6. Orchestration and Optimization
 
-- **Stream to Store, Transform at Rest**: Route raw data streams through Real-Time Hub into Eventhouse and perform business logic using KQL update policies. This decouples ingestion from transformation, improving both scalability and query latency.
+- **Stream to Store, Transform at Rest**: Route raw data streams through Real-time hub into Eventhouse and perform business logic using KQL update policies. This decouples ingestion from transformation, improving both scalability and query latency.
 
 - **Minimize Logic in Eventstream**: Use Eventstream for lightweight operations such as routing, reshaping, or basic filtering—not for complex joins or rule evaluation. This preserves throughput and reduces transformation bottlenecks.
 
@@ -373,7 +373,7 @@ A common anti-pattern in Activator usage is level-based evaluation (`value > thr
 
 - **Partition Strategically**: For high-volume sources like Kafka or Event Hubs, ensure partitioning aligns with logical workload boundaries (e.g., device ID, tenant ID) to prevent data skew and maximize parallelism across ingestion and query workloads.
 
-- **Monitor Lag and Policy Latency**: Continuously monitor Real-Time Hub ingestion lag, Eventstream throughput, and Eventhouse update policy latency. Use this telemetry to tune ingestion batch sizes, adjust rule complexity, or scale out resource allocations.
+- **Monitor Lag and Policy Latency**: Continuously monitor Real-time hub ingestion lag, Eventstream throughput, and Eventhouse update policy latency. Use this telemetry to tune ingestion batch sizes, adjust rule complexity, or scale out resource allocations.
 
 ---
 
@@ -546,7 +546,7 @@ Designing high-throughput, real-time ingestion pipelines in Microsoft Fabric Rea
 
 1. Upload two CSV files simulating delivery truck telemetry and parcel delivery status to a new KQL DB using the Get Data Wizard.
 2. Define ingestion mappings to reflect the schema (e.g., `parcel_id`, `status`, `location`, `timestamp`).
-3. Set up a Real-Time Hub connection via Eventstream to forward telemetry from an Event Hub or simulated stream.
+3. Set up a Real-time hub connection via Eventstream to forward telemetry from an Event Hub or simulated stream.
 4. Implement KQL update policies in Eventhouse to separate and enrich data by event type (e.g., truck movement vs. delivery status updates).
 5. Configure Activator to alert when a parcel status changes to `delayed` or `failed`. Integrate with Power Automate to notify the logistics team.
 

@@ -47,7 +47,7 @@ Finally, this architecture is enriched by **plugin extensibility**. Plugins like
 
 ---
 
-## Module 3: Technical Deep Dive Highlights
+## Technical Deep Dive Highlights
 
 ### Vectors and Embeddings
 
