@@ -158,7 +158,7 @@ Ingest the data into an Eventhouse table named `truck_logs`.
 
 Use the `ai_embeddings` plugin to convert the `incident_description` column into vector embeddings:
 
-```kql
+```kusto
 set async_execution = true;
 truck_logs
 | extend incident_vector = ai_embeddings("azure_openai_deployment_url", incident_description)
@@ -170,7 +170,7 @@ Ensure `incident_vector` is defined as a `dynamic` column in your table schema. 
 
 Example KQL snippet to confirm or cast the column:
 
-```kql
+```kusto
 truck_logs
 | extend incident_vector = todynamic(incident_vector)
 ```
@@ -179,7 +179,7 @@ truck_logs
 
 Use `vector_cosine_distance()` to find records similar to a new incident:
 
-```kql
+```kusto
 let new_incident = "Road closed due to snowstorm";
 let new_vector = ai_embeddings("azure_openai_deployment_url", new_incident);
 truck_logs
@@ -191,7 +191,7 @@ truck_logs
 
 Use `ai_chat_completion_prompt` to generate a summary for dispatchers:
 
-```kql
+```kusto
 truck_logs
 | where TimeStamp > ago(30m)
 | summarize logs=make_list(incident_description, 10)
@@ -206,7 +206,7 @@ Configure an Activator rule to trigger on critical phrases (e.g., "theft", "brea
 #### Export Embeddings to OneLake for ML Training
 Use `.export` or Continuous Export to write embeddings to OneLake in Delta Parquet format for use in ML model training pipelines.
 
-```kql
+```kusto
 .export async to delta (h@"https://<your_onelake_url>/deliveries/embeddings") <|
 truck_logs
 | project TimeStamp, incident_description, incident_vector

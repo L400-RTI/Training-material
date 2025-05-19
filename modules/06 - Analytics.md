@@ -45,7 +45,7 @@ Each of the analytics capabilities from the Kusto engine is implemented with an 
 
 An example, before we dive into the details is the one used for IP-adress lookup to get the Latitude and Longitude of an IP-adress:
 
-```kql
+```kusto
 print ip_location = geo_info_from_ip_address('20.53.203.50')
 ```
 
@@ -161,7 +161,7 @@ With tools like Azure Monitor Workbooks or Power BI, results from KQL queries ca
 
 1. Calculate Distance Between Two Points
 
-```kql
+```kusto
 let point1 = dynamic({"type":"Point","coordinates":[-122.12, 47.67]});
 let point2 = dynamic({"type":"Point","coordinates":[-122.33, 47.61]});
 print DistanceInMeters = geo_distance_2points(point1, point2)
@@ -169,7 +169,7 @@ print DistanceInMeters = geo_distance_2points(point1, point2)
 
 2. Filter Events Within a Radius
 
-```kql
+```kusto
 let center = dynamic({"type":"Point","coordinates":[-122.33, 47.61]});
 let radius = 1000; // in meters
 MyGeoTable
@@ -179,7 +179,7 @@ MyGeoTable
 
 3. Check If a Point is in a Polygon
 
-```kql
+```kusto
 let polygon = dynamic({
   "type":"Polygon",
   "coordinates":[[
@@ -193,7 +193,7 @@ MyGeoTable
 
 4. Cluster Events by Geohash
 
-```kql
+```kusto
 MyGeoTable
 | extend geohash = geo_point_to_geohash(longitude, latitude, 5)
 | summarize Count = count() by geohash
@@ -212,7 +212,7 @@ For forecasting, KQL provides the series_decompose_forecast() function, which pr
 1. Time-Series Preparation
    Before you can detect anomalies or forecast trends, you need to structure your data using make-series. This aggregates metrics over a time grain:
 
-```kql
+```kusto
 MyMetricsTable
 | make-series avgCPU=avg(CPU_Usage) on Timestamp in range(startofday(ago(7d)), now(), 1h)
 ```
@@ -221,7 +221,7 @@ MyMetricsTable
 
 This function flags values that deviate from the normal pattern:
 
-```kql
+```kusto
 MyMetricsTable
 | make-series avgCPU=avg(CPU_Usage) on Timestamp in range(startofday(ago(7d)), now(), 1h)
 | extend anomalies = series_decompose_anomalies(avgCPU, 3, -1, 'linefit')
@@ -235,7 +235,7 @@ MyMetricsTable
 
 You can predict future metric values using historical data:
 
-```kql
+```kusto
 MyMetricsTable
 | make-series avgCPU=avg(CPU_Usage) on Timestamp in range(startofday(ago(14d)), now(), 1h)
 | extend (forecast, lower, upper) = series_decompose_forecast(avgCPU, 24)
@@ -256,7 +256,7 @@ To work effectively with JSON and XML in KQL, it's important to understand the d
 1. JSON Parsing
    Example 1 – Parse a JSON string:
 
-```kql
+```kusto
 datatable(log: string)
 [
   '{"user":"alice","action":"login","meta":{"ip":"192.168.1.1","device":"mobile"}}'
@@ -267,13 +267,13 @@ datatable(log: string)
 
 Example 2 – Extract a value using extractjson():
 
-```kql
+```kusto
 MyLogs
 | extend ipAddress = extractjson("$.meta.ip", logField)
 Dot notation shortcut (when field is dynamic):
 ```
 
-```kql
+```kusto
 MyTable
 | extend userAgent = myjsonfield.device.os
 ```
@@ -282,14 +282,14 @@ MyTable
 
 Example – Extract value from XML using regex-style extract:
 
-```kql
+```kusto
 let xml = "<log><user>bob</user><action>logout</action></log>";
 print user = extract("<user>(.*?)</user>", 1, xml)
 ```
 
 Parsing XML into a structure (less common):
 
-```kql
+```kusto
 print data = parse_xml("<config><key>value</key></config>")
 ```
 

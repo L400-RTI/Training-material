@@ -93,7 +93,7 @@ This is done in an _ingestion mapping_ in the Eventhouse itself. These exists on
 
 An ingestion mapping consists of the columns and the corresponding data type - for instance:
 
-```kql
+```kusto
 
 .create table DestinationTable ingestion csv mapping "MappingOne"
 '['

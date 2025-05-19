@@ -63,7 +63,7 @@ Implications of capacity management tightly coupled with Eventhouse scaling mech
 
 Architecturally, this enforces a tight feedback loop between caching policies and deployment configurations: schema definitions must explicitly set caching and retention to control operational cost and scaling behavior.
 
-```kql
+```kusto
 .alter-merge table RawData policy caching hot = (0d)
 ```
 
@@ -139,7 +139,7 @@ This file describes the database.
 
 This file creates the assets within the KQL Database.
 
-```kql
+```kusto
 // KQL script
 // Use management commands in this script to configure your database items, such as tables, functions, materialized views, and more.
 
@@ -272,7 +272,7 @@ A critical technical factor for Real-Time Intelligence deployments is understand
 
 Caching and retention policies must be explicitly set in deployment scripts to avoid auto-scale drift and cost overrun.
 
-```kql
+```kusto
 .alter-merge table RawData policy caching hot = (0d)
 .alter-merge table RawData policy retention softdelete = (30d)
 ```
@@ -412,7 +412,7 @@ A typical deployment flow for a KQL Database looks like this:
 
 Use KQL command in your dev workspace:
 
-```kql
+```kusto
 .show database schema
 ```
 
@@ -496,7 +496,7 @@ To deploy across Dev → Test → Prod:
 
 Implement validation after deployment by querying:
 
-```kql
+```kusto
 .show cluster
 .show database schema
 .show tables details 5. Advantages and Considerations
@@ -675,7 +675,7 @@ This section provides actionable guidance for diagnosing and resolving common is
 
 **Diagnostic Command:**
 
-```kql
+```kusto
 .show database schema violations
 ```
 
@@ -705,7 +705,7 @@ Although not CI/CD-specific, capacity issues can block deployments in Real-Time 
 
 Queries slow or failing after deployment.
 
-```kql
+```kusto
 .show cluster
 .show cluster diagnostics
 .show tables details
