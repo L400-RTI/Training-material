@@ -169,8 +169,6 @@ Create the connection to the SQL server in such a way that it can be used to liv
 
 Use the live connection to create a query which uses the newly created connection in a KQL statement. The statement can be made in your own liking, as long as it uses both data from the SQL server and the existing KQL database.
 
-**Brian to add reference to materials and content**
-
 #### Read data from JSON file to Eventhouse
 
 In this task, you will build a ingestion process directly in the KQL database. So no use of Evenstrem, shortcuts or other "built-in" connectors.
