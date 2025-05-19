@@ -79,7 +79,7 @@ Activator is the execution engine for real-time actions:
 All Real-Time Intelligence components are built on core Fabric foundations:
 
 - OneLake for unified data storage across batch and streaming workloads
-- Real-Time Hub as a logical fabric-wide orchestration layer
+- Real-Time hub as a logical fabric-wide orchestration layer
 - AI and Copilot Agents for intelligent assistance and automation enrichment
 
 #### Architectural Highlights
@@ -273,7 +273,7 @@ The best Real-Time Intelligence systems are not just fast—they’re also intro
 
 #### Beyond Configuration: Architecting for Flow and Efficiency
 
-In Real-Time Intelligence, services like Eventstream, KQL DB, Real-Time Hub and Activatorare powerful individually - but they only deliver business value when orchestrated into coherent, low-latency dataflows.
+In Real-Time Intelligence, services like Eventstream, KQL DB, Real-Time hub and Activatorare powerful individually - but they only deliver business value when orchestrated into coherent, low-latency dataflows.
 
 This course emphasizes not just how to configure components, but how to architect and optimize them holistically - so that data moves with purpose, triggers fire with precision, and costs stay predictable at scale.
 
@@ -330,7 +330,7 @@ Poor assumptions about these two dimensions are a leading cause of production is
 
 #### Why Schemas Matter in Real Time
 
-Real-Time Intelligence services - Eventstream, Eventhouse, Activator, Real-Time Hub - depend on explicit schema understanding to parse, correlate, and act on data. But in modern streaming systems, schemas are rarely fixed:
+Real-Time Intelligence services - Eventstream, Eventhouse, Activator, Real-Time hub - depend on explicit schema understanding to parse, correlate, and act on data. But in modern streaming systems, schemas are rarely fixed:
 
 - JSON payloads evolve
 - Fields become nullable or disappear
@@ -402,7 +402,7 @@ Yet many implementations defer observability until after deployment, resulting i
 
 You’ll learn how to:
 
-- Leverage built-in diagnostics in Eventstream, Activator, and Real-Time Hub
+- Leverage built-in diagnostics in Eventstream, Activator, and Real-Time hub
 - Use Azure Monitor, Log Analytics, and diagnostic logs for telemetry aggregation
 - Build live dashboards in Power BI for Real-Time Intelligence health monitoring
 - Trace a single event across the full Real-Time Intelligence pipeline using correlation IDs and logging hooks
