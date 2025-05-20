@@ -9,11 +9,6 @@
 ```
 [{"Properties":{"Ordinal":"0"},"column":"timestamp","datatype":""},{"Properties":{"Ordinal":"1"},"column":"value","datatype":""}]
 ```
-.create-merge table FabricWorkspaceEvents (id:guid, datacontenttype:string, specversion:real, source:guid, ['time']:datetime, subject:string, dataschemaversion:real, type:string, data:dynamic) with (folder = "Auxiliar") 
-.create-or-alter table FabricWorkspaceEvents ingestion json mapping 'FabricWorkspaceEvents_mapping'
-```
-[{"Properties":{"Path":"$['id']"},"column":"id","datatype":""},{"Properties":{"Path":"$['datacontenttype']"},"column":"datacontenttype","datatype":""},{"Properties":{"Path":"$['specversion']"},"column":"specversion","datatype":""},{"Properties":{"Path":"$['source']"},"column":"source","datatype":""},{"Properties":{"Path":"$['time']"},"column":"time","datatype":""},{"Properties":{"Path":"$['subject']"},"column":"subject","datatype":""},{"Properties":{"Path":"$['dataschemaversion']"},"column":"dataschemaversion","datatype":""},{"Properties":{"Path":"$['type']"},"column":"type","datatype":""},{"Properties":{"Path":"$['data']"},"column":"data","datatype":""}]
-```
 .create-merge table Json (ProductKey:int, age:int, name:string, email:string, phone:string, address:string, about:string, registered:datetime, latitude:real, longitude:real, heightCM:int, weightKG:int, tags:dynamic, friends:dynamic, greeting:string, favoriteFruit:string) 
 .create-or-alter table Json ingestion json mapping 'Json_mapping'
 ```
@@ -23,6 +18,7 @@
 .create-merge table SlowDelivery (SalesOrderNumber:string, ShipDate:datetime, OrderDate:datetime, DueDate:datetime, CustomerKey:string, ProductKey:string, SalesTerritoryKey:string, RevisionNumber:long, OrderQuantity:long, UnitPrice:dynamic, SalesAmount:long, DiscountAmount:dynamic, ProductStandardCost:dynamic, EventType:string) with (folder = "02. Silver") 
 .create-merge table SalesOrderDetail (SalesOrderID:int, SalesOrderDetailID:int, CarrierTrackingNumber:string, OrderQty:int, ProductID:int, SpecialOfferID:int, UnitPrice:decimal, UnitPriceDiscount:decimal, LineTotal:decimal, rowguid:string, ModifiedDate:datetime) with (folder = "Auxiliar") 
 .create-merge table SalesOrderHeader (SalesOrderID:int, RevisionNumber:int, OrderDate:datetime, DueDate:datetime, ShipDate:datetime, Status:int, OnlineOrderFlag:int, SalesOrderNumber:string, PurchaseOrderNumber:string, AccountNumber:string, CustomerID:int, SalesPersonID:int, TerritoryID:int, BillToAddressID:int, ShipToAddressID:int, ShipMethodID:int, CreditCardID:int, CreditCardApprovalCode:string, CurrencyRateID:int, SubTotal:decimal, TaxAmt:decimal, Freight:decimal, TotalDue:int, Comment:string, rowguid:string, ModifiedDate:datetime) with (folder = "Auxiliar") 
+.create-merge table FabricWorkspaceEvents (id:string, datacontenttype:string, specversion:real, source:string, ['time']:datetime, subject:string, dataschemaversion:real, type:string, data:dynamic) with (folder = "Auxiliar") 
 .create-or-alter function with (skipvalidation = "true") parse_RapidDelivery() {
 RawRapidDelivery
 | project SalesOrderNumber=tostring(SalesOrderNumber),
