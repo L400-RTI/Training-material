@@ -1,0 +1,58 @@
+{
+  "queryset": {
+    "version": "1.0.0",
+    "dataSources": [
+      {
+        "id": "ed994465-a4cf-46b3-9786-04560a53ff70",
+        "clusterUri": "",
+        "type": "Fabric",
+        "databaseItemId": "514b9ac4-fd6f-85b2-4103-3199c518516d",
+        "databaseItemName": "L400-HOL"
+      }
+    ],
+    "tabs": [
+      {
+        "id": "9f0aaa90-a4c1-4004-b214-607d021b558e",
+        "content": "\n// startup script for all labs to get data and be ready for the tasks\n.execute database script <|\n.drop table SalesOrderDetail ifexists \n.drop table SalesOrderHeader ifexists \n.create table SalesOrderDetail (\n    SalesOrderID:int,\n\tSalesOrderDetailID:int,\n\tCarrierTrackingNumber:string,\n\tOrderQty:int,\n\tProductID:int,\n\tSpecialOfferID:int,\n\tUnitPrice:decimal,\n\tUnitPriceDiscount:decimal,\n\tLineTotal:decimal, \n\trowguid:string,\n\tModifiedDate:datetime \n)\n.create table SalesOrderHeader (\n\tSalesOrderID:int,\n\tRevisionNumber:int,\n\tOrderDate:datetime,\n\tDueDate:datetime,\n\tShipDate:datetime,\n\tStatus:int,\n\tOnlineOrderFlag:int,\n\tSalesOrderNumber:string,\n\tPurchaseOrderNumber:string,\n\tAccountNumber:string,\n\tCustomerID:int,\n\tSalesPersonID:int,\n\tTerritoryID:int,\n\tBillToAddressID:int,\n\tShipToAddressID:int,\n\tShipMethodID:int,\n\tCreditCardID:int,\n\tCreditCardApprovalCode:string,\n\tCurrencyRateID:int,\n\tSubTotal:decimal,\n\tTaxAmt:decimal,\n\tFreight:decimal,\n\tTotalDue:int,\n\tComment:string,\n\trowguid:string,\n\tModifiedDate:datetime\n)    \n.ingest into table SalesOrderHeader (@'https://raw.githubusercontent.com/microsoft/fabric-samples/refs/heads/main/community-samples/Real-Time-Intelligence-L400/SalesOrderHeader.csv')\nwith (\n\tformat = \"csv\"\n\t,ignoreFirstRecord = true\n)\n.ingest into table SalesOrderDetail (@'https://raw.githubusercontent.com/microsoft/fabric-samples/refs/heads/main/community-samples/Real-Time-Intelligence-L400/SalesOrderDetail.csv')\nwith (\n\tformat = \"csv\"\n\t,ignoreFirstRecord = true\n)",
+        "title": "Tab",
+        "dataSourceId": "ed994465-a4cf-46b3-9786-04560a53ff70"
+      },
+      {
+        "id": "0c00f1a7-d0d2-4356-866b-224c26585756",
+        "content": ".create-or-alter  external table extFabrikamCustomers( \n       [CustomerID]: string \n      ,[FullName]: string \n      ,[Address]: string \n      ,[State]: string \n      ,[ZipCode]: string \n      ,[Latitude]: real \n      ,[Longitude]: real  \n )  \n kind=sql \n table=[dbo.FabrikamCustomers] \n (  \n h@'Server= pragmaticworkspublic.database.windows.net,1433;Initial Catalog=AdventureWorksDW;User Id=PWStudent;Password=PW5tud3nt' \n ) \n with  \n ( \n createifnotexists = true \n ) \n\n\nexternal_table('extFabrikamCustomers')\n\nexternal_table('Customers')\n\nexternal_table('Customers_Slow')\n\n\n\nexternal_table('extFabrikamCustomers')\n| join RawRapidDelivery on $left.CustomerID == $right.CustomerKey\n| extend OrderDate = todatetime(strcat(OrderDate,\" \", OrderTime) )\n| getschema \n\nFabricWorkspaceEvents\n| getschema kind=csl \n\n.drop table FabricWorkspaceEvents\n\n.create table FabricWorkspaceEvents(id:string , datacontenttype:string, specversion:real, source:string , ['time']:datetime, subject:string, dataschemaversion:real, type:string, data:dynamic) with (folder = \"Auxiliar\")",
+        "title": "External Tables",
+        "dataSourceId": "ed994465-a4cf-46b3-9786-04560a53ff70"
+      },
+      {
+        "id": "6ba012a7-92d2-4ad7-8ff3-eb1b636cbc8e",
+        "content": ".alter table RawRapidDelivery folder \"01. Bronze\"\n\n.alter table RawSlowDelivery folder \"01. Bronze\"\n\n.alter table Anomaly folder \"Auxiliar\"\n\n.alter table FabricWorkspaceEvents folder \"Auxiliar\"\n\n.alter table SalesOrderDetail folder \"Auxiliar\"\n\n.alter table SalesOrderHeader folder \"Auxiliar\"\n\n\n.create-or-alter function parse_RapidDelivery(){\nRawRapidDelivery\n| project SalesOrderNumber=tostring(SalesOrderNumber),\n    ShipDate = todatetime(ShipDate),\n    OrderDate = todatetime(strcat(OrderDate,\" \",OrderTime)),\n    DueDate = todatetime(strcat(DueDate,\" \",DueTime)),\n    CustomerKey,\n    ProductKey = tostring(ProductKey),\n    SalesTerritoryKey = tostring(SalesTerritoryKey),\n    RevisionNumber,\n    OrderQuantity,\n    UnitPrice,\n    SalesAmount = UnitPrice * OrderQuantity,\n    DiscountAmount,\n    ProductStandardCost,\n    EventType\n}\n\n\n.create-or-alter function parse_SlowDelivery(){\nRawSlowDelivery\n| project SalesOrderNumber=tostring(SalesOrderNumber),\n    ShipDate = todatetime(ShipDate),\n    OrderDate = todatetime(strcat(OrderDate,\" \",OrderTime)),\n    DueDate = todatetime(strcat(DueDate,\" \",DueTime)),\n    CustomerKey,\n    ProductKey = tostring(ProductKey),\n    SalesTerritoryKey = tostring(SalesTerritoryKey),\n    RevisionNumber,\n    OrderQuantity,\n    UnitPrice,\n    SalesAmount = UnitPrice * OrderQuantity,\n    DiscountAmount,\n    ProductStandardCost,\n    EventType\n}\n\n\n\n.set-or-replace RapidDelivery <| parse_RapidDelivery\n\n\n\n\n.alter table RapidDelivery policy update\n```[{\n    \"IsEnabled\": true,\n    \"Source\": \"RawRapidDelivery\",\n    \"Query\": \"parse_RapidDelivery\",\n    \"IsTransactional\": false,\n    \"PropagateIngestionProperties\": false\n}]```\n\n\n.set-or-replace SlowDelivery <| parse_SlowDelivery\n\n\n.alter table SlowDelivery policy update\n```[{\n    \"IsEnabled\": true,\n    \"Source\": \"RawSlowDelivery\",\n    \"Query\": \"parse_SlowDelivery\",\n    \"IsTransactional\": false,\n    \"PropagateIngestionProperties\": false\n}]```\n\n\n.alter table RapidDelivery folder \"02. Silver\"\n\n.alter table SlowDelivery folder \"02. Silver\"\n\n\n.create-or-alter materialized-view LastRapidDeliveryByCustomer on table RapidDelivery {\nRapidDelivery\n| summarize arg_max(OrderDate, SalesOrderNumber, ProductKey, SalesTerritoryKey, OrderQuantity, UnitPrice, SalesAmount, DiscountAmount, ProductStandardCost) by CustomerKey\n}\n\n.create-or-alter materialized-view TotalSalesByProductOrderDateHour on table RapidDelivery {\nRapidDelivery\n| summarize TotalSales = sum(SalesAmount) by ProductKey, bin(OrderDate,1h)\n}\n\n\n.alter materialized-view LastRapidDeliveryByCustomer folder \"03. Gold\"\n\n\n.alter materialized-view TotalSalesByProductOrderDateHour folder \"03. Gold\"\n\nexternal_table('Customers')\n\n\nexternal_table('DeliveryTrucks')",
+        "title": "",
+        "dataSourceId": "ed994465-a4cf-46b3-9786-04560a53ff70"
+      },
+      {
+        "id": "661e85e8-52cb-4004-921b-4756b0df0249",
+        "content": "external_table('Customers')",
+        "title": "",
+        "dataSourceId": "ed994465-a4cf-46b3-9786-04560a53ff70"
+      },
+      {
+        "id": "e753471f-c0b4-46fe-8467-2d9b076045b8",
+        "content": ".show ingestion failures \n\n.show materialized-views \n\n.show queries \n\n.show operations \n\n.show extents \n\n.show cluster \n\n.show diagnostics ",
+        "title": "Diagnostic commands",
+        "dataSourceId": "ed994465-a4cf-46b3-9786-04560a53ff70"
+      },
+      {
+        "id": "69831604-77d1-47d3-b0b2-3e09a58aeed5",
+        "content": "// Geospacial analytics\n\nJson\n| summarize CountOfObservations=count() by H3Cell = geo_point_to_h3cell(latitude, longitude, 10)\n| where H3Cell <> \"\"\n| take 2\n\n\nlet H3Cell1 = \"8ae4c1624bb7fff\";\nlet H3cell2 = \"8ae85d2f3c6ffff\";\nprint geo_h3cell_to_central_point(H3Cell1)\n\n\n//Shortest distance from London to Seattle\n\nrange i from 1 to 1000000 step 1\n| project lng = rand() * real(-122), lat = rand() * 90\n| where lng between(real(-122) .. 0) and lat between(47 .. 90)\n| where geo_distance_point_to_line(lng,lat,dynamic({\"type\":\"LineString\",\"coordinates\":[[-122,47],[0,51]]})) < 500\n| render scatterchart with (kind=map)\n",
+        "title": "Analytics",
+        "dataSourceId": "ed994465-a4cf-46b3-9786-04560a53ff70"
+      },
+      {
+        "id": "eeebe00b-2ef4-45da-9e2f-ce9dd025ddd4",
+        "content": "cluster(\"help\").database(\"SampleLogs\").RawSysLogs\n| evaluate bag_unpack(fields)\n| where avg_cpu_percent <> \"\"\n| project avg_cpu_percent=todouble(avg_cpu_percent), timestamp, active_workers_count\n| make-series AvgCPUPercent = avg(avg_cpu_percent), SumActiveUsers = sum(active_workers_count) on timestamp step 10min\n| extend outliers = series_outliers(AvgCPUPercent)\n| extend pos_anomalies = array_iff(series_greater_equals(outliers, 1.5), 1, 0)\n| render anomalychart with(xcolumn=timestamp, ycolumns=AvgCPUPercent, anomalycolumns=pos_anomalies)",
+        "title": "Anomoly detection",
+        "dataSourceId": "ed994465-a4cf-46b3-9786-04560a53ff70"
+      }
+    ]
+  }
+}

@@ -1,0 +1,119 @@
+{
+  "sources": [
+    {
+      "id": "201f0e36-c89a-4fde-b511-6e2f3ee16d78",
+      "name": "FactoryDataInput",
+      "type": "AzureEventHub",
+      "properties": {
+        "dataConnectionId": "1ff15eb1-dd24-45fb-96c4-6063b57cc82b",
+        "consumerGroupName": "$Default",
+        "inputSerialization": {
+          "type": "Json",
+          "properties": {
+            "encoding": "UTF8"
+          }
+        }
+      }
+    }
+  ],
+  "destinations": [
+    {
+      "id": "42b43d69-9a93-4fe7-8009-130abad2f66e",
+      "name": "Activator",
+      "type": "Activator",
+      "properties": {
+        "workspaceId": "00000000-0000-0000-0000-000000000000",
+        "itemId": "1c534b5b-6f0c-ad8b-4225-8d373670662a",
+        "inputSerialization": {
+          "type": "Json",
+          "properties": {
+            "encoding": "UTF8"
+          }
+        }
+      },
+      "inputNodes": [
+        {
+          "name": "FactoryData-stream"
+        }
+      ],
+      "inputSchemas": [
+        {
+          "name": "FactoryData-stream",
+          "schema": {
+            "columns": [
+              {
+                "name": "Cell",
+                "type": "Nvarchar(max)",
+                "fields": null,
+                "items": null
+              },
+              {
+                "name": "Site",
+                "type": "Nvarchar(max)",
+                "fields": null,
+                "items": null
+              },
+              {
+                "name": "Line",
+                "type": "Nvarchar(max)",
+                "fields": null,
+                "items": null
+              },
+              {
+                "name": "EnergyConsumption",
+                "type": "Float",
+                "fields": null,
+                "items": null
+              },
+              {
+                "name": "Temperature",
+                "type": "Float",
+                "fields": null,
+                "items": null
+              },
+              {
+                "name": "Timestamp",
+                "type": "Nvarchar(max)",
+                "fields": null,
+                "items": null
+              },
+              {
+                "name": "EventProcessedUtcTime",
+                "type": "DateTime",
+                "fields": null,
+                "items": null
+              },
+              {
+                "name": "PartitionId",
+                "type": "BigInt",
+                "fields": null,
+                "items": null
+              },
+              {
+                "name": "EventEnqueuedUtcTime",
+                "type": "DateTime",
+                "fields": null,
+                "items": null
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "streams": [
+    {
+      "id": "cff4ae75-211a-477c-9079-81f196745905",
+      "name": "FactoryData-stream",
+      "type": "DefaultStream",
+      "properties": {},
+      "inputNodes": [
+        {
+          "name": "FactoryDataInput"
+        }
+      ]
+    }
+  ],
+  "operators": [],
+  "compatibilityLevel": "1.0"
+}

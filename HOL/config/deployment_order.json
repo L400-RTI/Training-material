@@ -20,5 +20,17 @@
     {
         "name": "OrderSales.Eventstream",
         "id": "01a932e8-94db-b3b9-46ad-17d437bfec20"
+    },
+    {
+        "name": "L400-HOL_queryset.KQLQueryset",
+        "id": "9346e8ce-4f86-a705-4d5b-429adfe84b83"
+    },
+    {
+        "name": "Analytics.KQLQueryset",
+        "id": "d97a8191-d309-98ff-4c1f-642f8e675dc1"
+    },
+    {
+        "name": "Real-Time Dashboard.KQLDashboard",
+        "id": "8e97ca27-9699-b902-41c3-6e79eca4c74a"
     }
 ]

@@ -2,8 +2,6 @@
 // Use management commands in this script to configure your database items, such as tables, functions, materialized views, and more.
 
 
-.create-merge table SalesOrderDetail (SalesOrderID:int, SalesOrderDetailID:int, CarrierTrackingNumber:string, OrderQty:int, ProductID:int, SpecialOfferID:int, UnitPrice:decimal, UnitPriceDiscount:decimal, LineTotal:decimal, rowguid:string, ModifiedDate:datetime) with (folder = "Auxiliar") 
-.create-merge table SalesOrderHeader (SalesOrderID:int, RevisionNumber:int, OrderDate:datetime, DueDate:datetime, ShipDate:datetime, Status:int, OnlineOrderFlag:int, SalesOrderNumber:string, PurchaseOrderNumber:string, AccountNumber:string, CustomerID:int, SalesPersonID:int, TerritoryID:int, BillToAddressID:int, ShipToAddressID:int, ShipMethodID:int, CreditCardID:int, CreditCardApprovalCode:string, CurrencyRateID:int, SubTotal:decimal, TaxAmt:decimal, Freight:decimal, TotalDue:int, Comment:string, rowguid:string, ModifiedDate:datetime) with (folder = "Auxiliar") 
 .create-merge table RawRapidDelivery (SalesOrderNumber:long, ShipDate:string, OrderDate:string, OrderTime:string, DueDate:string, DueTime:string, CustomerKey:string, ProductKey:long, SalesTerritoryKey:long, RevisionNumber:long, OrderQuantity:long, UnitPrice:dynamic, DiscountAmount:dynamic, ProductStandardCost:dynamic, IsRapidDelivery:long, IsRapidDeliveryLarge:long, EventType:string, EventProcessedUtcTime:datetime, PartitionId:long, EventEnqueuedUtcTime:datetime) with (folder = "01. Bronze") 
 .create-merge table RawSlowDelivery (SalesOrderNumber:long, ShipDate:string, OrderDate:string, OrderTime:string, DueDate:string, DueTime:string, CustomerKey:string, ProductKey:long, SalesTerritoryKey:long, RevisionNumber:long, OrderQuantity:long, UnitPrice:dynamic, DiscountAmount:dynamic, ProductStandardCost:dynamic, IsRapidDelivery:long, IsRapidDeliveryLarge:long, EventType:string, EventProcessedUtcTime:datetime, PartitionId:long, EventEnqueuedUtcTime:datetime) with (folder = "01. Bronze") 
 .create-merge table Anomaly (timestamp:datetime, value:real) with (folder = "Auxiliar") 
@@ -23,6 +21,8 @@
 ```
 .create-merge table RapidDelivery (SalesOrderNumber:string, ShipDate:datetime, OrderDate:datetime, DueDate:datetime, CustomerKey:string, ProductKey:string, SalesTerritoryKey:string, RevisionNumber:long, OrderQuantity:long, UnitPrice:dynamic, SalesAmount:long, DiscountAmount:dynamic, ProductStandardCost:dynamic, EventType:string) with (folder = "02. Silver") 
 .create-merge table SlowDelivery (SalesOrderNumber:string, ShipDate:datetime, OrderDate:datetime, DueDate:datetime, CustomerKey:string, ProductKey:string, SalesTerritoryKey:string, RevisionNumber:long, OrderQuantity:long, UnitPrice:dynamic, SalesAmount:long, DiscountAmount:dynamic, ProductStandardCost:dynamic, EventType:string) with (folder = "02. Silver") 
+.create-merge table SalesOrderDetail (SalesOrderID:int, SalesOrderDetailID:int, CarrierTrackingNumber:string, OrderQty:int, ProductID:int, SpecialOfferID:int, UnitPrice:decimal, UnitPriceDiscount:decimal, LineTotal:decimal, rowguid:string, ModifiedDate:datetime) with (folder = "Auxiliar") 
+.create-merge table SalesOrderHeader (SalesOrderID:int, RevisionNumber:int, OrderDate:datetime, DueDate:datetime, ShipDate:datetime, Status:int, OnlineOrderFlag:int, SalesOrderNumber:string, PurchaseOrderNumber:string, AccountNumber:string, CustomerID:int, SalesPersonID:int, TerritoryID:int, BillToAddressID:int, ShipToAddressID:int, ShipMethodID:int, CreditCardID:int, CreditCardApprovalCode:string, CurrencyRateID:int, SubTotal:decimal, TaxAmt:decimal, Freight:decimal, TotalDue:int, Comment:string, rowguid:string, ModifiedDate:datetime) with (folder = "Auxiliar") 
 .create-or-alter function with (skipvalidation = "true") parse_RapidDelivery() {
 RawRapidDelivery
 | project SalesOrderNumber=tostring(SalesOrderNumber),
@@ -61,7 +61,5 @@ RawSlowDelivery
 | summarize arg_max(OrderDate, SalesOrderNumber, ProductKey, SalesTerritoryKey, OrderQuantity, UnitPrice, SalesAmount, DiscountAmount, ProductStandardCost) by CustomerKey }
 .create-or-alter materialized-view with (Folder = "03. Gold")  TotalSalesByProductOrderDateHour on table RapidDelivery { RapidDelivery
 | summarize TotalSales = sum(SalesAmount) by ProductKey, bin(OrderDate,1h) }
-.alter column SalesOrderDetail.['OrderQty'] policy encoding type = 'SpreadNumeric'
-.alter column SalesOrderDetail.['rowguid'] policy encoding type = 'Identifier'
 .alter table RapidDelivery policy update "[{\"IsEnabled\":true,\"Source\":\"RawRapidDelivery\",\"Query\":\"parse_RapidDelivery\",\"IsTransactional\":false,\"PropagateIngestionProperties\":false,\"ManagedIdentity\":null}]"
 .alter table SlowDelivery policy update "[{\"IsEnabled\":true,\"Source\":\"RawSlowDelivery\",\"Query\":\"parse_SlowDelivery\",\"IsTransactional\":false,\"PropagateIngestionProperties\":false,\"ManagedIdentity\":null}]"
