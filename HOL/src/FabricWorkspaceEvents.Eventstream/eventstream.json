@@ -29,7 +29,7 @@
         "workspaceId": "00000000-0000-0000-0000-000000000000",
         "itemId": "514b9ac4-fd6f-85b2-4103-3199c518516d",
         "tableName": "FabricWorkspaceEvents",
-        "connectionName": "fabric_event_stream_L400-Test-Fabric",
+        "connectionName": "fabric_event_stream_L400-Fabric",
         "mappingRuleName": "FabricWorkspaceEvents_mapping"
       },
       "inputNodes": [
