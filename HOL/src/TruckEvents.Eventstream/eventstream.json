@@ -1,0 +1,226 @@
+{
+  "sources": [
+    {
+      "id": "f8d784ad-675a-4f1d-973a-fda81b57e75f",
+      "name": "TruckEventsInput",
+      "type": "CustomEndpoint",
+      "properties": {}
+    }
+  ],
+  "destinations": [
+    {
+      "id": "76d3aa52-af25-4c58-a597-c37b40677dab",
+      "name": "TruckEventsEH",
+      "type": "Eventhouse",
+      "properties": {
+        "dataIngestionMode": "ProcessedIngestion",
+        "workspaceId": "00000000-0000-0000-0000-000000000000",
+        "itemId": "514b9ac4-fd6f-85b2-4103-3199c518516d",
+        "databaseName": "L400-HOL",
+        "tableName": "TruckEvents",
+        "inputSerialization": {
+          "type": "Json",
+          "properties": {
+            "encoding": "UTF8"
+          }
+        }
+      },
+      "inputNodes": [
+        {
+          "name": "ManageFields"
+        }
+      ],
+      "inputSchemas": [
+        {
+          "name": "ManageFields",
+          "schema": {
+            "columns": [
+              {
+                "name": "TruckID",
+                "type": "BigInt",
+                "fields": null,
+                "items": null
+              },
+              {
+                "name": "latitude",
+                "type": "Float",
+                "fields": null,
+                "items": null
+              },
+              {
+                "name": "longitude",
+                "type": "Float",
+                "fields": null,
+                "items": null
+              },
+              {
+                "name": "EventProcessedUtcTime",
+                "type": "DateTime",
+                "fields": null,
+                "items": null
+              },
+              {
+                "name": "PartitionId",
+                "type": "BigInt",
+                "fields": null,
+                "items": null
+              },
+              {
+                "name": "EventEnqueuedUtcTime",
+                "type": "DateTime",
+                "fields": null,
+                "items": null
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "streams": [
+    {
+      "id": "5355a823-e227-415c-a1f7-496c208a9611",
+      "name": "TruckEvents-stream",
+      "type": "DefaultStream",
+      "properties": {},
+      "inputNodes": [
+        {
+          "name": "TruckEventsInput"
+        }
+      ]
+    }
+  ],
+  "operators": [
+    {
+      "name": "ManageFields",
+      "type": "ManageFields",
+      "inputNodes": [
+        {
+          "name": "TruckEvents-stream"
+        }
+      ],
+      "properties": {
+        "columns": [
+          {
+            "type": "Rename",
+            "properties": {
+              "column": {
+                "expressionType": "ColumnReference",
+                "node": null,
+                "columnName": "TruckID",
+                "columnPathSegments": []
+              }
+            },
+            "alias": "TruckID"
+          },
+          {
+            "type": "Rename",
+            "properties": {
+              "column": {
+                "expressionType": "ColumnReference",
+                "node": null,
+                "columnName": "latitude",
+                "columnPathSegments": []
+              }
+            },
+            "alias": "latitude"
+          },
+          {
+            "type": "Rename",
+            "properties": {
+              "column": {
+                "expressionType": "ColumnReference",
+                "node": null,
+                "columnName": "longitude",
+                "columnPathSegments": []
+              }
+            },
+            "alias": "longitude"
+          },
+          {
+            "type": "Rename",
+            "properties": {
+              "column": {
+                "expressionType": "ColumnReference",
+                "node": null,
+                "columnName": "EventProcessedUtcTime",
+                "columnPathSegments": []
+              }
+            },
+            "alias": "EventProcessedUtcTime"
+          },
+          {
+            "type": "Rename",
+            "properties": {
+              "column": {
+                "expressionType": "ColumnReference",
+                "node": null,
+                "columnName": "PartitionId",
+                "columnPathSegments": []
+              }
+            },
+            "alias": "PartitionId"
+          },
+          {
+            "type": "Rename",
+            "properties": {
+              "column": {
+                "expressionType": "ColumnReference",
+                "node": null,
+                "columnName": "EventEnqueuedUtcTime",
+                "columnPathSegments": []
+              }
+            },
+            "alias": "EventEnqueuedUtcTime"
+          }
+        ]
+      },
+      "inputSchemas": [
+        {
+          "name": "TruckEvents-stream",
+          "schema": {
+            "columns": [
+              {
+                "name": "TruckID",
+                "type": "BigInt",
+                "fields": null,
+                "items": null
+              },
+              {
+                "name": "latitude",
+                "type": "Float",
+                "fields": null,
+                "items": null
+              },
+              {
+                "name": "longitude",
+                "type": "Float",
+                "fields": null,
+                "items": null
+              },
+              {
+                "name": "EventProcessedUtcTime",
+                "type": "DateTime",
+                "fields": null,
+                "items": null
+              },
+              {
+                "name": "PartitionId",
+                "type": "BigInt",
+                "fields": null,
+                "items": null
+              },
+              {
+                "name": "EventEnqueuedUtcTime",
+                "type": "DateTime",
+                "fields": null,
+                "items": null
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "compatibilityLevel": "1.0"
+}

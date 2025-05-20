@@ -20,5 +20,13 @@
     {
         "name": "OrderSales.Eventstream",
         "id": "01a932e8-94db-b3b9-46ad-17d437bfec20"
+    },
+    {
+        "name": "TruckEvents.Eventstream",
+        "id": "a621f74d-d212-a446-4240-3bc6b5590e02"
+    },
+    {
+        "name": "TruckEvents.Notebook",
+        "id": "57b54e96-4b8e-9fbb-4c9b-f96efbedd596"
     }
 ]
