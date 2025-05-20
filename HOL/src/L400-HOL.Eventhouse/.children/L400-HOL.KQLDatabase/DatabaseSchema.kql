@@ -19,6 +19,7 @@
 .create-merge table SalesOrderDetail (SalesOrderID:int, SalesOrderDetailID:int, CarrierTrackingNumber:string, OrderQty:int, ProductID:int, SpecialOfferID:int, UnitPrice:decimal, UnitPriceDiscount:decimal, LineTotal:decimal, rowguid:string, ModifiedDate:datetime) with (folder = "Auxiliar") 
 .create-merge table SalesOrderHeader (SalesOrderID:int, RevisionNumber:int, OrderDate:datetime, DueDate:datetime, ShipDate:datetime, Status:int, OnlineOrderFlag:int, SalesOrderNumber:string, PurchaseOrderNumber:string, AccountNumber:string, CustomerID:int, SalesPersonID:int, TerritoryID:int, BillToAddressID:int, ShipToAddressID:int, ShipMethodID:int, CreditCardID:int, CreditCardApprovalCode:string, CurrencyRateID:int, SubTotal:decimal, TaxAmt:decimal, Freight:decimal, TotalDue:int, Comment:string, rowguid:string, ModifiedDate:datetime) with (folder = "Auxiliar") 
 .create-merge table FabricWorkspaceEvents (id:string, datacontenttype:string, specversion:real, source:string, ['time']:datetime, subject:string, dataschemaversion:real, type:string, data:dynamic) with (folder = "Auxiliar") 
+.create-merge table TruckEvents (TruckID:long, latitude:dynamic, longitude:dynamic, EventProcessedUtcTime:datetime, PartitionId:long, EventEnqueuedUtcTime:datetime) 
 .create-or-alter function with (skipvalidation = "true") parse_RapidDelivery() {
 RawRapidDelivery
 | project SalesOrderNumber=tostring(SalesOrderNumber),

@@ -32,14 +32,24 @@ import json
 import pandas as pd
 import concurrent.futures
 import time
+import requests
 from azure.eventhub import EventHubProducerClient, EventData
 
-eventHubConnString = ""
-eventHubNameevents = "" 
+eventHubConnString = "Endpoint=sb://esehdb0nsbwvuvh00virk1.servicebus.windows.net/;SharedAccessKeyName=key_f8d784ad-675a-4f1d-973a-fda81b57e75f;SharedAccessKey=3a3jDGblfKoSuWPb5H2aH4ZiJmidG7klU+AEhCZc3+s=;EntityPath=es_1e3d1005-327d-4c71-8cb4-ca75cd93c788"
+eventHubNameevents = "es_1e3d1005-327d-4c71-8cb4-ca75cd93c788" 
 
 producer_events = EventHubProducerClient.from_connection_string(conn_str=eventHubConnString, eventhub_name=eventHubNameevents)
 
-df_trucks_location = pd.read_csv("./builtin/truck_location.csv")
+url = "https://raw.githubusercontent.com/L400-RTI/Training-material/refs/heads/main/HOL/assets/truck_location.csv"
+
+dtype_dict = {
+    "TruckID": "int64",
+    "latitude": "float64",
+    "longitude": "float64",
+    "Order": "int64",
+}
+
+df_trucks_location = pd.read_csv(url,dtype=dtype_dict)
 
 SLEEP_TIMER = 10
 
