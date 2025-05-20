@@ -35,8 +35,8 @@ import time
 import requests
 from azure.eventhub import EventHubProducerClient, EventData
 
-eventHubConnString = "Endpoint=sb://esehdb0nsbwvuvh00virk1.servicebus.windows.net/;SharedAccessKeyName=key_f8d784ad-675a-4f1d-973a-fda81b57e75f;SharedAccessKey=3a3jDGblfKoSuWPb5H2aH4ZiJmidG7klU+AEhCZc3+s=;EntityPath=es_1e3d1005-327d-4c71-8cb4-ca75cd93c788"
-eventHubNameevents = "es_1e3d1005-327d-4c71-8cb4-ca75cd93c788" 
+eventHubConnString = ""
+eventHubNameevents = "" 
 
 producer_events = EventHubProducerClient.from_connection_string(conn_str=eventHubConnString, eventhub_name=eventHubNameevents)
 
