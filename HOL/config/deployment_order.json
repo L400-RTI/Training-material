@@ -16,5 +16,9 @@
     {
         "name": "FabricWorkspaceEvents.Eventstream",
         "id": "c16fe837-9bc3-81f8-41a2-b1011389efd0"
+    },
+    {
+        "name": "OrderSales.Eventstream",
+        "id": "01a932e8-94db-b3b9-46ad-17d437bfec20"
     }
 ]
