@@ -1,0 +1,58 @@
+{
+  "sources": [
+    {
+      "id": "ed42ca8e-50b6-4aca-94b8-d18f887c82af",
+      "name": "FabricWorkspaceEventsInput",
+      "type": "FabricWorkspaceItemEvents",
+      "properties": {
+        "eventScope": "Workspace",
+        "workspaceId": "823a6f00-d836-4f15-8417-147e4f00c605",
+        "includedEventTypes": [
+          "Microsoft.Fabric.ItemCreateSucceeded",
+          "Microsoft.Fabric.ItemCreateFailed",
+          "Microsoft.Fabric.ItemUpdateSucceeded",
+          "Microsoft.Fabric.ItemUpdateFailed",
+          "Microsoft.Fabric.ItemDeleteSucceeded",
+          "Microsoft.Fabric.ItemDeleteFailed"
+        ],
+        "filters": []
+      }
+    }
+  ],
+  "destinations": [
+    {
+      "id": "b092fbd9-8bf2-4562-a358-78246203ed9f",
+      "name": "FabricWorkspaceEvents",
+      "type": "Eventhouse",
+      "properties": {
+        "dataIngestionMode": "DirectIngestion",
+        "workspaceId": "00000000-0000-0000-0000-000000000000",
+        "itemId": "514b9ac4-fd6f-85b2-4103-3199c518516d",
+        "tableName": "FabricWorkspaceEvents",
+        "connectionName": "fabric_event_stream_L400-Test-Fabric",
+        "mappingRuleName": "FabricWorkspaceEvents_mapping"
+      },
+      "inputNodes": [
+        {
+          "name": "fabric_event_stream-stream"
+        }
+      ],
+      "inputSchemas": []
+    }
+  ],
+  "streams": [
+    {
+      "id": "1389efd0-b101-41a2-81f8-9bc3c16fe837",
+      "name": "fabric_event_stream-stream",
+      "type": "DefaultStream",
+      "properties": {},
+      "inputNodes": [
+        {
+          "name": "FabricWorkspaceEventsInput"
+        }
+      ]
+    }
+  ],
+  "operators": [],
+  "compatibilityLevel": "1.0"
+}

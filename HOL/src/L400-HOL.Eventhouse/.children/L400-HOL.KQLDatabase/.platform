@@ -1,0 +1,12 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "KQLDatabase",
+    "displayName": "L400-HOL",
+    "description": "L400-Test"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "514b9ac4-fd6f-85b2-4103-3199c518516d"
+  }
+}
