@@ -4,7 +4,9 @@
 
 - Validate Access
 - Create Workspace
-- Create Eventhouse
+- Create Eventhouse*
+
+  *To accelerate the process of the Eventhouse and Eventstream creation, you can use the following script to deploy those items: [L400 Training Setup.ipynb](https://github.com/L400-RTI/Training-material/blob/main/HOL/setup/L400%20Training%20Setup.ipynb)
 
 ## Real-Time Hub
 
