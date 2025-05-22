@@ -1,0 +1,12 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Eventhouse",
+    "displayName": "L400-HOL",
+    "description": "L400-Test"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "b0b1f0ed-014c-aa6a-42ea-3d68f3d84705"
+  }
+}

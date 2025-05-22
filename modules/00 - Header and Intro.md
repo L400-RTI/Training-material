@@ -93,7 +93,7 @@ needed using the KQL language, visualize and analyze data using KQL, Real-Time D
 architectural approaches, Security and Networking.
 
 1. [Introduction to RTI](./01%20-%20Introduction.md) (Frank)
-2. [Real-Time Hub](./02%20-%20Real-Time%20Hub.md) (Matt)
+2. [Real-Time hub](./02%20-%20Real-Time%20Hub.md) (Matt)
 3. [Connectors](./03%20-%20Connectors.md) (Brian)
 4. [Ingestion](./04%20-%20Ingestion.md) (Brian)
 5. [Data modelling](./05%20-%20Data%20modelling.md) (Frank)

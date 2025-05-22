@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Eventstream",
+    "displayName": "TruckEvents"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "a621f74d-d212-a446-4240-3bc6b5590e02"
+  }
+}

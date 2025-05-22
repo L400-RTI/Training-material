@@ -8,7 +8,7 @@ To support your learning journey and enable hands-on exploration, we’ve compil
 
 - [Microsoft Fabric RTI Demo Application](https://github.com/microsoft/Microsoft_Fabric_RTI_API_Sample/blob/main/README.md)
 
-#### Real-Time Hub
+#### Real-Time hub
 
 #### Connectors
 

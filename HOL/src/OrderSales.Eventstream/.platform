@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Eventstream",
+    "displayName": "OrderSales"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "01a932e8-94db-b3b9-46ad-17d437bfec20"
+  }
+}

@@ -108,26 +108,26 @@ They can be used for
 
 - Downsampling
 
-```kql
+```kusto
 T
 | summarize count() by bin(Timestamp, 1d))
 ```
 
-```kql
+```kusto
 T
 | summarize dcount(User), avg(Duration) by bin(Timestamp, 1h))
 ```
 
 - Last entity by update time
 
-```kql
+```kusto
 T
 | summarize arg_max(Timestmap, *) by Id
 ```
 
 - De-Duplication
 
-```kql
+```kusto
 T
 | summarize take_any(*) by Dimension1, Dimension2â€¦DimensionN
 ```
@@ -307,7 +307,7 @@ In this example we enrich Logs using an update policy.
 
 Step 1: Create the source table
 
-```kql
+```kusto
 .create table RawLogs (
     Timestamp: datetime,
     DeviceId: string,
@@ -317,7 +317,7 @@ Step 1: Create the source table
 
 Step 2: Create the Target Table
 
-```kql
+```kusto
 .create table EnrichedLogs (
     Timestamp: datetime,
     DeviceId: string,
@@ -329,7 +329,7 @@ Step 2: Create the Target Table
 
 Step 3: Create a Dimension Table for enrichment
 
-```kql
+```kusto
 .create table Devices (
     DeviceId: string,
     DeviceType: string,
@@ -339,7 +339,7 @@ Step 3: Create a Dimension Table for enrichment
 
 Step 4: Define a Transformation Function
 
-```kql
+```kusto
 .create function with (folder = "UpdatePolicies") EnrichRawLogs() {
     RawLogs
     | lookup kind=leftouter Devices on DeviceId
@@ -349,7 +349,7 @@ Step 4: Define a Transformation Function
 
 Step 5: Attach the Update Policy to table `RawLogs`
 
-```kql
+```kusto
 .alter table RawLogs policy update
 @'[{"IsEnabled": true, "Source": "RawLogs", "Query": "EnrichRawLogs()", "Destination": "EnrichedLogs"}]'
 ```
@@ -417,7 +417,7 @@ Materialization is an asynchronous background job, triggered when capacity allow
 
 To inspect the materialization status
 
-```kql
+```kusto
 .show materialized-view <ViewName> details
 ```
 
@@ -477,7 +477,7 @@ minimal latency and resource consumption.
 
 Example:
 
-```kql
+```kusto
 external_table("MyExternalStorageTable")
 | where Timestamp > ago(1d)
 | summarize count() by bin(Timestamp, 1h)
@@ -586,7 +586,7 @@ Partitioning in KQL databases is **column-based** and usually falls into two com
 
    Example:
 
-   ```kql
+   ```kusto
    .alter-merge table Events policy Partitioning
    { "PartitionKeys": [ { "ColumnName": "Timestamp", "Kind": "UniformRange" } ] }
    ```
@@ -598,7 +598,7 @@ Partitioning in KQL databases is **column-based** and usually falls into two com
 
    Example:
 
-   ```kql
+   ```kusto
    .alter-merge table Metrics policy Partitioning
    { "PartitionKeys": [ { "ColumnName": "TenantId", "Kind": "Hash" } ] }
    ```
@@ -785,7 +785,7 @@ Update policies automate transformation of ingested data by triggering materiali
 
 Example:
 
-```kql
+```kusto
 .alter table CleanEvents policy update
 @'{
   "IsEnabled": true,
@@ -811,7 +811,7 @@ Materialized views are offline, incremental aggregations over a source tableâ€‹â
 2. Define a materialized view over a single source table.
 3. Configure materialization schedule (automatic behind the scenes).
 
-```kql
+```kusto
 .create materialized-view DailyEventCounts on table Events
 {
   Events
@@ -836,7 +836,7 @@ Export policies allow continuous streaming of ingested data to external systemsâ
 2. Create an export policy scoped to the source table.
 3. Configure cursor management for delta-based exports.
 
-```kql
+```kusto
 .alter table Events policy continuous-export
 @'{
   "IsEnabled": true,
@@ -863,7 +863,7 @@ Efficient joins are critical in KQL modeling, especially in real-time environmen
 3. Pre-aggregate or pre-filter as much as possible before the join.
 4. If modeling for Power BI, minimize the number of joins by using star schemas.
 
-```kql
+```kusto
 EventData
 | join kind=inner hint.strategy=hash (
     DeviceRegistry
@@ -910,7 +910,7 @@ External tables enable querying remote storage or SQL sources without ingestionâ
 
 Example (Storage External Table):
 
-```kql
+```kusto
 .create external table ExtEvents
 (
     EventId: string,
@@ -1010,7 +1010,7 @@ This section describes how to identify, diagnose, and resolve common issues with
 
 Useful Kusto commands for general modeling troubleshooting:
 
-```kql
+```kusto
 .show ingestion failures
 .show materialized-views
 .show queries

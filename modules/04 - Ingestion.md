@@ -102,7 +102,7 @@ This can be changed by editing the Data policies on each shortcut.
 
 Or by altering the shortcut’s data policy in KQL script:
 
-```kql
+```kusto
 .alter external table lineitem_accelerate policy query_acceleration '{"IsEnabled": true, "Hot": "1.00:00:00"}'
 
 ```
@@ -113,7 +113,7 @@ When you create a shortcut with acceleration enabled, the underlying Kusto engin
 
 To get a status of this process, you can execute the following command:
 
-```kql
+```kusto
 .show external table lineitems600m_accelerate operations query_acceleration statistics
 ```
 
@@ -153,7 +153,7 @@ You can create ingestion mappings directly when creating the ingestion or create
 
 Below example is using a mapping directly in the ingestion command:
 
-```kql
+```kusto
 .ingest into table RawEvents ('https://kustosamplefiles.blob.core.windows.net/jsonsamplefiles/simple.json') 
     with (
             format = "json",
@@ -176,7 +176,7 @@ Below example show the creation of a reusable mapping and the use of that mappin
 
 **Mapping:**
 
-```kql
+```kusto
 .create table RawEvents ingestion json mapping 'RawEventMapping' 
     ```
   [ 
@@ -191,7 +191,7 @@ Below example show the creation of a reusable mapping and the use of that mappin
 
 **Use of the above mapping:**
 
-```kql
+```kusto
 .ingest into table RawEvents ('https://kustosamplefiles.blob.core.windows.net/jsonsamplefiles/simple.json') 
   with (
           format="json",

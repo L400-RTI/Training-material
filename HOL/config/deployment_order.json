@@ -1,0 +1,32 @@
+[
+    {
+        "name": "Workspace.src",
+        "id": "823a6f00-d836-4f15-8417-147e4f00c605"
+    },
+    {
+        "name": "L400-HOL.Eventhouse",
+        "id": "b0b1f0ed-014c-aa6a-42ea-3d68f3d84705",
+        "children": [
+            {
+                "name": "L400-HOL.KQLDatabase",
+                "id": "514b9ac4-fd6f-85b2-4103-3199c518516d"
+            }
+        ]
+    },
+    {
+        "name": "FabricWorkspaceEvents.Eventstream",
+        "id": "c16fe837-9bc3-81f8-41a2-b1011389efd0"
+    },
+    {
+        "name": "OrderSales.Eventstream",
+        "id": "01a932e8-94db-b3b9-46ad-17d437bfec20"
+    },
+    {
+        "name": "TruckEvents.Eventstream",
+        "id": "a621f74d-d212-a446-4240-3bc6b5590e02"
+    },
+    {
+        "name": "TruckEvents.Notebook",
+        "id": "57b54e96-4b8e-9fbb-4c9b-f96efbedd596"
+    }
+]

@@ -1,0 +1,653 @@
+{
+  "sources": [
+    {
+      "id": "17edae9e-5ccb-41c5-adfb-3d41f1ab1c28",
+      "name": "L400-SalesOrder",
+      "type": "AzureEventHub",
+      "properties": {
+        "dataConnectionId": "128f9b2f-500f-4061-a395-0599720d0d4f",
+        "consumerGroupName": "$Default",
+        "inputSerialization": {
+          "type": "Json",
+          "properties": {
+            "encoding": "UTF8"
+          }
+        }
+      }
+    }
+  ],
+  "destinations": [
+    {
+      "id": "90c61051-ecb6-434c-b7ed-4058264d9dea",
+      "name": "SlowDeliveryEH",
+      "type": "Eventhouse",
+      "properties": {
+        "dataIngestionMode": "ProcessedIngestion",
+        "workspaceId": "00000000-0000-0000-0000-000000000000",
+        "itemId": "514b9ac4-fd6f-85b2-4103-3199c518516d",
+        "databaseName": "L400-HOL",
+        "tableName": "RawSlowDelivery",
+        "inputSerialization": {
+          "type": "Json",
+          "properties": {
+            "encoding": "UTF8"
+          }
+        }
+      },
+      "inputNodes": [
+        {
+          "name": "SlowDelivery"
+        }
+      ],
+      "inputSchemas": [
+        {
+          "name": "SlowDelivery",
+          "schema": {
+            "columns": [
+              {
+                "name": "SalesOrderNumber",
+                "type": "BigInt",
+                "fields": null,
+                "items": null
+              },
+              {
+                "name": "ShipDate",
+                "type": "Nvarchar(max)",
+                "fields": null,
+                "items": null
+              },
+              {
+                "name": "OrderDate",
+                "type": "Nvarchar(max)",
+                "fields": null,
+                "items": null
+              },
+              {
+                "name": "OrderTime",
+                "type": "Nvarchar(max)",
+                "fields": null,
+                "items": null
+              },
+              {
+                "name": "DueDate",
+                "type": "Nvarchar(max)",
+                "fields": null,
+                "items": null
+              },
+              {
+                "name": "DueTime",
+                "type": "Nvarchar(max)",
+                "fields": null,
+                "items": null
+              },
+              {
+                "name": "CustomerKey",
+                "type": "Nvarchar(max)",
+                "fields": null,
+                "items": null
+              },
+              {
+                "name": "ProductKey",
+                "type": "BigInt",
+                "fields": null,
+                "items": null
+              },
+              {
+                "name": "SalesTerritoryKey",
+                "type": "BigInt",
+                "fields": null,
+                "items": null
+              },
+              {
+                "name": "RevisionNumber",
+                "type": "BigInt",
+                "fields": null,
+                "items": null
+              },
+              {
+                "name": "OrderQuantity",
+                "type": "BigInt",
+                "fields": null,
+                "items": null
+              },
+              {
+                "name": "UnitPrice",
+                "type": "Float",
+                "fields": null,
+                "items": null
+              },
+              {
+                "name": "DiscountAmount",
+                "type": "Float",
+                "fields": null,
+                "items": null
+              },
+              {
+                "name": "ProductStandardCost",
+                "type": "Float",
+                "fields": null,
+                "items": null
+              },
+              {
+                "name": "IsRapidDelivery",
+                "type": "BigInt",
+                "fields": null,
+                "items": null
+              },
+              {
+                "name": "IsRapidDeliveryLarge",
+                "type": "BigInt",
+                "fields": null,
+                "items": null
+              },
+              {
+                "name": "EventType",
+                "type": "Nvarchar(max)",
+                "fields": null,
+                "items": null
+              },
+              {
+                "name": "EventProcessedUtcTime",
+                "type": "DateTime",
+                "fields": null,
+                "items": null
+              },
+              {
+                "name": "PartitionId",
+                "type": "BigInt",
+                "fields": null,
+                "items": null
+              },
+              {
+                "name": "EventEnqueuedUtcTime",
+                "type": "DateTime",
+                "fields": null,
+                "items": null
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "d3d5bae6-babc-4ee9-8eaf-646f0ad37930",
+      "name": "RapidDeliveryEH",
+      "type": "Eventhouse",
+      "properties": {
+        "dataIngestionMode": "ProcessedIngestion",
+        "workspaceId": "00000000-0000-0000-0000-000000000000",
+        "itemId": "514b9ac4-fd6f-85b2-4103-3199c518516d",
+        "databaseName": "L400-HOL",
+        "tableName": "RawRapidDelivery",
+        "inputSerialization": {
+          "type": "Json",
+          "properties": {
+            "encoding": "UTF8"
+          }
+        }
+      },
+      "inputNodes": [
+        {
+          "name": "RapidDelivery"
+        }
+      ],
+      "inputSchemas": [
+        {
+          "name": "RapidDelivery",
+          "schema": {
+            "columns": [
+              {
+                "name": "SalesOrderNumber",
+                "type": "BigInt",
+                "fields": null,
+                "items": null
+              },
+              {
+                "name": "ShipDate",
+                "type": "Nvarchar(max)",
+                "fields": null,
+                "items": null
+              },
+              {
+                "name": "OrderDate",
+                "type": "Nvarchar(max)",
+                "fields": null,
+                "items": null
+              },
+              {
+                "name": "OrderTime",
+                "type": "Nvarchar(max)",
+                "fields": null,
+                "items": null
+              },
+              {
+                "name": "DueDate",
+                "type": "Nvarchar(max)",
+                "fields": null,
+                "items": null
+              },
+              {
+                "name": "DueTime",
+                "type": "Nvarchar(max)",
+                "fields": null,
+                "items": null
+              },
+              {
+                "name": "CustomerKey",
+                "type": "Nvarchar(max)",
+                "fields": null,
+                "items": null
+              },
+              {
+                "name": "ProductKey",
+                "type": "BigInt",
+                "fields": null,
+                "items": null
+              },
+              {
+                "name": "SalesTerritoryKey",
+                "type": "BigInt",
+                "fields": null,
+                "items": null
+              },
+              {
+                "name": "RevisionNumber",
+                "type": "BigInt",
+                "fields": null,
+                "items": null
+              },
+              {
+                "name": "OrderQuantity",
+                "type": "BigInt",
+                "fields": null,
+                "items": null
+              },
+              {
+                "name": "UnitPrice",
+                "type": "Float",
+                "fields": null,
+                "items": null
+              },
+              {
+                "name": "DiscountAmount",
+                "type": "Float",
+                "fields": null,
+                "items": null
+              },
+              {
+                "name": "ProductStandardCost",
+                "type": "Float",
+                "fields": null,
+                "items": null
+              },
+              {
+                "name": "IsRapidDelivery",
+                "type": "BigInt",
+                "fields": null,
+                "items": null
+              },
+              {
+                "name": "IsRapidDeliveryLarge",
+                "type": "BigInt",
+                "fields": null,
+                "items": null
+              },
+              {
+                "name": "EventType",
+                "type": "Nvarchar(max)",
+                "fields": null,
+                "items": null
+              },
+              {
+                "name": "EventProcessedUtcTime",
+                "type": "DateTime",
+                "fields": null,
+                "items": null
+              },
+              {
+                "name": "PartitionId",
+                "type": "BigInt",
+                "fields": null,
+                "items": null
+              },
+              {
+                "name": "EventEnqueuedUtcTime",
+                "type": "DateTime",
+                "fields": null,
+                "items": null
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "streams": [
+    {
+      "id": "c67cb70c-4cab-4309-b16d-5ea5eed45ca4",
+      "name": "L400-Demo-stream",
+      "type": "DefaultStream",
+      "properties": {},
+      "inputNodes": [
+        {
+          "name": "L400-SalesOrder"
+        }
+      ]
+    }
+  ],
+  "operators": [
+    {
+      "name": "RapidDelivery",
+      "type": "Filter",
+      "inputNodes": [
+        {
+          "name": "L400-Demo-stream"
+        }
+      ],
+      "properties": {
+        "conditions": [
+          {
+            "column": {
+              "expressionType": "ColumnReference",
+              "node": null,
+              "columnName": "IsRapidDelivery",
+              "columnPathSegments": []
+            },
+            "operatorType": "Equals",
+            "value": {
+              "expressionType": "Literal",
+              "dataType": "BigInt",
+              "value": "1"
+            }
+          }
+        ]
+      },
+      "inputSchemas": [
+        {
+          "name": "L400-Demo-stream",
+          "schema": {
+            "columns": [
+              {
+                "name": "SalesOrderNumber",
+                "type": "BigInt",
+                "fields": null,
+                "items": null
+              },
+              {
+                "name": "ShipDate",
+                "type": "Nvarchar(max)",
+                "fields": null,
+                "items": null
+              },
+              {
+                "name": "OrderDate",
+                "type": "Nvarchar(max)",
+                "fields": null,
+                "items": null
+              },
+              {
+                "name": "OrderTime",
+                "type": "Nvarchar(max)",
+                "fields": null,
+                "items": null
+              },
+              {
+                "name": "DueDate",
+                "type": "Nvarchar(max)",
+                "fields": null,
+                "items": null
+              },
+              {
+                "name": "DueTime",
+                "type": "Nvarchar(max)",
+                "fields": null,
+                "items": null
+              },
+              {
+                "name": "CustomerKey",
+                "type": "Nvarchar(max)",
+                "fields": null,
+                "items": null
+              },
+              {
+                "name": "ProductKey",
+                "type": "BigInt",
+                "fields": null,
+                "items": null
+              },
+              {
+                "name": "SalesTerritoryKey",
+                "type": "BigInt",
+                "fields": null,
+                "items": null
+              },
+              {
+                "name": "RevisionNumber",
+                "type": "BigInt",
+                "fields": null,
+                "items": null
+              },
+              {
+                "name": "OrderQuantity",
+                "type": "BigInt",
+                "fields": null,
+                "items": null
+              },
+              {
+                "name": "UnitPrice",
+                "type": "Float",
+                "fields": null,
+                "items": null
+              },
+              {
+                "name": "DiscountAmount",
+                "type": "Float",
+                "fields": null,
+                "items": null
+              },
+              {
+                "name": "ProductStandardCost",
+                "type": "Float",
+                "fields": null,
+                "items": null
+              },
+              {
+                "name": "IsRapidDelivery",
+                "type": "BigInt",
+                "fields": null,
+                "items": null
+              },
+              {
+                "name": "IsRapidDeliveryLarge",
+                "type": "BigInt",
+                "fields": null,
+                "items": null
+              },
+              {
+                "name": "EventType",
+                "type": "Nvarchar(max)",
+                "fields": null,
+                "items": null
+              },
+              {
+                "name": "EventProcessedUtcTime",
+                "type": "DateTime",
+                "fields": null,
+                "items": null
+              },
+              {
+                "name": "PartitionId",
+                "type": "BigInt",
+                "fields": null,
+                "items": null
+              },
+              {
+                "name": "EventEnqueuedUtcTime",
+                "type": "DateTime",
+                "fields": null,
+                "items": null
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "SlowDelivery",
+      "type": "Filter",
+      "inputNodes": [
+        {
+          "name": "L400-Demo-stream"
+        }
+      ],
+      "properties": {
+        "conditions": [
+          {
+            "column": {
+              "expressionType": "ColumnReference",
+              "node": null,
+              "columnName": "IsRapidDelivery",
+              "columnPathSegments": []
+            },
+            "operatorType": "Equals",
+            "value": {
+              "expressionType": "Literal",
+              "dataType": "BigInt",
+              "value": "0"
+            }
+          }
+        ]
+      },
+      "inputSchemas": [
+        {
+          "name": "L400-Demo-stream",
+          "schema": {
+            "columns": [
+              {
+                "name": "SalesOrderNumber",
+                "type": "BigInt",
+                "fields": null,
+                "items": null
+              },
+              {
+                "name": "ShipDate",
+                "type": "Nvarchar(max)",
+                "fields": null,
+                "items": null
+              },
+              {
+                "name": "OrderDate",
+                "type": "Nvarchar(max)",
+                "fields": null,
+                "items": null
+              },
+              {
+                "name": "OrderTime",
+                "type": "Nvarchar(max)",
+                "fields": null,
+                "items": null
+              },
+              {
+                "name": "DueDate",
+                "type": "Nvarchar(max)",
+                "fields": null,
+                "items": null
+              },
+              {
+                "name": "DueTime",
+                "type": "Nvarchar(max)",
+                "fields": null,
+                "items": null
+              },
+              {
+                "name": "CustomerKey",
+                "type": "Nvarchar(max)",
+                "fields": null,
+                "items": null
+              },
+              {
+                "name": "ProductKey",
+                "type": "BigInt",
+                "fields": null,
+                "items": null
+              },
+              {
+                "name": "SalesTerritoryKey",
+                "type": "BigInt",
+                "fields": null,
+                "items": null
+              },
+              {
+                "name": "RevisionNumber",
+                "type": "BigInt",
+                "fields": null,
+                "items": null
+              },
+              {
+                "name": "OrderQuantity",
+                "type": "BigInt",
+                "fields": null,
+                "items": null
+              },
+              {
+                "name": "UnitPrice",
+                "type": "Float",
+                "fields": null,
+                "items": null
+              },
+              {
+                "name": "DiscountAmount",
+                "type": "Float",
+                "fields": null,
+                "items": null
+              },
+              {
+                "name": "ProductStandardCost",
+                "type": "Float",
+                "fields": null,
+                "items": null
+              },
+              {
+                "name": "IsRapidDelivery",
+                "type": "BigInt",
+                "fields": null,
+                "items": null
+              },
+              {
+                "name": "IsRapidDeliveryLarge",
+                "type": "BigInt",
+                "fields": null,
+                "items": null
+              },
+              {
+                "name": "EventType",
+                "type": "Nvarchar(max)",
+                "fields": null,
+                "items": null
+              },
+              {
+                "name": "EventProcessedUtcTime",
+                "type": "DateTime",
+                "fields": null,
+                "items": null
+              },
+              {
+                "name": "PartitionId",
+                "type": "BigInt",
+                "fields": null,
+                "items": null
+              },
+              {
+                "name": "EventEnqueuedUtcTime",
+                "type": "DateTime",
+                "fields": null,
+                "items": null
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "compatibilityLevel": "1.0"
+}

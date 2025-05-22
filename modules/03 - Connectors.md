@@ -93,7 +93,7 @@ This is done in an _ingestion mapping_ in the Eventhouse itself. These exists on
 
 An ingestion mapping consists of the columns and the corresponding data type - for instance:
 
-```kql
+```kusto
 
 .create table DestinationTable ingestion csv mapping "MappingOne"
 '['
@@ -168,8 +168,6 @@ Stored procedure name: Production.Product
 Create the connection to the SQL server in such a way that it can be used to live query data and joined in a KQL query for further processing.
 
 Use the live connection to create a query which uses the newly created connection in a KQL statement. The statement can be made in your own liking, as long as it uses both data from the SQL server and the existing KQL database.
-
-**Brian to add reference to materials and content**
 
 #### Read data from JSON file to Eventhouse
 
